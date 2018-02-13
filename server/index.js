@@ -8,7 +8,6 @@ var app = express();
 
 app.use(express.static(__dirname + '/../react-client/dist'));
 
-
 app.get('/shows', function (req, res) {
   db.selectAllShows(function(err, data) {
     if(err) {

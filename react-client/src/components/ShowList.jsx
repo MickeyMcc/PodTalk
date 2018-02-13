@@ -2,14 +2,15 @@ import React from 'react';
 import ShowEntry from './ShowEntry.jsx';
 
 const ShowList = (props) => {
-  if (props.shows[0]) {
-    console.log(props.shows[0].itunesId);
-  }
   return (
-  <div>
-    <h4> List Component </h4>
-    There are { props.shows.length } items.
-    { props.shows.map(show => <ShowEntry item={show}/>)}
+  <div className='show-list pane'>
+    <h4> Your Shows </h4>
+    You have { props.shows.length } shows so far.
+    { props.shows.map((show, index) => 
+      <ShowEntry show={show} 
+        key = {index}
+      />
+    )}
   </div>
 )};
 

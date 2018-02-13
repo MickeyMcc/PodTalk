@@ -7,25 +7,17 @@
   const actionWithPayload = { type: 'UPDATE_INPUT_VALUE', payload: 'Dude' };
 */
 
-/* Action Creators simply are functions that return Actions. */
-export const changePage = (pageName) => {
-  return {
-    type: 'CHANGE_PAGE',
-    payload: pageName,
-  }
-}
-
 export const addShow = (show) => {
   return {
     type: 'ADD_SHOW',
     /* ES6 obect property shorthand */
-    payload: show
+    identifier: show
   }
 }
 
 export const search = (query) => ({
   type: 'SEARCH',
-  payload: query
+  identifier: query
 });
 
 export const reset = () => ({

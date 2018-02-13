@@ -1,0 +1,28 @@
+body {
+  font-family: Helvetica, Arial, sans-serif;
+  background-color : lightslategray
+}
+h4 {
+  margin: 1px;
+}
+
+.pane {
+  display: inline-block;
+  border: white;
+  border-style: solid;
+  border-width: 2px;
+  padding: 10px;
+  margin: 5px;
+}
+
+.show-list {
+  float: left;
+}
+
+.search-list {
+  float: right;
+}
+
+#title {
+  color : white;
+}

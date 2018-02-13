@@ -2,13 +2,23 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import ShowList from './components/ShowList.jsx';
+import SearchList from './components/SearchList.jsx';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
+import {
+  addShow,
+  search,
+  reset,
+} from './actions';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
       user: '',
-      shows: []
+      shows: [],
+      searchResults: ['hey', 'we', 'are', 'results']
     }
   }
 
@@ -28,7 +38,8 @@ class App extends React.Component {
 
   render () {
     return (<div>
-      <h1>PodStar</h1>
+      <h1 id = 'title' >PodStar</h1>
+      <SearchList results={this.state.searchResults} />
       <ShowList shows={this.state.shows}/>
     </div>)
   }
