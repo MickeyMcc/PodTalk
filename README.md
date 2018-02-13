@@ -1,5 +1,6 @@
-# react-starter
-Simple Boilerplate for React Project
+# Podstar
+MVP project built off of Patrick Daly's 
+'Simple Boilerplate for React Project'
 
 ## To start the app
 
