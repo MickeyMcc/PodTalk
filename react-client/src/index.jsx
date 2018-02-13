@@ -16,7 +16,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
-      user: '',
+      user: 'default',
       shows: [],
       searchResults: ['hey', 'we', 'are', 'results']
     }
@@ -39,6 +39,12 @@ class App extends React.Component {
   render () {
     return (<div>
       <h1 id = 'title' >PodStar</h1>
+      <nav className = 'nav-bar'> <ul>
+        <li> Hello {this.state.user} </li>
+        <li> Login </li>
+        <li> Sign Up </li>
+        <li> Log Out </li>
+      </ul> </nav>
       <SearchList results={this.state.searchResults} />
       <ShowList shows={this.state.shows}/>
     </div>)

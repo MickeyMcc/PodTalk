@@ -40,7 +40,6 @@ CREATE TABLE shows_users (
  * SOME SAMPLE STARTER DATA
 */
 
-
 INSERT INTO shows (itunesId) VALUES ('woohoo!');
 INSERT INTO users (username, password) VALUES ('test', 'test');
 INSERT INTO comments (text, user_id, show_id) VALUES ('I liked this', 1, 1);
