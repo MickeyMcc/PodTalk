@@ -1,24 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
-import List from './components/List.jsx';
+import ShowList from './components/ShowList.jsx';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
       user: '',
-      shows: [],
-      items: []
+      shows: []
     }
   }
 
   componentDidMount() {
     $.ajax({
-      url: '/items', 
+      url: '/shows', 
       success: (data) => {
         this.setState({
-          items: data
+          shows: data
         })
       },
       error: (err) => {
@@ -30,7 +29,7 @@ class App extends React.Component {
   render () {
     return (<div>
       <h1>PodStar</h1>
-      <List items={this.state.items}/>
+      <ShowList shows={this.state.shows}/>
     </div>)
   }
 }
@@ -38,7 +37,7 @@ class App extends React.Component {
 const mapStateToProps = (state) => {
   return {
     username: state.username,
-    userShows: state.userShows
+    shows: state.shows
   }
 }
 

@@ -7,8 +7,8 @@ var connection = mysql.createConnection({
   database : 'podstar'
 });
 
-var selectAllUsers = function(callback) {
-  connection.query('SELECT * FROM users', function(err, results, fields) {
+var selectAllShows = function(callback) {
+  connection.query('SELECT * FROM shows', function(err, results, fields) {
     if(err) {
       callback(err, null);
     } else {
@@ -17,4 +17,4 @@ var selectAllUsers = function(callback) {
   });
 };
 
-module.exports.selectAllUsers = selectAllUsers;
+module.exports.selectAllShows = selectAllShows;

@@ -32,9 +32,19 @@ CREATE TABLE shows_users (
   user_id INT NOT NULL,
   show_id INT NOT NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (user_id) REFERENCES users (user_id),
-  FOREIGN KEY (show_id) REFERENCES shows (show_id)
+  FOREIGN KEY (user_id) REFERENCES users (id),
+  FOREIGN KEY (show_id) REFERENCES shows (id)
 );
+
+/*
+ * SOME SAMPLE STARTER DATA
+*/
+
+
+INSERT INTO shows (itunesId) VALUES ('woohoo!');
+INSERT INTO users (username, password) VALUES ('test', 'test');
+INSERT INTO comments (text, user_id, show_id) VALUES ('I liked this', 1, 1);
+INSERT INTO shows_users (user_id, show_id) VALUES (1,1);
 
 /*  Execute this file from the command line by typing:
  *    mysql -u root < server/schema.sql
