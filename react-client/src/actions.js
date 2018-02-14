@@ -10,7 +10,6 @@
 export const addShow = (show) => {
   return {
     type: 'ADD_SHOW',
-    /* ES6 obect property shorthand */
     identifier: show
   }
 }

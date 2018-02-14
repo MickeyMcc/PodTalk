@@ -1,6 +1,7 @@
 const initialState = {
   user: '',
-  currentShows: [],
+  shows: [],
+  searchResults: ['we', 'are', 'search', 'results']
 };
 
 /*  
