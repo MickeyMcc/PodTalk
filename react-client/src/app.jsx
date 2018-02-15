@@ -14,18 +14,22 @@ import {
 class App extends React.Component {
   constructor() {
     this.state = {
-      user: '',
+      user: 'tester',
       shows: [],
       searchResults: ['we', 'are', 'search', 'results']
     }
   }
 
   componentDidMount() {
+    context = this;
     $.ajax({
       method: 'GET',
       url: '/shows', 
+      data: {
+        user: this.state.user
+      },
       success: (data) => {
-        this.setState({
+        context.setState({
           shows: data
         })
       },
@@ -36,20 +40,45 @@ class App extends React.Component {
   }
 
   search(query) {
+    context = this;
     $.ajax({
       method: 'GET',
       url: '/search',
-      success: () => {
-        console.log('')
+      data: {
+        query: query
+      },
+      success: (results) => {
+        console.log('nice search!');
+        context.setState({
+          searchResults: results
+        })
       }
     })
+  }
+
+  addShow(show) {
+    context = this;
+    $.ajax({
+      method: 'POST',
+      url: '/shows',
+      data: {
+        user: context.state.user,
+        show: show
+      },
+      success: (data) => {
+        console.log('show was added');
+      },
+      error: (err) => {
+        console.log('err', err);
+      }
+    });
   }
 
   render () {
     return (<div>
       <h1 id = 'title' >PodStar</h1>
       <nav className = 'nav-bar'> <ul>
-        <li> Hello {this.props.user} </li>
+        <li> Hello {this.props.user}! </li>
         <li> Login </li>
         <li> Sign Up </li>
         <li> Log Out </li>
@@ -57,22 +86,6 @@ class App extends React.Component {
       <SearchList results={this.props.searchResults} />
       <ShowList shows={this.props.shows}/>
     </div>)
-  }
-}
-
-const mapStateToProps = (state) => {
-  return {
-    username: state.username,
-    shows: state.shows,
-    searchResults: state.searchResults
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    dispatch: dispatch,
-    onAddShow: (show) => dispatch(addShow(show)),
-    onReset: () => dispatch(reset())
   }
 }
 
@@ -85,5 +98,5 @@ App.propTypes = {
 }
 
 
-export default App = connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;
 
