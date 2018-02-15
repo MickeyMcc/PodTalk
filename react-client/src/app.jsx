@@ -5,11 +5,6 @@ import PropTypes from 'prop-types';
 import ShowList from './components/ShowList.jsx';
 import SearchList from './components/SearchList.jsx';
 
-import {
-  addShow,
-  search,
-  reset,
-} from './actions';
 
 class App extends React.Component {
   constructor() {
@@ -21,12 +16,16 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    this.refreshShowList;
+  }
+
+  refreshShowList() {
     context = this;
     $.ajax({
       method: 'GET',
-      url: '/shows', 
+      url: '/shows',
       data: {
-        user: this.state.user
+        user: context.state.user
       },
       success: (data) => {
         context.setState({
@@ -53,7 +52,7 @@ class App extends React.Component {
           searchResults: results
         })
       }
-    })
+    });
   }
 
   addShow(show) {
@@ -67,6 +66,7 @@ class App extends React.Component {
       },
       success: (data) => {
         console.log('show was added');
+        context.refreshShowList();
       },
       error: (err) => {
         console.log('err', err);
@@ -83,8 +83,8 @@ class App extends React.Component {
         <li> Sign Up </li>
         <li> Log Out </li>
       </ul> </nav>
-      <SearchList results={this.props.searchResults} />
-      <ShowList shows={this.props.shows}/>
+      <SearchList results={this.props.searchResults} search = {this.search.bind(this)} />
+      <ShowList shows={this.props.shows} addShow = {this.addShow.bind(this)}/>
     </div>)
   }
 }
