@@ -2,8 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import actions from './actions.js';
 import ShowList from './components/ShowList.jsx';
 import SearchList from './components/SearchList.jsx';
 
@@ -14,9 +12,17 @@ import {
 } from './actions';
 
 class App extends React.Component {
+  constructor() {
+    this.state = {
+      user: '',
+      shows: [],
+      searchResults: ['we', 'are', 'search', 'results']
+    }
+  }
 
   componentDidMount() {
     $.ajax({
+      method: 'GET',
       url: '/shows', 
       success: (data) => {
         this.setState({
@@ -27,6 +33,16 @@ class App extends React.Component {
         console.log('err', err);
       }
     });
+  }
+
+  search(query) {
+    $.ajax({
+      method: 'GET',
+      url: '/search',
+      success: () => {
+        console.log('')
+      }
+    })
   }
 
   render () {
