@@ -4,7 +4,7 @@ import $ from 'jquery';
 import PropTypes from 'prop-types';
 import ShowList from './components/ShowList.jsx';
 import SearchList from './components/SearchList.jsx';
-
+import axios from 'axios';
 
 class App extends React.Component {
   constructor(props) {
@@ -17,30 +17,44 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.refreshShowList;
+    this.refreshShowList();
   }
 
   refreshShowList() {
-    context = this;
-    $.ajax({
-      method: 'GET',
-      url: '/shows',
-      data: {
-        user: context.state.user
-      },
-      success: (data) => {
+    let context = this;
+    axios.get('/shows', {
+      params: {
+        user: 'yoohoo!'
+      }
+    })
+      .then(function (data) {
+        console.log(data);
         context.setState({
           shows: data
         })
-      },
-      error: (err) => {
+      })
+      .catch(function (err) {
         console.log('err', err);
-      }
-    });
+      });
+
+    // $.ajax({
+    //   type: 'GET',
+    //   url: '/shows',
+    //   //dataType: 'json',
+    //   data: JSON.stringify({
+    //     user: 'yoohoo!'
+    //   }),
+    //   success: (data) => {
+
+    //   },
+    //   error: (err) => {
+        
+    //   }
+    // });
   }
 
   search(query) {
-    context = this;
+    let context = this;
     $.ajax({
       method: 'GET',
       url: '/search',
@@ -57,7 +71,7 @@ class App extends React.Component {
   }
 
   addShow(show) {
-    context = this;
+    let context = this;
     $.ajax({
       method: 'POST',
       url: '/shows',

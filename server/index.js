@@ -3,12 +3,17 @@ var bodyParser = require('body-parser');
 
 var db = require('../database-mysql');
 
-
 var app = express();
 
 app.use(express.static(__dirname + '/../react-client/dist'));
 
+app.use(bodyParser.json());
+
 app.get('/shows', function (req, res) {
+  console.log(req);
+  console.log(req.body);
+  const user = req.body.user;
+  console.log('GET FOR SHOWS', user);
   db.selectAllShows(user, function(err, data) {
     if(err) {
       res.sendStatus(500);
@@ -19,7 +24,7 @@ app.get('/shows', function (req, res) {
 });
 
 app.post('/shows', function (req, res) {
-  
+
 
 })
 
