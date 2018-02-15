@@ -23,11 +23,11 @@ CREATE TABLE users (
 CREATE TABLE shows (
   id int NOT NULL AUTO_INCREMENT,
   title varchar(40) NOT NULL,
-  maker varchar(40) NOT NULL,
-  itunesUrl varchar(60) NOT NULL,
-  littleImg varchar(60) NOT NULL,
-  bigImg varchar(60) NOT NULL,
-  latestRelease varchar(40) NOT NULL,  -- Kind of a data but i don't want to format it
+  maker varchar(300) NOT NULL,
+  itunesUrl varchar(100) NOT NULL,
+  littleImg varchar(200) NOT NULL,
+  bigImg varchar(200) NOT NULL,
+  latestRelease varchar(60) NOT NULL,  -- Kind of a data but i don't want to format it
   trackCount INTEGER NOT NULL,
   genre varchar(20) NOT NULL,
   PRIMARY KEY (ID)

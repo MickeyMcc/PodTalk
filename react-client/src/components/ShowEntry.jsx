@@ -1,7 +1,7 @@
 import React from 'react';
 
 const ShowEntry = (props) => {
-  return (<div>
+  return (<div className = 'showEntry'>
     {props.show.title}
   </div>
   )

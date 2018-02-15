@@ -29,8 +29,13 @@ module.exports.addShowToUser = function (user, show, callback) {
       callback(err);
     } else {
       if (!showFound) { //show has never been added to db
-        addShow(show, function () { //add show to db
-          makeConection(callback); //make user-show connection
+        console.log('show not found in database, adding', show.title, 'now!');
+        addShow(show, function (err) { //add show to db
+          if (err) {
+            callback(err);
+          } else {
+            makeConection(callback); //make user-show connection
+          }
         });
       } else {
         checkForConnection(user, show, function (err, connFound) {
@@ -48,8 +53,8 @@ module.exports.addShowToUser = function (user, show, callback) {
 
   const makeConection = function () {
     const connectShowUser = "INSERT INTO shows_users (user_id, show_id) " +
-      `VALUES ((SELECT id FROM users WHERE username = ${user}), ` +
-        `SELECT id FROM shows WHERE itunesID = ${showID})`;
+      `VALUES ((SELECT id FROM users WHERE username = '${user}'), ` +
+        `(SELECT id FROM shows WHERE title = '${show.title}'))`;
 
     connection.query(connectShowUser, function (err, data) {
       if (err) {
@@ -62,22 +67,26 @@ module.exports.addShowToUser = function (user, show, callback) {
 };
 
 const checkForConnection = function(user, show, callback) {
-  const checkConnection = "SELECT shows_users.id FROM shows_users " + 
-    "INNER JOIN shows ON shows.id = shows_users.show_id " + 
-    "INNER JOIN users ON users.id = shows_users.user_id" + 
-    `WHERE users.username = ${user} AND shows.title = ${show.title}`;
-
-  connection.query(checkConnection, function (err, data) {
-    if (err) {
-      callback(err);
-    } else {
-      if (data.length === 0) {
-        callback(err, false);
+  // const getShowId = `SELECT id FROM shows WHERE shows.title = ${show.title}`;
+  // connection.query(getShowId, function (err, data) {
+  //   const showID = data[0];
+    const checkConnection = "SELECT shows_users.id FROM shows_users " + 
+      "INNER JOIN shows ON shows.id = shows_users.show_id " + 
+      "INNER JOIN users ON users.id = shows_users.user_id " + 
+      `WHERE users.username = ${user} AND shows.title = ${show.title}`;
+  
+    connection.query(checkConnection, function (err, data) {
+      if (err) {
+        callback(err);
       } else {
-        callback(err, true);
+        if (data.length === 0) {
+          callback(err, false);
+        } else {
+          callback(err, true);
+        }
       }
-    }
-  });
+    });
+  
 };
 
 const checkDBForShow = function (show, callback) {
@@ -98,13 +107,13 @@ const checkDBForShow = function (show, callback) {
 const addShow = function (show, callback) {
   var sql = "INSERT INTO shows " +
     "(title, maker, itunesUrl, littleImg, bigImg, latestRelease, trackCount, genre) " +
-    `VALUES (${show.title},${show.maker},${show.itunesUrl}),${show.littleImg},${show.bigImg},${show.latestRelease},${show.trackCount},${show.genre}`;
+    `VALUES ('${show.title}','${show.maker}','${show.itunesUrl}','${show.littleImg}','${show.bigImg}','${show.latestRelease}','${show.trackCount}','${show.genre}')`;
 
   connection.query(sql, function (err, data) {
     if (err) {
       callback(err);
     } else {
-      callbakc(null, data);
+      callback(null, data);
     }
   });
 };

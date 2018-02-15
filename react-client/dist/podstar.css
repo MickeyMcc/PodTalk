@@ -42,15 +42,22 @@ li {
 }
 
 .show-list {
-  float: right;
+  float: left;
   margin-right: 15px;
   margin-left: 15px;
 }
 
 .search-area {
-  float: right;
+  float: left;
   margin-right: 15px;
 }
+
+
+.thumbnail {
+  display: inline-block
+}
+
+
 
 #title {
   color : white;

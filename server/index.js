@@ -27,8 +27,8 @@ app.get('/shows', function (req, res) {
 
 app.post('/shows', function (req, res) {  //gets user and show
   const user = req.body.user;
-  const showID = req.body.show;
-  db.addShowToUser(user, showID, function(err, data) {
+  const show = req.body.show;
+  db.addShowToUser(user, show, function(err, data) {
     if (err) {
       console.log(err);
       res.end('show could not be added');

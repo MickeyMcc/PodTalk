@@ -29,6 +29,7 @@ class SearchList extends React.Component {
         {this.props.results.map((result, index) =>
           <SearchEntry show={result}
             key={index}
+            addShow = {this.props.addShow}
           />
         )}
       </div>

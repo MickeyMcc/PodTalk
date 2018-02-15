@@ -92,8 +92,12 @@ class App extends React.Component {
         <li> Sign Up </li>
         <li> Log Out </li>
       </ul> </nav>
-      <SearchList results={this.state.searchResults} search = {this.search.bind(this)} />
-      <ShowList shows={this.state.shows} addShow = {this.addShow.bind(this)}/>
+      <ShowList shows={this.state.shows}  />
+      <SearchList 
+        results={this.state.searchResults} 
+        search={this.search.bind(this)} 
+        addShow={this.addShow.bind(this)}
+      />
     </div>)
   }
 }

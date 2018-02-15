@@ -5,11 +5,24 @@ const SearchEntry = (props) => {
   if (show.bigImg === undefined) {
     show.bigImg = 'http://icons.iconarchive.com/icons/shwz/disney/64/mickey-mouse-icon.png'
   }
-  console.log('url', show.bigImg);
+
+  const entryStyle = {
+    color: 'red',
+    border: '2px solid grey',
+    marginTop: '5px'
+    //'rgb(129, 129, 129)',
+    // backgroundColor: 'rgb(235, 235, 235)'
+  }
+
+  const addShow = function () {
+    console.log('gonna add the show');
+    props.addShow(props.show);
+  }
+  
   return (
-    <div className = 'searchEntry'>
-      <img src = {show.bigImg}/>
-      {show.title} - {show.maker}
+    <div style = {entryStyle}>
+      <img className = 'thumbnail' src = {show.bigImg}/>
+      <h5 onClick = {addShow}>{show.title}</h5>
     </div>
   )
 }
