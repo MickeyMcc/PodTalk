@@ -10,7 +10,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: 'tester',
+      user: 'test',
       shows: [],
       searchResults: ['we', 'are', 'search', 'results']
     }
@@ -29,9 +29,13 @@ class App extends React.Component {
     })
       .then(function (data) {
         console.log(data);
-        context.setState({
-          shows: data
-        })
+        if (data.data === null) {
+          console.log('no shows here');
+        } else {
+          context.setState({
+            shows: data.data
+          })
+        }
       })
       .catch(function (err) {
         console.log('err', err);
@@ -48,7 +52,7 @@ class App extends React.Component {
       .then(function (results) {
         console.log('nice search!');
         context.setState({
-          searchResults: results
+          searchResults: results.data
         })
       })
       .catch(function (err) {
@@ -58,9 +62,13 @@ class App extends React.Component {
 
   addShow(show) {
     let context = this;
-    axios.post('/shows', {
-      user: context.state.user,
-      show: show
+    axios({
+      method: 'post',
+      url: '/shows', 
+      data: {
+        user: context.state.user,
+        show: show
+      }
     })
       .then(function (results) {
         console.log('show was added');

@@ -7,11 +7,12 @@ var connection = mysql.createConnection({
   database : 'podstar'
 });
 
-var selectAllShows = function(user, callback) {
-  //TODO: change query statements to het shows on a user's list
+module.exports.selectAllShows = function(user, callback) {
 
-  connection.query('SELECT * FROM shows', function(err, results, fields) {
-    if(err) {
+  var sql = `SELECT itunesID FROM shows, users, shows_users WHERE '${user}' = users.username AND shows_users.user_id = users.id AND shows_users.show_id = shows.id`;
+
+  connection.query(sql, function(err, results) {
+    if (err) {
       callback(err, null);
     } else {
       callback(null, results);
@@ -19,4 +20,16 @@ var selectAllShows = function(user, callback) {
   });
 };
 
-module.exports.selectAllShows = selectAllShows;
+module.exports.addShow = function (user, showID, callback) {
+  var sql = `INSERT INTO shows_users (user_id, show_id) VALUES ((SELECT id FROM users WHERE username = ${user}), SELECT id FROM shows WHERE itunesID = ${showID})`;
+
+  connection.query(sql, function(err, data) {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null, data);
+    }
+  })
+
+}
+
