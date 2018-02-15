@@ -15,18 +15,17 @@ app.use(bodyParser.json());
 app.get('/shows', function (req, res) {
   const user = req.query.user;
   console.log('GET FOR SHOWS', user);
-  db.selectAllShows(user, function(err, data) {
+  db.selectAllUserShows(user, function(err, data) {
     if(err) {
       console.log(err);
       res.status(500).json(err);
     } else {
-      console.log(data) 
       res.status(200).end(JSON.stringify(data));
     }
   });
 });
 
-app.post('/shows', function (req, res) {  //gets user and showID
+app.post('/shows', function (req, res) {  //gets user and show
   const user = req.body.user;
   const showID = req.body.show;
   db.addShowToUser(user, showID, function(err, data) {
@@ -42,6 +41,7 @@ app.post('/shows', function (req, res) {  //gets user and showID
 
 app.get('/search', function(req, res) {
   const query = req.query.terms;
+  console.log(query, '<--------- my query');
   itunes.search(query, function(err, data) {
     if (err) {
       res.status(500).json(err);

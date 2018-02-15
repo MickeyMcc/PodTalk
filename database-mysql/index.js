@@ -7,11 +7,11 @@ var connection = mysql.createConnection({
   database: 'podstar'
 });
 
-module.exports.selectAllShows = function (user, callback) {
+module.exports.selectAllUserShows = function (user, callback) {
 
   var showsForUser = "SELECT shows.* FROM shows " +
     "INNER JOIN shows_users ON shows.id = shows_users.show_id " +
-    "INNERJOIN users ON users.id = shows_users.user_id, " + 
+    "INNER JOIN users ON users.id = shows_users.user_id " + 
     `WHERE '${user}' = users.username`;
 
   connection.query(showsForUser, function (err, results) {
@@ -58,7 +58,7 @@ module.exports.addShowToUser = function (user, show, callback) {
         callback(null, data);
       }
     });
-  }
+  };
 };
 
 const checkForConnection = function(user, show, callback) {
@@ -78,7 +78,7 @@ const checkForConnection = function(user, show, callback) {
       }
     }
   });
-}
+};
 
 const checkDBForShow = function (show, callback) {
   const checkForShow = `SELECT id FROM shows WHERE '${show.title}' = title`;
@@ -93,7 +93,7 @@ const checkDBForShow = function (show, callback) {
       }
     }
   });
-}
+};
 
 const addShow = function (show, callback) {
   var sql = "INSERT INTO shows " +
@@ -109,13 +109,15 @@ const addShow = function (show, callback) {
   });
 };
 
-// {
-//   "title": "Reply All",
-//     "maker": "Gimlet",
-//       "itunesUrl": "https://itunes.apple.com/us/podcast/reply-all/id941907967?mt=2&uo=4",
-//         "littleImg": "http://is1.mzstatic.com/image/thumb/Music128/v4/22/0d/f6/220df688-843f-264a-b67e-28644b73c129/source/30x30bb.jpg",
-//           "bigImg": "http://is1.mzstatic.com/image/thumb/Music128/v4/22/0d/f6/220df688-843f-264a-b67e-28644b73c129/source/60x60bb.jpg",
-//             "latestRelease": "2018-02-15T11:00:00Z",
-//               "trackCount": 135,
-//                 "genre": "Technology"
-// },
+/*
+{
+  "title": "Reply All",
+  "maker": "Gimlet",
+  "itunesUrl": "https://itunes.apple.com/us/podcast/reply-all/id941907967?mt=2&uo=4",
+  "littleImg": "http://is1.mzstatic.com/image/thumb/Music128/v4/22/0d/f6/220df688-843f-264a-b67e-28644b73c129/source/30x30bb.jpg",
+  "bigImg": "http://is1.mzstatic.com/image/thumb/Music128/v4/22/0d/f6/220df688-843f-264a-b67e-28644b73c129/source/60x60bb.jpg",
+  "latestRelease": "2018-02-15T11:00:00Z",
+  "trackCount": 135,
+  "genre": "Technology"
+}
+*/

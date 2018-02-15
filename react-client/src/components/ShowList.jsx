@@ -8,7 +8,7 @@ const ShowList = (props) => {
   } else {
     message = `You have ${props.shows.length} shows so far.`;
   }
-  console.log(props.shows);
+
   return (
     <div className='show-list pane'>
       <h4> Your Shows </h4>

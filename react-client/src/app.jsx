@@ -12,12 +12,13 @@ class App extends React.Component {
     this.state = {
       user: 'test',
       shows: [],
-      searchResults: ['we', 'are', 'search', 'results']
+      searchResults: [{title: 'we'}]
     }
   }
 
   componentDidMount() {
     this.refreshShowList();
+    //this.search('gimlet');
   }
 
   refreshShowList() {
@@ -43,14 +44,17 @@ class App extends React.Component {
   }
 
   search(query) {
+    console.log('searching for', query);
     let context = this;
+    console.log(query);
     axios.get('/search', {
       params: {
         terms: query
       }
     })
       .then(function (results) {
-        console.log('nice search!');
+        console.log('nice search!', results);
+
         context.setState({
           searchResults: results.data
         })

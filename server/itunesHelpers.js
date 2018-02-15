@@ -33,7 +33,6 @@ const getTheImportantStuff = function (results) {
       trackCount : podcast.trackCount,
       genre : podcast.primaryGenreName
     }
-    console.log(aShow);
     importantStuff.push(aShow);
   }
   return importantStuff;
