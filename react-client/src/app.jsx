@@ -7,7 +7,8 @@ import SearchList from './components/SearchList.jsx';
 
 
 class App extends React.Component {
-  constructor() {
+  constructor(props) {
+    super(props);
     this.state = {
       user: 'tester',
       shows: [],
@@ -78,25 +79,16 @@ class App extends React.Component {
     return (<div>
       <h1 id = 'title' >PodStar</h1>
       <nav className = 'nav-bar'> <ul>
-        <li> Hello {this.props.user}! </li>
+        <li> Hello {this.state.user}! </li>
         <li> Login </li>
         <li> Sign Up </li>
         <li> Log Out </li>
       </ul> </nav>
-      <SearchList results={this.props.searchResults} search = {this.search.bind(this)} />
-      <ShowList shows={this.props.shows} addShow = {this.addShow.bind(this)}/>
+      <SearchList results={this.state.searchResults} search = {this.search.bind(this)} />
+      <ShowList shows={this.state.shows} addShow = {this.addShow.bind(this)}/>
     </div>)
   }
 }
-
-App.propTypes = {
-  user: PropTypes.string,
-  shows: PropTypes.array,
-  searchResults: PropTypes.array,
-  onAddShow: PropTypes.func.isRequired,
-  onReset: PropTypes.func.isRequired
-}
-
 
 export default App;
 
