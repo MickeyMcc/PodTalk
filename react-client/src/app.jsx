@@ -24,7 +24,7 @@ class App extends React.Component {
     let context = this;
     axios.get('/shows', {
       params: {
-        user: 'yoohoo!'
+        user: context.state.user
       }
     })
       .then(function (data) {
@@ -36,57 +36,39 @@ class App extends React.Component {
       .catch(function (err) {
         console.log('err', err);
       });
-
-    // $.ajax({
-    //   type: 'GET',
-    //   url: '/shows',
-    //   //dataType: 'json',
-    //   data: JSON.stringify({
-    //     user: 'yoohoo!'
-    //   }),
-    //   success: (data) => {
-
-    //   },
-    //   error: (err) => {
-        
-    //   }
-    // });
   }
 
   search(query) {
     let context = this;
-    $.ajax({
-      method: 'GET',
-      url: '/search',
-      data: {
-        query: query
-      },
-      success: (results) => {
+    axios.get('/search', {
+      params: {
+        terms: query
+      }
+    })
+      .then(function (results) {
         console.log('nice search!');
         context.setState({
           searchResults: results
         })
-      }
-    });
+      })
+      .catch(function (err) {
+        console.log('err', err);
+      });
   }
 
   addShow(show) {
     let context = this;
-    $.ajax({
-      method: 'POST',
-      url: '/shows',
-      data: {
-        user: context.state.user,
-        show: show
-      },
-      success: (data) => {
+    axios.post('/shows', {
+      user: context.state.user,
+      show: show
+    })
+      .then(function (results) {
         console.log('show was added');
         context.refreshShowList();
-      },
-      error: (err) => {
+      })
+      .catch(function (err) {
         console.log('err', err);
-      }
-    });
+      });
   }
 
   render () {

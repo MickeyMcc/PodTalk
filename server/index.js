@@ -10,9 +10,7 @@ app.use(express.static(__dirname + '/../react-client/dist'));
 app.use(bodyParser.json());
 
 app.get('/shows', function (req, res) {
-  console.log(req);
-  console.log(req.body);
-  const user = req.body.user;
+  const user = req.query.user;
   console.log('GET FOR SHOWS', user);
   db.selectAllShows(user, function(err, data) {
     if(err) {
