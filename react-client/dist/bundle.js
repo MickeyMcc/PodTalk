@@ -2801,28 +2801,16 @@ eval("module.exports = function(originalModule) {\r\n\tif(!originalModule.webpac
 
 /***/ }),
 /* 230 */,
-/* 231 */
-/* no static exports found */
-/* all exports used */
-/*!*****************************************************!*\
-  !*** ./react-client/src/components/SearchEntry.jsx ***!
-  \*****************************************************/
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _react = __webpack_require__(/*! react */ 32);\n\nvar _react2 = _interopRequireDefault(_react);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nvar SearchEntry = function SearchEntry(props) {\n  if (props) {\n    console.log(props);\n  }\n  return _react2.default.createElement(\n    'div',\n    null,\n    props.result\n  );\n};\n\nexports.default = SearchEntry;//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiMjMxLmpzIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vL3JlYWN0LWNsaWVudC9zcmMvY29tcG9uZW50cy9TZWFyY2hFbnRyeS5qc3g/MGM0MyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgUmVhY3QgZnJvbSAncmVhY3QnO1xuXG5jb25zdCBTZWFyY2hFbnRyeSA9IChwcm9wcykgPT4ge1xuICBpZiAocHJvcHMpIHtcbiAgICBjb25zb2xlLmxvZyhwcm9wcylcbiAgfVxuICByZXR1cm4gKFxuICAgIDxkaXY+XG4gICAgICB7cHJvcHMucmVzdWx0fVxuICAgIDwvZGl2PlxuICApXG59XG5cbmV4cG9ydCBkZWZhdWx0IFNlYXJjaEVudHJ5O1xuXG5cbi8vIFdFQlBBQ0sgRk9PVEVSIC8vXG4vLyByZWFjdC1jbGllbnQvc3JjL2NvbXBvbmVudHMvU2VhcmNoRW50cnkuanN4Il0sIm1hcHBpbmdzIjoiOzs7Ozs7QUFBQTtBQUNBOzs7OztBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUFBO0FBQ0E7QUFEQTtBQUlBO0FBQ0E7QUFDQSIsInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///231\n");
-
-/***/ }),
+/* 231 */,
 /* 232 */
 /* no static exports found */
 /* all exports used */
 /*!****************************************************!*\
   !*** ./react-client/src/components/SearchList.jsx ***!
   \****************************************************/
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _react = __webpack_require__(/*! react */ 32);\n\nvar _react2 = _interopRequireDefault(_react);\n\nvar _SearchEntry = __webpack_require__(/*! ./SearchEntry.jsx */ 231);\n\nvar _SearchEntry2 = _interopRequireDefault(_SearchEntry);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nvar SearchList = function SearchList(props) {\n  return _react2.default.createElement(\n    'div',\n    { className: 'search-area pane' },\n    _react2.default.createElement(\n      'form',\n      { id: 'searchbar' },\n      _react2.default.createElement('input', { type: 'text' }),\n      _react2.default.createElement('input', { className: 'button', type: 'submit' })\n    ),\n    _react2.default.createElement(\n      'h4',\n      null,\n      ' Search Results '\n    ),\n    props.results.length,\n    ' results found.',\n    props.results.map(function (result, index) {\n      return _react2.default.createElement(_SearchEntry2.default, { result: result,\n        key: index\n      });\n    })\n  );\n};\n\nexports.default = SearchList;//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiMjMyLmpzIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vL3JlYWN0LWNsaWVudC9zcmMvY29tcG9uZW50cy9TZWFyY2hMaXN0LmpzeD8wMzNjIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBSZWFjdCBmcm9tICdyZWFjdCc7XG5pbXBvcnQgU2VhcmNoRW50cnkgZnJvbSAnLi9TZWFyY2hFbnRyeS5qc3gnO1xuXG5jb25zdCBTZWFyY2hMaXN0ID0gKHByb3BzKSA9PiB7XG4gIHJldHVybiAoXG4gICAgPGRpdiBjbGFzc05hbWU9J3NlYXJjaC1hcmVhIHBhbmUnID5cbiAgICAgIDxmb3JtIGlkPSdzZWFyY2hiYXInID5cbiAgICAgICAgPGlucHV0IHR5cGU9J3RleHQnIC8+XG4gICAgICAgIDxpbnB1dCBjbGFzc05hbWU9J2J1dHRvbicgdHlwZT0nc3VibWl0JyAvPlxuICAgICAgPC9mb3JtPlxuICAgICAgPGg0PiBTZWFyY2ggUmVzdWx0cyA8L2g0PlxuICAgICAge3Byb3BzLnJlc3VsdHMubGVuZ3RofSByZXN1bHRzIGZvdW5kLlxuICAgICAge3Byb3BzLnJlc3VsdHMubWFwKChyZXN1bHQsIGluZGV4KSA9PlxuICAgICAgICA8U2VhcmNoRW50cnkgcmVzdWx0PXtyZXN1bHR9XG4gICAgICAgICAga2V5PXtpbmRleH1cbiAgICAgICAgLz5cbiAgICAgICl9XG4gICAgPC9kaXY+XG4gIClcbn07XG5cbmV4cG9ydCBkZWZhdWx0IFNlYXJjaExpc3Q7XG5cblxuLy8gV0VCUEFDSyBGT09URVIgLy9cbi8vIHJlYWN0LWNsaWVudC9zcmMvY29tcG9uZW50cy9TZWFyY2hMaXN0LmpzeCJdLCJtYXBwaW5ncyI6Ijs7Ozs7O0FBQUE7QUFDQTs7O0FBQUE7QUFDQTs7Ozs7QUFDQTtBQUNBO0FBQ0E7QUFBQTtBQUNBO0FBQUE7QUFBQTtBQUNBO0FBQ0E7QUFGQTtBQUlBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFDQTtBQU5BO0FBT0E7QUFBQTtBQUVBO0FBREE7QUFEQTtBQVBBO0FBY0E7QUFDQTtBQUNBIiwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///232\n");
+eval("throw new Error(\"Module build failed: SyntaxError: Only one default export allowed per module. (59:0)\\n\\n\\u001b[0m \\u001b[90m 57 | \\u001b[39m\\n \\u001b[90m 58 | \\u001b[39m\\n\\u001b[31m\\u001b[1m>\\u001b[22m\\u001b[39m\\u001b[90m 59 | \\u001b[39m\\u001b[36mexport\\u001b[39m \\u001b[36mdefault\\u001b[39m \\u001b[33mSearchList\\u001b[39m\\u001b[33m;\\u001b[39m\\n \\u001b[90m    | \\u001b[39m\\u001b[31m\\u001b[1m^\\u001b[22m\\u001b[39m\\u001b[0m\\n\");//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiMjMyLmpzIiwic291cmNlcyI6W10sIm1hcHBpbmdzIjoiIiwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///232\n");
 
 /***/ }),
 /* 233 */
