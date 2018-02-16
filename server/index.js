@@ -139,6 +139,30 @@ app.post('/comments', function(req, res) {
   });
 })
 
+app.get('/comments', function(req, res) {
+
+  const user = req.query.userID;
+
+  if (user === 'all') {
+    db.getCommentsAll(req.query.movie, function(err, data) {
+      if (err) {
+        res.status(500).json({message: err});        
+      } else {
+        res.status(201).json(data);
+      }
+    })
+
+  } else {
+    db.getCommentsUser(user, function(err, data) {
+      if (err) {
+        res.status(500).json({message: err});        
+      } else {
+        res.status(201).json(data);
+      }
+    })
+  }
+})
+
 app.listen(3000, function() {
   console.log('listening on port 3000!');
 });

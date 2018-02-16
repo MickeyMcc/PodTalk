@@ -15,6 +15,7 @@ class App extends React.Component {
       user: {},
       shows: [],
       searchResults: [],
+      userComments: {},
       loggedIn: false
     }
   };
@@ -109,6 +110,7 @@ class App extends React.Component {
           context.setState({
             shows: results.data
           })
+          context.getUsersComments();
         }
       })
       .catch(function (err) {
@@ -188,6 +190,56 @@ class App extends React.Component {
       })
   }
 
+  getUsersComments() {
+    let context = this;
+    axios({
+      method: 'get',
+      url: '/comments',
+      params: {
+        userID: context.state.user.id
+      }
+    })
+      .then(function(results) {
+        context.setState({userComments: context.transformComments(results.data)});
+      })
+      .catch(function(err) {
+        console.log(err);
+      })
+  };
+
+  getShowComments(show) {
+    let context = this;
+    axios({
+      method: 'get',
+      url: '/comments',
+      params: {
+        userID: 'all',
+        showID: show.id
+      }
+    })
+      .then(function(results) {
+        console.log('all the comments on that show', results.data);
+      })
+      .catch(function(err) {
+        console.log(err);
+      }) 
+  };
+
+  transformComments(comments) {
+    console.log(comments);
+    let commentsObj = {};
+    for (var i = 0; i < comments.length; i++) {
+      console.log(commentsObj, 'new comment', comments[i]);
+      if (!commentsObj[comments[i].show_id]) {
+        commentsObj[comments[i].show_id] = [comments[i].text];
+      } else {
+        commentsObj[comments[i].show_id].push(comments[i].text);        
+      }
+    }
+    console.log(commentsObj);
+    return commentsObj;
+  }
+
 ///////////////////RENDER\\\\\\\\\\\\\\\\\\\\\\\\\\
 
   render () {
@@ -202,6 +254,7 @@ class App extends React.Component {
         </ul> </nav>
         <ShowList shows={this.state.shows}
           saveComment = {this.saveComment.bind(this)}
+          comments = {this.state.userComments}
         />
         <SearchList 
           results={this.state.searchResults} 
@@ -220,7 +273,7 @@ class App extends React.Component {
         <Signup signup = {this.signup.bind(this)}/>
       </div>)
     }
-  }
+  };
 }
 
 export default App;
