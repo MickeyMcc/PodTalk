@@ -4,15 +4,21 @@ import $ from 'jquery';
 import PropTypes from 'prop-types';
 import ShowList from './components/ShowList.jsx';
 import SearchList from './components/SearchList.jsx';
+import Login from './components/Login.jsx';
+import Signup from './components/Signup.jsx';
 import axios from 'axios';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: 'test',
+      user: '',
       shows: [],
+<<<<<<< HEAD
       searchResults: [{title: 'we'}],
+=======
+      searchResults: [],
+>>>>>>> 191ec33e742ab1382041df7e27f45d3d03bc3dfa
       loggedIn: false
     }
   }
@@ -28,13 +34,14 @@ class App extends React.Component {
         user: context.state.user
       }
     })
-      .then(function (data) {
-        console.log(data);
-        if (data.data === null) {
-          console.log('no shows here');
+      .then(function (results) {
+        if (results.statusCode === 404) {
+          context.setState({
+            loggedIn: false
+          });
         } else {
           context.setState({
-            shows: data.data
+            shows: results.data
           })
         }
       })
@@ -53,9 +60,15 @@ class App extends React.Component {
       }
     })
       .then(function (results) {
-        context.setState({
+        if (results.statusCode === 404) {
+          context.setState({
+            loggedIn: false
+          });
+        } else {
+          context.setState({
           searchResults: results.data
-        })
+          });
+        }
       })
       .catch(function (err) {
         console.log('err', err);
@@ -73,7 +86,13 @@ class App extends React.Component {
       }
     })
       .then(function (results) {
-        context.refreshShowList();
+        if (results.statusCode === 404) {
+          context.setState({
+            loggedIn: false
+          });
+        } else {
+          context.refreshShowList();
+        }
       })
       .catch(function (err) {
         console.log('err', err);
@@ -91,14 +110,20 @@ class App extends React.Component {
       }
     })
       .then(function (results) {
-        context.setState({user: username, loggedIn: true});
+        if (results.statusCode === 400) {
+          console.log('SORRY COULD NOT CREATE USER')
+        } else {
+          console.log(`WELCOME BACK ${user}!`)
+          context.setState({user: username, loggedIn: true});
+        }
       })
       .catch(function (err) {
         console.log('err', err);
     });
   };
 
-  login(username, password) {
+  login(username = 'test', password = 'test') {
+
     let context = this;
     axios({
       method: 'get',
@@ -109,9 +134,13 @@ class App extends React.Component {
       }
     })
       .then(function (results) {
-        context.setState({ user: username, loggedIn: true }, () =>
-          context.refreshShowList()
-        );
+        if (results.statusCode === 400) {
+          console.log('SORRY COULD NOT LOGIN')
+        } else {
+          console.log( `WELCOME BACK ${username}!`)
+          context.setState({ user: 'test', loggedIn: true });
+          context.refreshShowList();
+        }
       })
       .catch(function (err) {
         console.log('err', err);
@@ -142,7 +171,7 @@ class App extends React.Component {
         <nav className='nav-bar'> <ul>
           <li> Hello Guest! </li>
         </ul> </nav>
-        <LogIn login = {this.login.bind(this)}/>
+        <Login login = {this.login.bind(this)}/>
         <Signup signup = {this.signup.bind(this)}/>
       </div>)
     }

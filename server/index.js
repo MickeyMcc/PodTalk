@@ -1,18 +1,34 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var itunes = require('./itunesHelpers');
+var session = require('express-session');
+var bcrypt = require('bcrypt-nodejs');
 
 var db = require('../database-mysql');
 
 var app = express();
 
 app.use(express.static(__dirname + '/../react-client/dist'));
+app.use(session({
+  secret: 'mickey mouse',
+  cookie: {
+    maxAge: 60000
+  }
+}));
 
 app.use(bodyParser.urlencoded());
 
 app.use(bodyParser.json());
 
-app.get('/shows', function (req, res) {
+const checkSession = function(req, res, next) {
+  if (req.session.loggedIn === true) {
+    next();
+  } else {
+    res.status(404).end(false);
+  }
+}
+
+app.get('/shows', checkSession, function (req, res) {
   const user = req.query.user;
   console.log('GET FOR SHOWS', user);
   db.selectAllUserShows(user, function(err, data) {
@@ -39,7 +55,7 @@ app.post('/shows', function (req, res) {  //gets user and show
 })
 
 
-app.get('/search', function(req, res) {
+app.get('/search', checkSession, function(req, res) {
   const query = req.query.terms;
   console.log(query, '<--------- my query');
   itunes.search(query, function(err, data) {
@@ -53,17 +69,25 @@ app.get('/search', function(req, res) {
 
 app.get('/users', function(req, res) {
   console.log('login');
-  res.end;
-})
+  const username = req.query.username;
+  const password = req.query.password;
+  db.createUser(username, password, function(err, data) {
+    req.session.loggedIn = true;
+    res.end();
+  });
+
+});
 
 app.post('/users', function (req, res) {
   console.log('signup');
-  res.end;
-})
-
-//https://itunes.apple.com/search?parameterkeyvalue
+  const username = req.body.username;
+  const password = req.body.password;
+  db.createUser(username, password, function(err, data) {
+    req.session.loggedIn = true;
+    res.end();
+  });
+});
 
 app.listen(3000, function() {
   console.log('listening on port 3000!');
 });
-
