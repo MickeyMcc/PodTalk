@@ -17,28 +17,28 @@ Once the project moves into development, the press release can be used as a touc
  -->
  
 ## Heading ##
-  > Name the product in a way the reader (i.e. your target customers) will understand.
+  Podstar
 
 ## Sub-Heading ##
-  > Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
+  Goodreads for podcasts
 
 ## Summary ##
-  > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
+  A place to show off the podcasts you love and what you think about them.
 
 ## Problem ##
-  > Describe the problem your product solves.
+  Are your friends sick and tired of listening to you talk about podcasts all the time?  Now you can talk to people who actually care about podcasts about your podcasts.  Everyone is happier.
 
 ## Solution ##
-  > Describe how your product elegantly solves the problem.
+  Make an account and get started adding all the podcasts you love to your 'list'.  Then read comments on them by other users and post your own, start a conversation.  See what podcasts are popular with other users so you can check them out too!!
 
 ## Quote from You ##
-  > A quote from a spokesperson in your company.
+  'I'm starting to think that 'I was listening to a podcast the other day and...' is my catchphrase'
 
 ## How to Get Started ##
-  > Describe how easy it is to get started.
+  'Signup, find your shows and start a conversation'
 
 ## Customer Quote ##
-  > Provide a quote from a hypothetical customer that describes how they experienced the benefit.
+  'Now my friends aren't sick of hearing about the latest episode of radiolab all the time!'
 
 ## Closing and Call to Action ##
   > Wrap it up and give pointers where the reader should go next.
