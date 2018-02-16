@@ -8,22 +8,81 @@ var connection = mysql.createConnection({
   database: 'podstar'
 });
 
-module.exports.selectAllUserShows = function (user, callback) {
-
-  var showsForUser = "SELECT shows.* FROM shows " +
-    "INNER JOIN shows_users ON shows.id = shows_users.show_id " +
-    "INNER JOIN users ON users.id = shows_users.user_id " + 
-    `WHERE '${user}' = users.username`;
-
-  connection.query(showsForUser, function (err, results) {
+//Factored out here to for less repetition
+const standardDBCall = function(query, callback) {
+  connection.query(query, function(err, data) {
     if (err) {
-      callback(err, null);
+      console.log(err);
+      callback(err);
     } else {
-      callback(null, results);
+      callback(err, data)
+    }
+  }); 
+};
+
+///////////////////USERS\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+module.exports.createUser = function(username, password, callback) {
+  const checkForExisting = `SELECT id FROM users WHERE username = '${username}'`;
+  connection.query(checkForExisting, function(err, data) {
+    if (err) {
+      callback(err);
+    } else {
+      if (data.length !== 0) {
+        callback('ERROR ON USER CREATION: username taken!');
+      } else {
+        insertUser(function(err, data) {
+          if (err) {
+            callback(err);
+          } else {
+            console.log(data);
+            callback(null, data)
+          }
+        });
+      }
+    }
+  });
+
+  function insertUser(callback) {
+    const insertQuery = `INSERT INTO USERS (username, password) VALUES ('${username}', '${bcrypt.hashSync(password)}')`;
+
+    standardDBCall(insertQuery, callback);
+  }
+
+};
+
+module.exports.login = function(username, password, callback) {
+  const query = `SELECT id, password FROM users WHERE username = '${username}'`;
+
+  connection.query(query, function(err, data) {
+    if (err) {
+      callback(err);
+    } else {
+      if (data.length === 0) {
+        callback('ERROR: username does not exist');
+      } else {
+        if (bcrypt.compareSync(password, data[0].password)) {
+          callback(null, data[0].id);
+        } else {
+          callback('ERROR: username and password do not match');
+        }
+      }
     }
   });
 };
 
+///////////////////SHOWS\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+module.exports.selectAllUserShows = function (user, callback) {
+
+  var showsForUser = "SELECT shows.* FROM shows " +
+    "INNER JOIN shows_users ON shows.id = shows_users.show_id " +
+    `WHERE '${user}' = shows_users.user_id`;
+
+  standardDBCall(showsForUser, callback);
+};
+
+//WELCOME TO HELL
 module.exports.addShowToUser = function (user, show, callback) {
   checkDBForShow(show, function (err, showFound) { //checks if some user has already added the show
     if (err) {
@@ -53,100 +112,19 @@ module.exports.addShowToUser = function (user, show, callback) {
   });
 
   function makeConection() {
+
     const connectShowUser = "INSERT INTO shows_users (user_id, show_id) " +
-      `VALUES ((SELECT id FROM users WHERE username = '${user}'), ` +
-        `(SELECT id FROM shows WHERE title = '${show.title}'))`;
+      `VALUES (${user}, ` +
+      `(SELECT id FROM shows WHERE title = '${show.title}'))`;
 
-    connection.query(connectShowUser, function (err, data) {
-      if (err) {
-        callback(err);
-      } else {
-        callback(null, data);
-      }
-    });
-  };
-};
-
-module.exports.createUser = function(username, password, callback) {
-  const checkForExisting = `SELECT id FROM users WHERE username = '${username}'`;
-  connection.query(checkForExisting, function(err, data) {
-    if (err) {
-      callback(err);
-    } else {
-      if (data.length !== 0) {
-        callback('ERROR ON USER CREATION: username taken!');
-      } else {
-        insertUser(function(err, data) {
-          if (err) {
-            callback(err);
-          } else {
-            callback(null, data)
-          }
-        });
-      }
-    }
-
-    function insertUser(callback) {
-      const insertQuery = `INSERT INTO USERS (username, password) VALUES ('${username}', '${bcrypt.hashSync(password)}')`;
-
-      connection.query(insertQuery, function(err, data) {
-        if (err) {
-          callback(err);
-        } else {
-          callback(null, data);
-        }
-      });
-    }
-  });
-
-};
-
-module.exports.login = function(username, password, callback) {
-  const query = `SELECT password FROM users WHERE username = '${username}'`;
-  console.log(query);
-  connection.query(query, function(err, data) {
-    if (err) {
-      callback(err);
-    } else {
-      if (data.length === 0) {
-        callback('ERROR: username does not exist');
-      } else {
-        if (bcrypt.compareSync(password, data[0].password)) {
-          callback(null, true);
-        } else {
-          callback('ERROR: username and password do not match');
-        }
-      }
-    }
-  })
-
-};
-
-const checkForConnection = function(user, show, callback) {
-  // const getShowId = `SELECT id FROM shows WHERE shows.title = ${show.title}`;
-  // connection.query(getShowId, function (err, data) {
-  //   const showID = data[0];
-    const checkConnection = "SELECT shows_users.id FROM shows_users " + 
-      "INNER JOIN shows ON shows.id = shows_users.show_id " + 
-      "INNER JOIN users ON users.id = shows_users.user_id " + 
-      `WHERE users.username = '${user}' AND shows.title = '${show.title}'`;
-  
-    connection.query(checkConnection, function (err, data) {
-      if (err) {
-        callback(err);
-      } else {
-        if (data.length === 0) {
-          callback(err, false);
-        } else {
-          callback(err, true);
-        }
-      }
-    });
-  
+    standardDBCall(connectShowUser, callback);
+  }
 };
 
 const checkDBForShow = function (show, callback) {
+
   const checkForShow = `SELECT id FROM shows WHERE '${show.title}' = title`;
+
   connection.query(checkForShow, function (err, data) {
     if (err) {
       callback(err)
@@ -160,19 +138,63 @@ const checkDBForShow = function (show, callback) {
   });
 };
 
+
 const addShow = function (show, callback) {
-  var sql = "INSERT INTO shows " +
+  var query = "INSERT INTO shows " +
     "(title, maker, itunesUrl, littleImg, bigImg, latestRelease, trackCount, genre) " +
     `VALUES ('${show.title}','${show.maker}','${show.itunesUrl}','${show.littleImg}','${show.bigImg}','${show.latestRelease}','${show.trackCount}','${show.genre}')`;
 
-  connection.query(sql, function (err, data) {
-    if (err) {
-      callback(err);
-    } else {
-      callback(null, data);
-    }
-  });
+  standardDBCall(query, callback);
+
 };
+
+
+const checkForConnection = function(user, show, callback) {
+
+    const checkConnection = "SELECT shows_users.id FROM shows_users " + 
+      "INNER JOIN shows ON shows.id = shows_users.show_id " + 
+      `WHERE shows_users.user_id = ${user} AND shows.title = '${show.title}'`;
+  
+    connection.query(checkConnection, function (err, data) {
+      if (err) {
+        callback(err);
+      } else {
+        if (data.length === 0) {
+          callback(err, false);
+        } else {
+          callback(err, true);
+        }
+      }
+    });
+};
+
+///////////////////COMMENTS\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+
+module.exports.addComment = function(userID, showID, comment, callback) {
+  
+  const query = "INSERT INTO comments (user_id, show_id, text) " +
+    `VALUES ('${userID}', '${showID}', '${comment}')`;
+
+  standardDBCall(query, callback);
+};
+
+module.exports.getCommentsUser = function(userID, showID, callback) {
+  const query = "SELECT comments.text, users.username FROM comments " +
+    "INNER JOIN users ON users.id = comments.user_id " +
+    `WHERE '${showID}' = comments.show_id`;
+
+  standardDBCall(query, callback);
+};
+
+module.exports.getCommentsAll = function(showID, callback) {
+  const query = "SELECT comments.text, users.username FROM comments " +
+    "INNER JOIN users ON users.id = comments.user_id " +
+    `WHERE '${showID}' = comments.show_id`;
+
+  standardDBCall(query, callback);
+};
+
 
 /////DATA STRUCTURE FOR SHOWS
 /*

@@ -20,7 +20,10 @@ app.use(bodyParser.urlencoded());
 
 app.use(bodyParser.json());
 
+///////////////AUTHENTICATION\\\\\\\\\\\\\\\\\\\
+
 const checkSession = function(req, res, next) {
+  
   if (req.session.loggedIn === true) {
     next();
   } else {
@@ -29,8 +32,52 @@ const checkSession = function(req, res, next) {
   }
 }
 
-app.get('/shows', checkSession, function (req, res) {
+///////////////////USERS\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+app.get('/users', function(req, res) {
+  
   const user = req.query.user;
+  const password = req.query.password;
+  
+  db.login(user, password, function(err, data) {
+    if (err) {
+      res.status(400).json({message: err});
+    } else {
+      req.session.loggedIn = true;
+      res.status(200).json({username: user, id: data});
+    }
+  });
+});
+
+app.post('/users', function (req, res) {
+  
+  const user = req.body.user;
+  const password = req.body.password;
+  
+  db.createUser(user, password, function(err, data) {
+    if (err) {
+      res.status(400).json({message: err});
+    } else {
+      req.session.loggedIn = true;
+      res.status(201).json({username: user, id: data.insertId});
+    }
+  });
+});
+
+app.delete('/users', function (req, res) {
+  
+  res.session.destroy( function() {
+    res.status(200).end();
+  });
+})
+
+
+///////////////////SHOWS\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+app.get('/shows', checkSession, function (req, res) {
+  
+  const user = req.query.userId;
+  
   db.selectAllUserShows(user, function(err, data) {
     if(err) {
       console.log(err);
@@ -42,9 +89,11 @@ app.get('/shows', checkSession, function (req, res) {
 });
 
 app.post('/shows', function (req, res) {  //gets user and show
-  const user = req.body.user;
+  
+  const userId = req.body.userId;
   const show = req.body.show;
-  db.addShowToUser(user, show, function(err, data) {
+
+  db.addShowToUser(userId, show, function(err, data) {
     if (err) {
       console.log(err);
       res.end('show could not be added');
@@ -54,9 +103,13 @@ app.post('/shows', function (req, res) {  //gets user and show
   });
 })
 
+///////////////////SEARCH\\\\\\\\\\\\\\\\\\\\\\\\\\
+
 
 app.get('/search', checkSession, function(req, res) {
+
   const query = req.query.terms;
+
   itunes.search(query, function(err, data) {
     if (err) {
       res.status(500).json(err);
@@ -66,45 +119,24 @@ app.get('/search', checkSession, function(req, res) {
   });
 });
 
-app.get('/users', function(req, res) {
-  const user = req.query.user;
-  const password = req.query.password;
-  db.login(user, password, function(err, data) {
-    if (err) {
-      res.status(400).json({message: err});
-    } else {
-      req.session.loggedIn = true;
-      res.status(200).end();
-    }
-  });
-});
+///////////////////COMMENTS\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-app.post('/users', function (req, res) {
-  const user = req.body.user;
-  const password = req.body.password;
-  db.createUser(user, password, function(err, data) {
+app.post('/comments', function(req, res) {
+
+  const comment = req.body.comment;
+  const user = req.body.userID;
+  const show = req.body.showID;
+
+  console.log(`add ${comment} to ${show} by ${user}`);
+
+  db.addComment(user, show, comment, function(err, data) {
     if (err) {
-      res.status(400).json({message: err});
+      res.status(500).json({message: err});
     } else {
-      req.session.loggedIn = true;
+      console.log(data);
       res.status(201).end();
     }
   });
-});
-
-app.delete('/users', function (req, res) {
-  res.session.destroy( function() {
-    res.status(200).end();
-  });
-})
-
-app.post('/comments', function(req, res) {
-  const comment = req.body.comment;
-  const user = req.body.user;
-  const showID = req.body.showID;
-  console.log(`add ${comment} to ${showID} by ${user}`);
-
-  res.end()
 })
 
 app.listen(3000, function() {

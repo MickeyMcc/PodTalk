@@ -12,7 +12,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: '',
+      user: {},
       shows: [],
       searchResults: [],
       loggedIn: false
@@ -20,18 +20,84 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-    this.login();
     if (this.state.loggedIn) {
       this.refreshShowList();
-      this.search('r');
     }
   };
+
+///////////////////USERS\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+  signup(username, password) {
+    console.log(username);
+    let context = this;
+    axios({
+      method: 'post',
+      url: '/users',
+      data: {
+        user: username,
+        password: password
+      }
+    })
+      .then(function (results) {
+        if (results.statusCode === 400) {
+          console.log('SORRY COULD NOT CREATE USER');
+        } else {
+          console.log(`WELCOME TO PODSTAR ${username}!`)
+          console.log(JSON.stringify(results.data));
+          context.setState({ user: results.data, loggedIn: true });
+        }
+      })
+      .catch(function (err) {
+        console.log('err', err);
+    });
+  };
+
+  login(username= 'new', password = 'user') {
+
+    let context = this;
+    axios({
+      method: 'get',
+      url: '/users',
+      params: {
+        user: username,
+        password: password
+      }
+    })
+      .then(function (results) {
+        if (results.statusCode === 400) {
+          console.log('SORRY COULD NOT LOGIN');
+        } else {
+          console.log( `WELCOME BACK ${results.data.username}!`)
+          context.setState({ user: results.data, loggedIn: true });
+          context.refreshShowList();
+        }
+      })
+      .catch(function (err) {
+        console.log('err', err);
+    });
+  };
+
+  logout() {
+    let context = this;
+    axios({
+      method: 'delete',
+      url: '/users',
+    })
+      .then(function(results) {
+        context.setState({user: null, loggedIn: false});
+      })
+      .catch(function (err) {
+        console.log('err', err);
+    });
+  };
+
+///////////////////SHOWS\\\\\\\\\\\\\\\\\\\\\\\\\\
 
   refreshShowList() {
     let context = this;
     axios.get('/shows', {
       params: {
-        user: context.state.user
+        userId: context.state.user.id
       }
     })
       .then(function (results) {
@@ -43,13 +109,38 @@ class App extends React.Component {
           context.setState({
             shows: results.data
           })
-                context.search('r');
         }
       })
       .catch(function (err) {
         console.log('err', err);
       });
   };
+
+  addShow(show) {
+    let context = this;
+    axios({
+      method: 'post',
+      url: '/shows', 
+      data: {
+        userId: context.state.user.id,
+        show: show    //from search results, doesn't have id
+      }
+    })
+      .then(function (results) {
+        if (results.statusCode === 404) {
+          context.setState({
+            loggedIn: false
+          });
+        } else {
+          context.refreshShowList();
+        }
+      })
+      .catch(function (err) {
+        console.log('err', err);
+      });
+  };
+
+///////////////////SEARCH\\\\\\\\\\\\\\\\\\\\\\\\\\
 
   search(query) {
     console.log('searching for', query);
@@ -76,92 +167,7 @@ class App extends React.Component {
       });
   };
 
-  addShow(show) {
-    let context = this;
-    axios({
-      method: 'post',
-      url: '/shows', 
-      data: {
-        user: context.state.user,
-        show: show
-      }
-    })
-      .then(function (results) {
-        if (results.statusCode === 404) {
-          context.setState({
-            loggedIn: false
-          });
-        } else {
-          context.refreshShowList();
-        }
-      })
-      .catch(function (err) {
-        console.log('err', err);
-      });
-  };
-
-  signup(username, password) {
-    console.log(username);
-    let context = this;
-    axios({
-      method: 'post',
-      url: '/users',
-      data: {
-        user: username,
-        password: password
-      }
-    })
-      .then(function (results) {
-        if (results.statusCode === 400) {
-          console.log('SORRY COULD NOT CREATE USER');
-        } else {
-          console.log(`WELCOME TO PODSTAR ${username}!`)
-          context.setState({user: username, loggedIn: true});
-        }
-      })
-      .catch(function (err) {
-        console.log('err', err);
-    });
-  };
-
-  login(username= 'new', password = 'user') {
-
-    let context = this;
-    axios({
-      method: 'get',
-      url: '/users',
-      params: {
-        user: username,
-        password: password
-      }
-    })
-      .then(function (results) {
-        if (results.statusCode === 400) {
-          console.log('SORRY COULD NOT LOGIN');
-        } else {
-          console.log( `WELCOME BACK ${username}!`)
-          context.setState({ user: username, loggedIn: true });
-          context.refreshShowList();
-        }
-      })
-      .catch(function (err) {
-        console.log('err', err);
-    });
-  };
-
-  logout() {
-    let context = this;
-    axios({
-      method: 'delete',
-      url: '/users',
-    })
-      .then(function(results) {
-        context.setState({loggedIn: false});
-      })
-      .catch(function (err) {
-        console.log('err', err);
-    });
-  };
+///////////////////COMMENTS\\\\\\\\\\\\\\\\\\\\\\\\\\
 
   saveComment(comment, showID) {
     let context = this;
@@ -171,7 +177,7 @@ class App extends React.Component {
       data: {
         comment: comment,
         showID: showID,
-        user: context.state.user
+        userID: context.state.user.id
       }
     })
       .then(function(results) {
@@ -182,12 +188,14 @@ class App extends React.Component {
       })
   }
 
+///////////////////RENDER\\\\\\\\\\\\\\\\\\\\\\\\\\
+
   render () {
     if (this.state.loggedIn) {
       return (<div>
         <h1 id = 'title' >PodStar</h1>
         <nav className = 'nav-bar'> <ul>
-          <li> Hello {this.state.user}! </li>
+          <li> Hello {this.state.user.username}! </li>
           <li> Login </li>
           <li> Sign Up </li>
           <li onClick = {this.logout.bind(this)}> Log Out </li>
