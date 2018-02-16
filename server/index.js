@@ -51,6 +51,16 @@ app.get('/search', function(req, res) {
   });
 });
 
+app.get('/users', function(req, res) {
+  console.log('login');
+  res.end;
+})
+
+app.post('/users', function (req, res) {
+  console.log('signup');
+  res.end;
+})
+
 //https://itunes.apple.com/search?parameterkeyvalue
 
 app.listen(3000, function() {

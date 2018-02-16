@@ -22,9 +22,9 @@ CREATE TABLE users (
 
 CREATE TABLE shows (
   id int NOT NULL AUTO_INCREMENT,
-  title varchar(50) NOT NULL,
+  title varchar(100) NOT NULL,
   maker varchar(300) NOT NULL,
-  itunesUrl varchar(100) NOT NULL,
+  itunesUrl varchar(200) NOT NULL,
   littleImg varchar(200) NOT NULL,
   bigImg varchar(200) NOT NULL,
   latestRelease varchar(60) NOT NULL,  -- Kind of a data but i don't want to format it

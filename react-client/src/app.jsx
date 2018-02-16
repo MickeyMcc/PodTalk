@@ -12,13 +12,13 @@ class App extends React.Component {
     this.state = {
       user: 'test',
       shows: [],
-      searchResults: [{title: 'we'}]
+      searchResults: [{title: 'we'}],
+      loggedIn: true
     }
   }
 
   componentDidMount() {
     this.refreshShowList();
-    //this.search('gimlet');
   }
 
   refreshShowList() {
@@ -53,8 +53,6 @@ class App extends React.Component {
       }
     })
       .then(function (results) {
-        console.log('nice search!', results);
-
         context.setState({
           searchResults: results.data
         })
@@ -75,7 +73,6 @@ class App extends React.Component {
       }
     })
       .then(function (results) {
-        console.log('show was added');
         context.refreshShowList();
       })
       .catch(function (err) {
@@ -83,22 +80,72 @@ class App extends React.Component {
       });
   }
 
+  signup(username, password) {
+    let context = this;
+    axios({
+      method: 'post',
+      url: '/users',
+      data: {
+        user: username,
+        password: password
+      }
+    })
+      .then(function (results) {
+        context.setState({user: username, loggedIn: true});
+      })
+      .catch(function (err) {
+        console.log('err', err);
+    });
+  };
+
+  login(username, password) {
+    let context = this;
+    axios({
+      method: 'get',
+      url: '/users',
+      data: {
+        user: username,
+        show: password
+      }
+    })
+      .then(function (results) {
+        context.setState({ user: username, loggedIn: true }, () =>
+          context.refreshShowList()
+        );
+      })
+      .catch(function (err) {
+        console.log('err', err);
+    });
+  }
+
   render () {
-    return (<div>
-      <h1 id = 'title' >PodStar</h1>
-      <nav className = 'nav-bar'> <ul>
-        <li> Hello {this.state.user}! </li>
-        <li> Login </li>
-        <li> Sign Up </li>
-        <li> Log Out </li>
-      </ul> </nav>
-      <ShowList shows={this.state.shows}  />
-      <SearchList 
-        results={this.state.searchResults} 
-        search={this.search.bind(this)} 
-        addShow={this.addShow.bind(this)}
-      />
-    </div>)
+    if (this.state.loggedIn) {
+      return (<div>
+        <h1 id = 'title' >PodStar</h1>
+        <nav className = 'nav-bar'> <ul>
+          <li> Hello {this.state.user}! </li>
+          <li> Login </li>
+          <li> Sign Up </li>
+          <li> Log Out </li>
+        </ul> </nav>
+        <ShowList shows={this.state.shows}  />
+        <SearchList 
+          results={this.state.searchResults} 
+          search={this.search.bind(this)} 
+          addShow={this.addShow.bind(this)}
+        />
+      </div>)
+    } else {
+      return (
+      <div>
+        <h1 id='title' >PodStar</h1>
+        <nav className='nav-bar'> <ul>
+          <li> Hello Guest! </li>
+        </ul> </nav>
+        <LogIn login = {this.login.bind(this)}/>
+        <Signup signup = {this.signup.bind(this)}/>
+      </div>)
+    }
   }
 }
 
