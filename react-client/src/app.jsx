@@ -13,7 +13,7 @@ class App extends React.Component {
       user: 'test',
       shows: [],
       searchResults: [{title: 'we'}],
-      loggedIn: true
+      loggedIn: false
     }
   }
 
