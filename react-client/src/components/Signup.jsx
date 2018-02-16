@@ -22,12 +22,36 @@ class Signup extends React.Component {
   }
 
   render() {
+    let paneStyle = {
+      display: 'inline-block',
+      backgroundColor: 'rgb(235, 235, 235)',
+      border: '3px solid white',
+      marginTop: '10px',
+      marginLeft: '15px',
+      padding: '10px',
+      width: '40%'
+    };
+    // 'rgb(235, 235, 235)'
+
+    const buttonStyle = {
+
+    };
+
     return (
-      <div className='signup pane' >
+      <div style={paneStyle} >
         <div>
-          <input type='text' value={this.state.username} onChange={this.userNameEntry.bind(this)} />
-          <input type='text' value={this.state.password} onChange={this.passwordEntry.bind(this)} />
-          <button onClick={this.handleSubmit.bind(this)}> Search! </button>
+          <h3>Sign Up Over Here</h3>
+          <h5>Username</h5>
+          <input type='text' 
+            value={this.state.username} 
+            onChange={this.userNameEntry.bind(this)} 
+          />
+          <h5>Password</h5>
+          <input type='text' 
+            value={this.state.password} 
+            onChange={this.passwordEntry.bind(this)} 
+          />
+          <button onClick={this.handleSubmit.bind(this)}> Sign Me Up </button>
         </div>
       </div>
     )

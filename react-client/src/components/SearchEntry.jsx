@@ -6,23 +6,34 @@ const SearchEntry = (props) => {
     show.bigImg = 'http://icons.iconarchive.com/icons/shwz/disney/64/mickey-mouse-icon.png'
   }
 
-  const entryStyle = {
-    color: 'red',
-    border: '2px solid grey',
-    marginTop: '5px'
-    //'rgb(129, 129, 129)',
-    // backgroundColor: 'rgb(235, 235, 235)'
-  }
-
   const addShow = function () {
     console.log('gonna add the show');
     props.addShow(props.show);
   }
+
+  const entryStyle = {
+    border: '2px solid grey',
+    marginTop: '5px',
+    //'rgb(129, 129, 129)',
+    backgroundColor: 'rgb(235, 235, 235)'
+  }
+
   
+  const thumbnailStyle = {
+    display: 'inline',
+    margin: '3px'
+  }
+
   return (
     <div style = {entryStyle}>
-      <img className = 'thumbnail' src = {show.bigImg}/>
-      <h5 onClick = {addShow}>{show.title}</h5>
+      <div> 
+        <img style = {thumbnailStyle} src = {show.bigImg}/>
+        <div> 
+          <h4>{show.title}</h4>
+          <button onClick={addShow}> Add Show </button>
+          <p>BTYB: {show.maker}, Topic: {show.genre}</p>
+        </div>
+      </div>
     </div>
   )
 }

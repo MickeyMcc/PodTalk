@@ -20,8 +20,10 @@ class App extends React.Component {
   };
 
   componentDidMount() {
+    this.login();
     if (this.state.loggedIn) {
       this.refreshShowList();
+      this.search('r');
     }
   };
 
@@ -41,6 +43,7 @@ class App extends React.Component {
           context.setState({
             shows: results.data
           })
+                context.search('r');
         }
       })
       .catch(function (err) {
@@ -121,7 +124,7 @@ class App extends React.Component {
     });
   };
 
-  login(username= 'test', password = 'test') {
+  login(username= 'new', password = 'user') {
 
     let context = this;
     axios({

@@ -12,7 +12,7 @@ app.use(express.static(__dirname + '/../react-client/dist'));
 app.use(session({
   secret: 'mickey mouse',
   cookie: {
-    maxAge: 60000
+    maxAge: 6000000
   }
 }));
 
@@ -31,7 +31,6 @@ const checkSession = function(req, res, next) {
 
 app.get('/shows', checkSession, function (req, res) {
   const user = req.query.user;
-  console.log('GET FOR SHOWS', user);
   db.selectAllUserShows(user, function(err, data) {
     if(err) {
       console.log(err);
@@ -58,7 +57,6 @@ app.post('/shows', function (req, res) {  //gets user and show
 
 app.get('/search', checkSession, function(req, res) {
   const query = req.query.terms;
-  console.log(query, '<--------- my query');
   itunes.search(query, function(err, data) {
     if (err) {
       res.status(500).json(err);
@@ -69,8 +67,6 @@ app.get('/search', checkSession, function(req, res) {
 });
 
 app.get('/users', function(req, res) {
-  console.log('login');
-  console.log(req.query);
   const user = req.query.user;
   const password = req.query.password;
   db.login(user, password, function(err, data) {
@@ -78,13 +74,12 @@ app.get('/users', function(req, res) {
       res.status(400).json({message: err});
     } else {
       req.session.loggedIn = true;
-      res.end();
+      res.status(200).end();
     }
   });
 });
 
 app.post('/users', function (req, res) {
-  console.log('signup');
   const user = req.body.user;
   const password = req.body.password;
   db.createUser(user, password, function(err, data) {
@@ -92,14 +87,15 @@ app.post('/users', function (req, res) {
       res.status(400).json({message: err});
     } else {
       req.session.loggedIn = true;
-      res.end();
+      res.status(201).end();
     }
   });
 });
 
 app.delete('/users', function (req, res) {
-  console.log('lets log out!');
-  res.end();
+  res.session.destroy( function() {
+    res.status(200).end();
+  });
 })
 
 app.listen(3000, function() {

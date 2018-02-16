@@ -5,7 +5,7 @@ class SearchList extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      searchQuery: ''
+      searchQuery: 'r'
     }
   }
 

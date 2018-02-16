@@ -22,12 +22,26 @@ class Login extends React.Component {
   }
 
   render() {
+        let paneStyle = {
+      display: 'inline-block',
+      backgroundColor: 'rgb(235, 235, 235)',
+      border: '3px solid white',
+      marginTop: '10px',
+      marginLeft: '15px',
+      padding: '10px',
+      width: '40%'
+    };
+
     return (
-      <div className='login pane' >
+      <div style={paneStyle} >
         <div>
+          <h3>Log In Here</h3>
+          <h5>username</h5>
           <input type='text' value={this.state.username} onChange={this.userNameEntry.bind(this)} />
+
+          <h5>password</h5>
           <input type='text' value={this.state.password} onChange={this.passwordEntry.bind(this)} />
-          <button onClick={this.handleSubmit.bind(this)}> Search! </button>
+          <button onClick={this.handleSubmit.bind(this)}> Login </button>
         </div>
       </div>
     )
