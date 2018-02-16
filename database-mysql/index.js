@@ -1,4 +1,5 @@
 var mysql = require('mysql');
+var bcrypt = require('bcrypt-nodejs');
 
 var connection = mysql.createConnection({
   host: 'localhost',
@@ -51,7 +52,7 @@ module.exports.addShowToUser = function (user, show, callback) {
     }
   });
 
-  const makeConection = function () {
+  function makeConection() {
     const connectShowUser = "INSERT INTO shows_users (user_id, show_id) " +
       `VALUES ((SELECT id FROM users WHERE username = '${user}'), ` +
         `(SELECT id FROM shows WHERE title = '${show.title}'))`;
@@ -64,6 +65,61 @@ module.exports.addShowToUser = function (user, show, callback) {
       }
     });
   };
+};
+
+module.exports.createUser = function(username, password, callback) {
+  const checkForExisting = `SELECT id FROM users WHERE username = '${username}'`;
+  connection.query(checkForExisting, function(err, data) {
+    if (err) {
+      callback(err);
+    } else {
+      if (data.length !== 0) {
+        callback('ERROR ON USER CREATION: username taken!');
+      } else {
+        insertUser(function(err, data) {
+          if (err) {
+            callback(err);
+          } else {
+            callback(null, data)
+          }
+        });
+      }
+    }
+
+    function insertUser(callback) {
+      const insertQuery = `INSERT INTO USERS (username, password) VALUES ('${username}', '${bcrypt.hashSync(password)}')`;
+
+      connection.query(insertQuery, function(err, data) {
+        if (err) {
+          callback(err);
+        } else {
+          callback(null, data);
+        }
+      });
+    }
+  });
+
+};
+
+module.exports.login = function(username, password, callback) {
+  const query = `SELECT password FROM users WHERE username = '${username}'`;
+  console.log(query);
+  connection.query(query, function(err, data) {
+    if (err) {
+      callback(err);
+    } else {
+      if (data.length === 0) {
+        callback('ERROR: username does not exist');
+      } else {
+        if (bcrypt.compareSync(password, data[0].password)) {
+          callback(null, true);
+        } else {
+          callback('ERROR: username and password do not match');
+        }
+      }
+    }
+  })
+
 };
 
 const checkForConnection = function(user, show, callback) {
@@ -118,6 +174,7 @@ const addShow = function (show, callback) {
   });
 };
 
+/////DATA STRUCTURE FOR SHOWS
 /*
 {
   "title": "Reply All",

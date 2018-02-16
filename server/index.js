@@ -24,7 +24,8 @@ const checkSession = function(req, res, next) {
   if (req.session.loggedIn === true) {
     next();
   } else {
-    res.status(404).end(false);
+    console.log('badCookies');
+    res.status(404).json({loggedIn: false});
   }
 }
 
@@ -69,24 +70,37 @@ app.get('/search', checkSession, function(req, res) {
 
 app.get('/users', function(req, res) {
   console.log('login');
-  const username = req.query.username;
+  console.log(req.query);
+  const user = req.query.user;
   const password = req.query.password;
-  db.createUser(username, password, function(err, data) {
-    req.session.loggedIn = true;
-    res.end();
+  db.login(user, password, function(err, data) {
+    if (err) {
+      res.status(400).json({message: err});
+    } else {
+      req.session.loggedIn = true;
+      res.end();
+    }
   });
-
 });
 
 app.post('/users', function (req, res) {
   console.log('signup');
-  const username = req.body.username;
+  const user = req.body.user;
   const password = req.body.password;
-  db.createUser(username, password, function(err, data) {
-    req.session.loggedIn = true;
-    res.end();
+  db.createUser(user, password, function(err, data) {
+    if (err) {
+      res.status(400).json({message: err});
+    } else {
+      req.session.loggedIn = true;
+      res.end();
+    }
   });
 });
+
+app.delete('/users', function (req, res) {
+  console.log('lets log out!');
+  res.end();
+})
 
 app.listen(3000, function() {
   console.log('listening on port 3000!');

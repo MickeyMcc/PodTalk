@@ -14,18 +14,16 @@ class App extends React.Component {
     this.state = {
       user: '',
       shows: [],
-<<<<<<< HEAD
-      searchResults: [{title: 'we'}],
-=======
       searchResults: [],
->>>>>>> 191ec33e742ab1382041df7e27f45d3d03bc3dfa
       loggedIn: false
     }
-  }
+  };
 
   componentDidMount() {
-    this.refreshShowList();
-  }
+    if (this.state.loggedIn) {
+      this.refreshShowList();
+    }
+  };
 
   refreshShowList() {
     let context = this;
@@ -48,7 +46,7 @@ class App extends React.Component {
       .catch(function (err) {
         console.log('err', err);
       });
-  }
+  };
 
   search(query) {
     console.log('searching for', query);
@@ -73,7 +71,7 @@ class App extends React.Component {
       .catch(function (err) {
         console.log('err', err);
       });
-  }
+  };
 
   addShow(show) {
     let context = this;
@@ -97,9 +95,10 @@ class App extends React.Component {
       .catch(function (err) {
         console.log('err', err);
       });
-  }
+  };
 
   signup(username, password) {
+    console.log(username);
     let context = this;
     axios({
       method: 'post',
@@ -111,9 +110,9 @@ class App extends React.Component {
     })
       .then(function (results) {
         if (results.statusCode === 400) {
-          console.log('SORRY COULD NOT CREATE USER')
+          console.log('SORRY COULD NOT CREATE USER');
         } else {
-          console.log(`WELCOME BACK ${user}!`)
+          console.log(`WELCOME TO PODSTAR ${username}!`)
           context.setState({user: username, loggedIn: true});
         }
       })
@@ -122,20 +121,20 @@ class App extends React.Component {
     });
   };
 
-  login(username = 'test', password = 'test') {
+  login(username= 'test', password = 'test') {
 
     let context = this;
     axios({
       method: 'get',
       url: '/users',
-      data: {
+      params: {
         user: username,
-        show: password
+        password: password
       }
     })
       .then(function (results) {
         if (results.statusCode === 400) {
-          console.log('SORRY COULD NOT LOGIN')
+          console.log('SORRY COULD NOT LOGIN');
         } else {
           console.log( `WELCOME BACK ${username}!`)
           context.setState({ user: 'test', loggedIn: true });
@@ -145,7 +144,21 @@ class App extends React.Component {
       .catch(function (err) {
         console.log('err', err);
     });
-  }
+  };
+
+  logout() {
+    let context = this;
+    axios({
+      method: 'delete',
+      url: '/users',
+    })
+      .then(function(results) {
+        context.setState({loggedIn: false});
+      })
+      .catch(function (err) {
+        console.log('err', err);
+    });
+  };
 
   render () {
     if (this.state.loggedIn) {
@@ -155,7 +168,7 @@ class App extends React.Component {
           <li> Hello {this.state.user}! </li>
           <li> Login </li>
           <li> Sign Up </li>
-          <li> Log Out </li>
+          <li onClick = {this.logout.bind(this)}> Log Out </li>
         </ul> </nav>
         <ShowList shows={this.state.shows}  />
         <SearchList 
