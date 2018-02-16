@@ -69,6 +69,33 @@ module.exports.login = function(username, password, callback) {
       }
     }
   });
+
+  function insertUser(callback) {
+    const insertQuery = `INSERT INTO USERS (username, password) VALUES ('${username}', '${bcrypt.hashSync(password)}')`;
+
+    standardDBCall(insertQuery, callback);
+  }
+
+};
+
+module.exports.login = function(username, password, callback) {
+  const query = `SELECT id, password FROM users WHERE username = '${username}'`;
+  console.log(query);
+  connection.query(query, function(err, data) {
+    if (err) {
+      callback(err);
+    } else {
+      if (data.length === 0) {
+        callback('ERROR: username does not exist');
+      } else {
+        if (bcrypt.compareSync(password, data[0].password)) {
+          callback(null, data[0].id);
+        } else {
+          callback('ERROR: username and password do not match');
+        }
+      }
+    }
+  });
 };
 
 ///////////////////SHOWS\\\\\\\\\\\\\\\\\\\\\\\\\\
