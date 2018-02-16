@@ -140,7 +140,7 @@ class App extends React.Component {
           console.log('SORRY COULD NOT LOGIN');
         } else {
           console.log( `WELCOME BACK ${username}!`)
-          context.setState({ user: 'test', loggedIn: true });
+          context.setState({ user: username, loggedIn: true });
           context.refreshShowList();
         }
       })
@@ -163,6 +163,25 @@ class App extends React.Component {
     });
   };
 
+  saveComment(comment, showID) {
+    let context = this;
+    axios({
+      method: 'post',
+      url: '/comments',
+      data: {
+        comment: comment,
+        showID: showID,
+        user: context.state.user
+      }
+    })
+      .then(function(results) {
+        console.log('comment saved');
+      })
+      .catch(function(err) {
+        console.log(err);
+      })
+  }
+
   render () {
     if (this.state.loggedIn) {
       return (<div>
@@ -173,7 +192,9 @@ class App extends React.Component {
           <li> Sign Up </li>
           <li onClick = {this.logout.bind(this)}> Log Out </li>
         </ul> </nav>
-        <ShowList shows={this.state.shows}  />
+        <ShowList shows={this.state.shows}
+          saveComment = {this.saveComment.bind(this)}
+        />
         <SearchList 
           results={this.state.searchResults} 
           search={this.search.bind(this)} 

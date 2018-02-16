@@ -16,6 +16,7 @@ const ShowList = (props) => {
       {props.shows.map((show, index) => <ShowEntry 
         show = {show} 
         key = {index} 
+        saveComment = {props.saveComment}
         /> 
       )}
     </div>

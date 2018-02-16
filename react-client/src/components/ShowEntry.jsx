@@ -2,25 +2,47 @@ import React from 'react';
 
 
 
-const ShowEntry = (props) => {
+class ShowEntry extends React.Component {
+  constructor(props) {
+    super(props);
 
-  const show = props.show;
-  
-  const entryStyle = {
-    color: 'red',
-    border: '2px solid grey',
-    marginTop: '5px'
-    //'rgb(129, 129, 129)',
-    // backgroundColor: 'rgb(235, 235, 235)'
+    this.state = {
+      comment : 'Say Something!'
+    };
   }
 
-  return (<div className = 'showEntry'>
-    <div style={entryStyle}>
-      <img className='thumbnail' src={show.bigImg} />
-      <h5>{show.title}</h5>
-    </div>
-  </div>
-  )
+  comment(e) {
+    this.setState({comment: e.target.value});
+  }
+
+  submit(e) {
+    this.props.saveComment(this.state.comment, this.props.show.id);
+  }
+
+  render() {
+    const show = this.props.show;
+    
+    const entryStyle = {
+      border: '2px solid grey',
+      marginTop: '5px',
+      backgroundColor: 'rgb(235, 235, 235)'
+    }
+
+    const thumbnailStyle = {
+      display: 'inline',
+      margin: '3px'
+    }
+
+    return (
+      <div style={entryStyle}>
+        <img style= {thumbnailStyle} src={show.bigImg} />
+        <h5>{show.title}</h5>
+        Say Something about this show
+        <textArea value= {this.state.comment} onChange = {this.comment.bind(this)}/>
+        <button onClick= {this.submit.bind(this)}> Save </button>
+      </div>
+    )
+  }
 }
 
 export default ShowEntry;

@@ -98,6 +98,15 @@ app.delete('/users', function (req, res) {
   });
 })
 
+app.post('/comments', function(req, res) {
+  const comment = req.body.comment;
+  const user = req.body.user;
+  const showID = req.body.showID;
+  console.log(`add ${comment} to ${showID} by ${user}`);
+
+  res.end()
+})
+
 app.listen(3000, function() {
   console.log('listening on port 3000!');
 });
