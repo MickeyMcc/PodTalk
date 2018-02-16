@@ -8,6 +8,7 @@ const searchOnITunes = function (query, callback) {
           country: 'US',
           media: 'podcast',
           entity: 'podcast',
+          limit: 10
         }
       }
     )

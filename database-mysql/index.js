@@ -73,7 +73,7 @@ const checkForConnection = function(user, show, callback) {
     const checkConnection = "SELECT shows_users.id FROM shows_users " + 
       "INNER JOIN shows ON shows.id = shows_users.show_id " + 
       "INNER JOIN users ON users.id = shows_users.user_id " + 
-      `WHERE users.username = ${user} AND shows.title = ${show.title}`;
+      `WHERE users.username = '${user}' AND shows.title = '${show.title}'`;
   
     connection.query(checkConnection, function (err, data) {
       if (err) {

@@ -56,11 +56,8 @@ CREATE TABLE shows_users (
  * SOME SAMPLE STARTER DATA
 */
 
-INSERT INTO shows (title, maker, itunesUrl, littleImg, bigImg, latestRelease, trackCount, genre)
-  VALUES ('reply all','gimlet','url','lilthumb','bigthumb','last release',123,'awesomeness');
 INSERT INTO users (username, password) VALUES ('test', 'test');
-INSERT INTO comments (text, user_id, show_id) VALUES ('I liked this', 1, 1);
-INSERT INTO shows_users (user_id, show_id) VALUES (1,1);
+
 
 /*  Execute this file from the command line by typing:
  *    mysql -u root < server/schema.sql
