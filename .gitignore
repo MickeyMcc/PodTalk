@@ -6,7 +6,7 @@
 
 # production
 /build
-/react-client/dist/bundle.js
+react-client/dist/bundle.js
 
 # misc
 .DS_Store
