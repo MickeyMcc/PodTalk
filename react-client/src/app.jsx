@@ -249,7 +249,7 @@ class App extends React.Component {
             <li onClick = {this.goHome.bind(this)}> Home </li>
             <li onClick = {this.logout.bind(this)}> Log Out </li>
           </ul> </nav>
-          <ShowPage show = {show}/>
+          <ShowPage show = {show} saveComment = {this.saveComment.bind(this)}/>
         </div>
       );
 

@@ -39,6 +39,7 @@ class ShowPage extends React.Component {
   submit() {
     this.props.saveComment(this.state.comment, this.props.show.id);
     this.setState({comment: ''});
+    this.getShowComments();
   }
   
   render () {
