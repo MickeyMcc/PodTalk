@@ -66,7 +66,7 @@ app.post('/users', function (req, res) {
 
 app.delete('/users', function (req, res) {
   
-  res.session.destroy( function() {
+  req.session.destroy( function() {
     res.status(200).end();
   });
 })
@@ -144,8 +144,9 @@ app.get('/comments', function(req, res) {
   const user = req.query.userID;
 
   if (user === 'all') {
-    db.getCommentsAll(req.query.movie, function(err, data) {
+    db.getCommentsAll(req.query.showID, function(err, data) {
       if (err) {
+        console.log(err)
         res.status(500).json({message: err});        
       } else {
         res.status(201).json(data);

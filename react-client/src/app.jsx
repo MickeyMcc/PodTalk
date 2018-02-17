@@ -6,6 +6,7 @@ import ShowList from './components/ShowList.jsx';
 import SearchList from './components/SearchList.jsx';
 import Login from './components/Login.jsx';
 import Signup from './components/Signup.jsx';
+import ShowPage from './components/ShowPage.jsx';
 import axios from 'axios';
 
 class App extends React.Component {
@@ -16,7 +17,8 @@ class App extends React.Component {
       shows: [],
       searchResults: [],
       userComments: {},
-      loggedIn: false
+      loggedIn: false,
+      activeShow: null
     }
   };
 
@@ -26,10 +28,18 @@ class App extends React.Component {
     }
   };
 
+  goHome() {
+    this.setState({activeShow: null});
+  }
+
+  makeShowActive(show) {
+    console.log('top level');
+    this.setState({activeShow: show});
+  }
+
 ///////////////////USERS\\\\\\\\\\\\\\\\\\\\\\\\\\
 
   signup(username, password) {
-    console.log(username);
     let context = this;
     axios({
       method: 'post',
@@ -85,7 +95,7 @@ class App extends React.Component {
       url: '/users',
     })
       .then(function(results) {
-        context.setState({user: null, loggedIn: false});
+        context.setState({loggedIn: false});
       })
       .catch(function (err) {
         console.log('err', err);
@@ -147,7 +157,6 @@ class App extends React.Component {
   search(query) {
     console.log('searching for', query);
     let context = this;
-    console.log(query);
     axios.get('/search', {
       params: {
         terms: query
@@ -184,6 +193,7 @@ class App extends React.Component {
     })
       .then(function(results) {
         console.log('comment saved');
+        context.getUsersComments();
       })
       .catch(function(err) {
         console.log(err);
@@ -207,54 +217,56 @@ class App extends React.Component {
       })
   };
 
-  getShowComments(show) {
-    let context = this;
-    axios({
-      method: 'get',
-      url: '/comments',
-      params: {
-        userID: 'all',
-        showID: show.id
-      }
-    })
-      .then(function(results) {
-        console.log('all the comments on that show', results.data);
-      })
-      .catch(function(err) {
-        console.log(err);
-      }) 
-  };
+
 
   transformComments(comments) {
-    console.log(comments);
     let commentsObj = {};
+
     for (var i = 0; i < comments.length; i++) {
-      console.log(commentsObj, 'new comment', comments[i]);
+
       if (!commentsObj[comments[i].show_id]) {
         commentsObj[comments[i].show_id] = [comments[i].text];
       } else {
         commentsObj[comments[i].show_id].push(comments[i].text);        
       }
+
     }
-    console.log(commentsObj);
     return commentsObj;
   }
 
 ///////////////////RENDER\\\\\\\\\\\\\\\\\\\\\\\\\\
 
   render () {
-    if (this.state.loggedIn) {
+
+    //FOCUS VIEW
+    if (this.state.activeShow) {
+      const show = this.state.activeShow;
+      return (
+        <div>
+          <h1 id = 'title' >PodStar</h1>
+          <nav className = 'nav-bar'> <ul>
+            <li> Hello {this.state.user.username}! </li>
+            <li onClick = {this.goHome.bind(this)}> Home </li>
+            <li onClick = {this.logout.bind(this)}> Log Out </li>
+          </ul> </nav>
+          <ShowPage show = {show}/>
+        </div>
+      );
+
+
+    //NORMAL VIEW
+    } else if (this.state.loggedIn) {
       return (<div>
         <h1 id = 'title' >PodStar</h1>
         <nav className = 'nav-bar'> <ul>
           <li> Hello {this.state.user.username}! </li>
-          <li> Login </li>
-          <li> Sign Up </li>
+          <li onClick = {this.goHome.bind(this)}> Home </li>
           <li onClick = {this.logout.bind(this)}> Log Out </li>
         </ul> </nav>
         <ShowList shows={this.state.shows}
-          saveComment = {this.saveComment.bind(this)}
           comments = {this.state.userComments}
+          saveComment = {this.saveComment.bind(this)}
+          makeShowActive = {this.makeShowActive.bind(this)}
         />
         <SearchList 
           results={this.state.searchResults} 
@@ -262,6 +274,8 @@ class App extends React.Component {
           addShow={this.addShow.bind(this)}
         />
       </div>)
+
+    //LOGIN VIEW
     } else {
       return (
       <div>

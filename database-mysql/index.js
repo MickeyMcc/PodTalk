@@ -177,19 +177,17 @@ module.exports.addComment = function(userID, showID, comment, callback) {
 
 module.exports.getCommentsUser = function(userID, callback) {
   //all comments by a user
-  const query = "SELECT comments.text, show_id FROM comments " +
-    "INNER JOIN shows ON shows.id = comments.show_id " +
-    `WHERE '${userID}' = comments.user_id;`;
+  const query = "SELECT text, show_id FROM comments " +
+    `WHERE ${userID} = comments.user_id;`;
 
   standardDBCall(query, callback);
 };
 
 module.exports.getCommentsAll = function(showID, callback) {
   //all comments on a show
-  const query = "SELECT comments.text, users.id, shows.id FROM comments " +
-    "INNER JOIN users ON users.id = comments.user_id " +
-    "INNER JOIN shows ON comments.show_id = shows_id"
-    `WHERE '${showID}' = comments.show_id`;
+  const query = "SELECT comments.text, users.username FROM comments " +
+  "INNER JOIN users ON users.id = comments.user_id " +
+  `WHERE comments.show_id = ${showID};`;
 
   standardDBCall(query, callback);
 };

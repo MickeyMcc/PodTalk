@@ -5,9 +5,8 @@ import React from 'react';
 class ShowEntry extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      comment : 'Say Something!'
+      comment : 'Say Something!',
     };
   }
 
@@ -15,11 +14,18 @@ class ShowEntry extends React.Component {
     this.setState({comment: e.target.value});
   }
 
-  submit(e) {
+  submit() {
     this.props.saveComment(this.state.comment, this.props.show.id);
+    this.setState({comment: ''});
   }
 
+  goToShow() {
+    this.props.makeShowActive(this.props.show);
+  }  
+
   render() {
+    let oldComments = this.props.comments || [];
+    
     const show = this.props.show;
     
     const entryStyle = {
@@ -36,8 +42,9 @@ class ShowEntry extends React.Component {
     return (
       <div style={entryStyle}>
         <img style= {thumbnailStyle} src={show.bigImg} />
-        <h5>{show.title}</h5>
-        Say Something about this show
+        <h5 onClick = {this.goToShow.bind(this)}>{show.title}</h5>
+        What you've said before: 
+        {oldComments.map(comment => <div>{comment}</div>)}
         <textArea value= {this.state.comment} onChange = {this.comment.bind(this)}/>
         <button onClick= {this.submit.bind(this)}> Save </button>
       </div>

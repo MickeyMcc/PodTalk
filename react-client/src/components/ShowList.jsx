@@ -9,14 +9,20 @@ const ShowList = (props) => {
     message = `You have ${props.shows.length} shows so far.`;
   }
 
+  if (!props.comments) {
+    comments = {};
+  }
   return (
     <div className='show-list pane'>
       <h4> Your Shows </h4>
       {message}
-      {props.shows.map((show, index) => <ShowEntry 
+      {props.shows.map((show, index) => 
+        <ShowEntry 
         show = {show} 
         key = {index} 
+        comments = {props.comments[show.id]}
         saveComment = {props.saveComment}
+        makeShowActive = {props.makeShowActive}
         /> 
       )}
     </div>
