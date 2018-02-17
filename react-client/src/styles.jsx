@@ -39,19 +39,19 @@ module.exports.ButtonStyle = {
   backgroundColor: 'rgb(79, 33, 122)', /* Green */
   border: 'none',
   color: 'white',
-  padding: '12px 26px',
+  padding: '12px 20px',
   textAlign: 'center',
   textDecoration: 'none',
   fontSize: '14px',
-  display: 'inline-block',
-  marginTop: '20px',
-  marginBottom: '15px',
+  margin: '15px',
+  height: '40px'
 };
 
 module.exports.EntryStyle = {
     display: 'flex',
-    flexDirection: 'row',
-    border: '2px solid grey',
+    flexDirection: 'column',
+    borderTop: '3px solid rgb(79, 33, 122)',
+    textAlign: 'left',
     padding: '8px',
     marginTop: '5px',
     backgroundColor: 'rgb(235, 235, 235)'
@@ -59,7 +59,15 @@ module.exports.EntryStyle = {
 
 module.exports.ShowInfoStyle = {
   flexDirection: 'column',
-  marginTop: '20px'
+  marginTop: '20px',
+  textAlign: 'center',
+  width: '30%'
+}
+
+module.exports.SearchInfoStyle = {
+  flexDirection: 'column',
+  marginTop: '10px',
+  textAlign: 'left',
 }
 
 module.exports.CommentsStyle = {
@@ -67,14 +75,18 @@ module.exports.CommentsStyle = {
 };
 
 module.exports.CommentStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  border: '2px solid white',
   textAlign: 'left',
+  padding: '8px',
   marginTop: '5px',
+  textAlign: 'left',
 };
 
 module.exports.InputStyle = {
   width: '70%',
   padding: '12px 20px',
-  margin: '8px 0',
   boxSizing: 'border-box',
   border: '2px solid rgb(79, 33, 122)',
 };

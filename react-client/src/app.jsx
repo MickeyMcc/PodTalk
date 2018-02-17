@@ -36,7 +36,6 @@ class App extends React.Component {
   }
 
   makeShowActive(show) {
-    console.log('top level');
     this.setState({activeShow: show, userMessage: ''});
   }
 
@@ -53,12 +52,10 @@ class App extends React.Component {
       }
     })
       .then(function (results) {
-        console.log(results);
         if (results.status === 204) {
           context.setState({ userMessage: 'Sorry, could not create that user. Try a different username' });
         } else {
           console.log(`WELCOME TO PODSTAR ${username}!`)
-          console.log(JSON.stringify(results.data));
           context.setState({ user: results.data, loggedIn: true, userMessage: '' });
         }
       })
@@ -79,7 +76,7 @@ class App extends React.Component {
       }
     })
       .then(function (results) {
-        if (results.statusCode === 204) {
+        if (results.status === 204) {
           context.setState({ userMessage: 'Sorry, please check username-password combination' });
         } else {
           console.log( `WELCOME BACK ${results.data.username}!`)
@@ -100,7 +97,9 @@ class App extends React.Component {
     })
       .then(function(results) {
         context.setState({loggedIn: false});
-        context.setState({user: {username: 'guest'}, userMessage: 'Log out successful!'})
+        context.setState({user: {username: 'guest'}, 
+          userMessage: 'Log out successful!',
+          activeShow: null})
       })
       .catch(function (err) {
         console.log('err', err);
@@ -161,7 +160,6 @@ class App extends React.Component {
 ///////////////////SEARCH\\\\\\\\\\\\\\\\\\\\\\\\\\
 
   search(query) {
-    console.log('searching for', query);
     let context = this;
     axios.get('/search', {
       params: {
@@ -223,8 +221,6 @@ class App extends React.Component {
       })
   };
 
-
-
   transformComments(comments) {
     let commentsObj = {};
 
@@ -265,18 +261,21 @@ class App extends React.Component {
     } else if (this.state.loggedIn) {
       return (<div>
         <h1 id = 'title' >PodStar</h1>
+
         <nav style={NavBarStyle}> <ul>
           <li style = {NavEntryStyle}> Hello {this.state.user.username}! </li>
           <li style={NavEntryStyle} onClick = {this.goHome.bind(this)}> Home </li>
           <li style={NavEntryStyle} onClick = {this.logout.bind(this)}> Log Out </li>
           <li style={NavEntryStyle}>{this.state.userMessage}</li>
         </ul> </nav>
+
         <div style = {MainStyle}>
           <ShowList shows={this.state.shows}
             comments={this.state.userComments}
             saveComment={this.saveComment.bind(this)}
             makeShowActive={this.makeShowActive.bind(this)}
           />
+
           <SearchList
             results={this.state.searchResults}
             search={this.search.bind(this)}
@@ -289,17 +288,19 @@ class App extends React.Component {
     } else {
       return (
       <div>
+
         <h1 id='title' >PodStar</h1>
         <nav style = {NavBarStyle}> <ul>
           <li style={NavEntryStyle}> Hello Guest! </li>
           <li style={NavEntryStyle}>{this.state.userMessage}</li>
         </ul> </nav>
+
         <Login login = {this.login.bind(this)}/>
         <Signup signup = {this.signup.bind(this)}/>
+
       </div>)
     }
   };
 }
 
 export default App;
-

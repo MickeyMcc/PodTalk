@@ -37,18 +37,22 @@ class ShowEntry extends React.Component {
 
     return (
       <div style = {EntryStyle}>
-        <div style={ShowInfoStyle}>
-          <img style= {thumbnailStyle} src={show.littleImg} />
-          <h5 onClick = {this.goToShow.bind(this)}>{show.title}</h5>
+        <div style = {{display: 'inline-flex', flexDirection: 'row'}}>
+          <div style={ShowInfoStyle}>
+            <img style= {thumbnailStyle} src={show.littleImg} />
+            <h5 onClick = {this.goToShow.bind(this)}>{show.title}</h5>
+          </div>
+          <div style = {CommentsStyle}>
+            <br/>
+            <ul> 
+              What you've said before:
+              {oldComments.map(comment => <li style = {CommentStyle}>{comment}<br/></li>)}
+            </ul>
+          </div>
         </div>
-        <div style = {CommentsStyle}>
-        What you've said before:
-        <br/>
-        <ul> 
-        {oldComments.map(comment => <li style = {EntryStyle}>{comment}<br/></li>)}
-        </ul>
-        <textArea style = {InputStyle} value= {this.state.comment} placeholder = 'Say Something!' onChange = {this.comment.bind(this)}/>
-        <button style = {ButtonStyle} onClick= {this.submit.bind(this)}> Save </button>
+        <div style={{ display: 'inline-flex', flexDirection: 'row' }}>
+          <textArea style={InputStyle} value={this.state.comment} placeholder='Say Something!' onChange={this.comment.bind(this)} />
+          <button style={ButtonStyle} onClick={this.submit.bind(this)}> Save </button>
         </div>
       </div>
     )

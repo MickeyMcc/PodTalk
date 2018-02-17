@@ -1,5 +1,5 @@
 import React from 'react';
-import { EntryStyle, ButtonStyle, ShowInfoStyle} from '../styles.jsx';
+import { EntryStyle, ButtonStyle, ShowInfoStyle, SearchInfoStyle} from '../styles.jsx';
 
 
 const SearchEntry = (props) => {
@@ -9,7 +9,6 @@ const SearchEntry = (props) => {
   }
 
   const addShow = function () {
-    console.log('gonna add the show');
     props.addShow(props.show);
   }
   
@@ -20,15 +19,15 @@ const SearchEntry = (props) => {
 
   return (
     <div style = {EntryStyle}>
-      <div> 
+      <div style={{ display: 'inline-flex', flexDirection: 'row' }}>
         <img style = {thumbnailStyle} src = {show.littleImg}/>
         <div> 
-          <div style = {ShowInfoStyle}>
+          <div style = {SearchInfoStyle}>
           <h4>{show.title}</h4>
           <p>BTYB: {show.maker}, Topic: {show.genre}</p>
           </div>
-          <button style = {ButtonStyle} onClick={addShow}> Add Show </button>
         </div>
+        <button style={ButtonStyle} onClick={addShow}> Add </button>        
       </div>
     </div>
   )

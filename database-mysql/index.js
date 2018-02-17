@@ -28,7 +28,6 @@ module.exports.createUser = function(username, password, callback) {
       callback(err);
     } else {
       if (data.length !== 0) {
-        console.log('username found');
         callback(true);
       } else {
         insertUser(callback);
@@ -84,7 +83,6 @@ module.exports.addShowToUser = function (user, show, callback) {
     } else {
       if (!showFound) { 
       //show has never been added to db
-        console.log('show not found in database, adding', show.title, 'now!');
         addShow(show, function (err) { 
           if (err) {
             callback(err);
@@ -193,6 +191,91 @@ module.exports.getCommentsAll = function(showID, callback) {
   standardDBCall(query, callback);
 };
 
+///////////////////POPULARITY\\\\\\\\\\\\\\\\\\\\\\\\\\
+synthesizeUsers = function (comments, shows) {
+  let userActivity = {};
+  for (var show of shows) {
+    if (userActivity[show.username] === undefined) {
+      userActivity[show.username] = {connections: 0, comments: 0};
+    }
+    userActivity[show.username]['connections']++;
+  }
+  for (var comment of comments) {
+    if (userActivity[comment.username] === undefined) {
+      userActivity[comment.username] = { connections: 0, comments: 0 };
+    }
+    userActivity[comment.username]['comments']++;
+  }
+  return userActivity;
+}
+
+synthesizeShows = function (comments, connections) {
+  let showActivity = {};
+  for (var connection of connections) {
+    if (showActivity[connection.title] === undefined) {
+      showActivity[connection.title] = { connections: 0, comments: 0 };
+    }
+    showActivity[connection.title]['connections']++;
+  }
+  for (var comment of comments) {
+    if (showActivity[comment.title] === undefined) {
+      showActivity[comment.title] = { connections: 0, comments: 0 };
+    }
+    showActivity[comment.title]['comments']++;
+  }
+  return showActivity;
+}
+
+module.exports.getUserActivity = function (callback) {
+
+  const getComments = "SELECT users.username, comments.id AS 'comments' FROM users INNER JOIN comments ON users.id = comments.user_id;"
+
+  connection.query(getComments, function(err, data) {
+    if (err) {
+      callback(err);
+    } else {
+      let comments = data;
+      
+      const showConnections = "SELECT users.username, shows_users.id AS 'shows' FROM users INNER JOIN shows_users ON users.id = shows_users.user_id;"
+    
+      connection.query(showConnections, function(err, data) {
+        if (err) {
+          console.log('err');
+          callback(err);
+        } else {
+          let shows = data;
+          let processedData = synthesizeUsers(comments, shows);
+          callback(null, processedData);
+        }
+      })
+    }
+  });
+}
+
+module.exports.getShowActivity = function (callback) {
+
+  const getComments = "SELECT shows.title, comments.id AS 'comments' FROM shows LEFT OUTER JOIN comments ON shows.id = comments.show_id;"
+
+  connection.query(getComments, function (err, data) {
+    if (err) {
+      callback(err);
+    } else {
+      let comments = data;
+      
+      const showConnections = "SELECT shows.title, shows.id AS 'shows' FROM shows LEFT OUTER JOIN shows_users ON shows.id = shows_users.show_id;"
+
+      connection.query(showConnections, function (err, data) {
+        if (err) {
+          callback(err);
+        } else {
+          let connections = data;
+          let processedData = synthesizeShows(comments, connections);
+          callback(null, processedData);
+        }
+      });
+    }
+  });
+}
 
 /////DATA STRUCTURE FOR SHOWS
 /*

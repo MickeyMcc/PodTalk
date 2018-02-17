@@ -56,7 +56,6 @@ app.post('/users', function (req, res) {
   const password = req.body.password;
   
   db.createUser(user, password, function(err, data) {
-    console.log(err, data);
     if (err) {
       console.log('some err found');
       res.status(204).end();
@@ -130,13 +129,10 @@ app.post('/comments', function(req, res) {
   const user = req.body.userID;
   const show = req.body.showID;
 
-  console.log(`add ${comment} to ${show} by ${user}`);
-
   db.addComment(user, show, comment, function(err, data) {
     if (err) {
       res.status(500).json({message: err});
     } else {
-      console.log(data);
       res.status(201).end();
     }
   });
@@ -166,6 +162,28 @@ app.get('/comments', function (req, res) {
     })
   }
 })
+
+///////////////////ACTIVITY\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+app.get('/activity', function (req, res) {
+  function respond (err, data) {
+    if (err) {
+      res.status(500).end();
+    } else {
+      res.status(200).json(data);
+    }
+  }
+
+  const entity = req.query.type;
+
+  if (entity === 'users') {
+    db.getUserActivity(respond)
+  } else if (entity === 'shows') {
+    db.getShowActivity(respond);
+  } else {
+    res.status(400).end();
+  }
+});
 
 app.listen(3000, function() {
   console.log('listening on port 3000!');

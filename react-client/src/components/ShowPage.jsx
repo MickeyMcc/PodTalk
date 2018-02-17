@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { ShowPageStyle, ButtonStyle, CommentsStyle, CommentStyle, ShowInfoStyle, BigImgStyle, EntryStyle } from '../styles.jsx';
+import { ShowPageStyle, ButtonStyle, CommentsStyle, CommentStyle, ShowInfoStyle, BigImgStyle, EntryStyle, InputStyle } from '../styles.jsx';
 
 class ShowPage extends React.Component {
   constructor (props) {
@@ -25,7 +25,6 @@ class ShowPage extends React.Component {
       }
     })
       .then(function(results) {
-        console.log(results.data);
         context.setState({comments: results.data});
       })
       .catch(function(err) {
@@ -54,25 +53,24 @@ class ShowPage extends React.Component {
 
     let oldComments = this.props.comments || [];
     return (
-      <div style = {ShowPageStyle} >
-        <img style= {BigImgStyle} src={show.bigImg} />
-          <div style={ShowInfoStyle}>
-            {show.title} <br/>
-            {show.maker} <br/>
-            {show.genre} <br/>
-            <div style = {CommentsStyle}>
-            <h5>The Chatter</h5>
-            <br/>
-            <ul>
-            {this.state.comments.map((comment, index) => 
-              {return (<li style = {EntryStyle} 
-                key = {index}>
-                  {comment.username}: {comment.text}
-                </li>)})}
-              </ul>
-            <textArea value= {this.state.comment} onChange = {this.comment.bind(this)}/>
-            <button onClick= {this.submit.bind(this)}> Save </button>
-          </div>
+      <div style = {ShowPageStyle}>
+        <img style= {BigImgStyle} src={show.bigImg}/>
+        <div style={ShowInfoStyle}>
+          {show.title} <br/>
+          {show.maker} <br/>
+          {show.genre} <br/>
+        </div>
+        <div style = {{display: 'flex', flexDirection: 'column'}}>
+        <h5>The Chatter</h5>
+        <ul style = {CommentsStyle}>
+        {this.state.comments.map((comment, index) => 
+          {return (<li style = {CommentStyle} 
+            key = {index}>
+            {comment.username}: {comment.text}
+          </li>)})}
+        </ul>
+        <textArea style = {InputStyle} value= {this.state.comment} onChange = {this.comment.bind(this)}/>
+        <button style = {ButtonStyle} onClick= {this.submit.bind(this)}> Save </button>
         </div>
       </div>
     )
