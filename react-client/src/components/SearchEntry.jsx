@@ -21,7 +21,7 @@ const SearchEntry = (props) => {
   return (
     <div style = {EntryStyle}>
       <div> 
-        <img style = {thumbnailStyle} src = {show.bigImg}/>
+        <img style = {thumbnailStyle} src = {show.littleImg}/>
         <div> 
           <div style = {ShowInfoStyle}>
           <h4>{show.title}</h4>

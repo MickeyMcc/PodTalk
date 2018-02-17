@@ -38,12 +38,15 @@ class ShowEntry extends React.Component {
     return (
       <div style = {EntryStyle}>
         <div style={ShowInfoStyle}>
-          <img style= {thumbnailStyle} src={show.bigImg} />
+          <img style= {thumbnailStyle} src={show.littleImg} />
           <h5 onClick = {this.goToShow.bind(this)}>{show.title}</h5>
         </div>
         <div style = {CommentsStyle}>
-        What you've said before: 
-        {oldComments.map(comment => <div style = {CommentStyle}>{comment}<br/></div>)}
+        What you've said before:
+        <br/>
+        <ul> 
+        {oldComments.map(comment => <li style = {EntryStyle}>{comment}<br/></li>)}
+        </ul>
         <textArea style = {InputStyle} value= {this.state.comment} placeholder = 'Say Something!' onChange = {this.comment.bind(this)}/>
         <button style = {ButtonStyle} onClick= {this.submit.bind(this)}> Save </button>
         </div>

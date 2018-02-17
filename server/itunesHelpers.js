@@ -28,8 +28,8 @@ const getTheImportantStuff = function (results) {
       title : podcast.trackName,
       maker : podcast.artistName,
       itunesUrl : podcast.collectionViewUrl,
-      littleImg : podcast.artworkUrl30,
-      bigImg : podcast.artworkUrl60,
+      littleImg : podcast.artworkUrl100,
+      bigImg : podcast.artworkUrl600,
       latestRelease : podcast.releaseDate,
       trackCount : podcast.trackCount,
       genre : podcast.primaryGenreName

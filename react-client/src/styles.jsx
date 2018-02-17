@@ -13,9 +13,26 @@ module.exports.PaneStyle = {
   border: '3px solid white',
   marginTop: '10px',
   marginLeft: '15px',
-  width: '40%',
+  width: '44%',
   padding: '10px',
   textAlign: 'center'
+};
+
+module.exports.ShowPageStyle = {
+  display: 'inline-flex',
+  flexDirection: 'row',
+  backgroundColor: 'rgb(235, 235, 235)',
+  border: '3px solid white',
+  marginTop: '10px',
+  marginLeft: '15px',
+  marginRight: '15px',
+  padding: '10px',
+  textAlign: 'center'
+};
+
+module.exports.BigImgStyle = {
+  width: '300px',
+  height: '300px'
 };
 
 module.exports.ButtonStyle = {
@@ -42,13 +59,11 @@ module.exports.EntryStyle = {
 
 module.exports.ShowInfoStyle = {
   flexDirection: 'column',
-  width: '40%',
   marginTop: '20px'
 }
 
 module.exports.CommentsStyle = {
   flexDirection: 'column',
-  width: '50%',  
 };
 
 module.exports.CommentStyle = {
@@ -62,7 +77,6 @@ module.exports.InputStyle = {
   margin: '8px 0',
   boxSizing: 'border-box',
   border: '2px solid rgb(79, 33, 122)',
-  borderRadius: '4px',
 };
 
 module.exports.NavBarStyle = {

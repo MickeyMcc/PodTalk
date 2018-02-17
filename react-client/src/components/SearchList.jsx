@@ -1,6 +1,6 @@
 import React from 'react';
 import SearchEntry from './SearchEntry.jsx';
-import { PaneStyle, ButtonStyle } from '../styles.jsx';
+import { PaneStyle, ButtonStyle, InputStyle } from '../styles.jsx';
 
 class SearchList extends React.Component {
   constructor (props) {
@@ -23,8 +23,8 @@ class SearchList extends React.Component {
   render () {
     return (
       <div style = {PaneStyle} >
-        <div id='searchbar' >
-          <input type='text' value = {this.state.searchQuery} onChange = {this.handleChange.bind(this)}/>
+        <div>
+          <input style = {InputStyle} type='text' value = {this.state.searchQuery} onChange = {this.handleChange.bind(this)}/>
           <button style = {ButtonStyle} onClick = {this.handleSubmit.bind(this)}> Search! </button>
         </div>
         <h4> Search Results </h4>

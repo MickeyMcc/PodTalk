@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { ShowPageStyle, ButtonStyle, CommentsStyle, CommentStyle, ShowInfoStyle, BigImgStyle, EntryStyle } from '../styles.jsx';
 
 class ShowPage extends React.Component {
   constructor (props) {
@@ -51,20 +52,28 @@ class ShowPage extends React.Component {
       backgroundColor: 'rgb(235, 235, 235)'
     }
 
-    const thumbnailStyle = {
-      display: 'inline',
-      margin: '3px'
-    }
     let oldComments = this.props.comments || [];
     return (
-      <div className='focus' >
-        <img style= {thumbnailStyle} src={show.bigImg} />
-        <h5>{show.title}</h5>
-        The Chatter
-        {this.state.comments.map((comment, index) => {return (<div key = {index}>{comment.username}: {comment.text}</div>)})}
-        <textArea value= {this.state.comment} onChange = {this.comment.bind(this)}/>
-        <button onClick= {this.submit.bind(this)}> Save </button>
-      
+      <div style = {ShowPageStyle} >
+        <img style= {BigImgStyle} src={show.bigImg} />
+          <div style={ShowInfoStyle}>
+            {show.title} <br/>
+            {show.maker} <br/>
+            {show.genre} <br/>
+            <div style = {CommentsStyle}>
+            <h5>The Chatter</h5>
+            <br/>
+            <ul>
+            {this.state.comments.map((comment, index) => 
+              {return (<li style = {EntryStyle} 
+                key = {index}>
+                  {comment.username}: {comment.text}
+                </li>)})}
+              </ul>
+            <textArea value= {this.state.comment} onChange = {this.comment.bind(this)}/>
+            <button onClick= {this.submit.bind(this)}> Save </button>
+          </div>
+        </div>
       </div>
     )
   }
