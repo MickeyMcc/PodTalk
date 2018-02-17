@@ -28,7 +28,8 @@ module.exports.createUser = function(username, password, callback) {
       callback(err);
     } else {
       if (data.length !== 0) {
-        callback('ERROR ON USER CREATION: username taken!');
+        console.log('username found');
+        callback(true);
       } else {
         insertUser(callback);
       }

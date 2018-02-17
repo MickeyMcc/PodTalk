@@ -41,7 +41,8 @@ app.get('/users', function(req, res) {
   
   db.login(user, password, function(err, data) {
     if (err) {
-      res.status(400).json({message: err});
+      console.log('some login err');
+      res.status(204).end();
     } else {
       req.session.loggedIn = true;
       res.status(200).json({username: user, id: data});
@@ -55,8 +56,10 @@ app.post('/users', function (req, res) {
   const password = req.body.password;
   
   db.createUser(user, password, function(err, data) {
+    console.log(err, data);
     if (err) {
-      res.status(400).json({message: err});
+      console.log('some err found');
+      res.status(204).end();
     } else {
       req.session.loggedIn = true;
       res.status(201).json({username: user, id: data.insertId});

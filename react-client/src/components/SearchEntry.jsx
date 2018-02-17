@@ -1,5 +1,5 @@
 import React from 'react';
-import { EntryStyle} from '../styles.jsx';
+import { EntryStyle, ButtonStyle, ShowInfoStyle} from '../styles.jsx';
 
 
 const SearchEntry = (props) => {
@@ -12,14 +12,6 @@ const SearchEntry = (props) => {
     console.log('gonna add the show');
     props.addShow(props.show);
   }
-
-  const entryStyle = {
-    border: '2px solid grey',
-    marginTop: '5px',
-    //'rgb(129, 129, 129)',
-    backgroundColor: 'rgb(235, 235, 235)'
-  }
-
   
   const thumbnailStyle = {
     display: 'inline',
@@ -31,9 +23,11 @@ const SearchEntry = (props) => {
       <div> 
         <img style = {thumbnailStyle} src = {show.bigImg}/>
         <div> 
+          <div style = {ShowInfoStyle}>
           <h4>{show.title}</h4>
-          <button onClick={addShow}> Add Show </button>
           <p>BTYB: {show.maker}, Topic: {show.genre}</p>
+          </div>
+          <button style = {ButtonStyle} onClick={addShow}> Add Show </button>
         </div>
       </div>
     </div>

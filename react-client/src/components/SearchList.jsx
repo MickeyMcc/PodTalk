@@ -6,7 +6,7 @@ class SearchList extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      searchQuery: 'r'
+      searchQuery: ''
     }
   }
 
@@ -15,7 +15,9 @@ class SearchList extends React.Component {
   }
 
   handleSubmit(event) {
-    this.props.search(this.state.searchQuery);
+    if (this.state.searchQuery !== '') {
+      this.props.search(this.state.searchQuery);
+    }
   }
   
   render () {

@@ -8,7 +8,7 @@ import Login from './components/Login.jsx';
 import Signup from './components/Signup.jsx';
 import ShowPage from './components/ShowPage.jsx';
 import axios from 'axios';
-import {MainStyle} from './styles.jsx';
+import {MainStyle, NavBarStyle, NavEntryStyle} from './styles.jsx';
 
 
 class App extends React.Component {
@@ -20,7 +20,8 @@ class App extends React.Component {
       searchResults: [],
       userComments: {},
       loggedIn: false,
-      activeShow: null
+      activeShow: null,
+      userMessage: 'Please login or signup!'
     }
   };
 
@@ -31,12 +32,12 @@ class App extends React.Component {
   };
 
   goHome() {
-    this.setState({activeShow: null});
+    this.setState({activeShow: null, userMessage: ''});
   }
 
   makeShowActive(show) {
     console.log('top level');
-    this.setState({activeShow: show});
+    this.setState({activeShow: show, userMessage: ''});
   }
 
 ///////////////////USERS\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -52,12 +53,13 @@ class App extends React.Component {
       }
     })
       .then(function (results) {
-        if (results.statusCode === 400) {
-          console.log('SORRY COULD NOT CREATE USER');
+        console.log(results);
+        if (results.status === 204) {
+          context.setState({ userMessage: 'Sorry, could not create that user. Try a different username' });
         } else {
           console.log(`WELCOME TO PODSTAR ${username}!`)
           console.log(JSON.stringify(results.data));
-          context.setState({ user: results.data, loggedIn: true });
+          context.setState({ user: results.data, loggedIn: true, userMessage: '' });
         }
       })
       .catch(function (err) {
@@ -77,11 +79,11 @@ class App extends React.Component {
       }
     })
       .then(function (results) {
-        if (results.statusCode === 400) {
-          console.log('SORRY COULD NOT LOGIN');
+        if (results.statusCode === 204) {
+          context.setState({ userMessage: 'Sorry, please check username-password combination' });
         } else {
           console.log( `WELCOME BACK ${results.data.username}!`)
-          context.setState({ user: results.data, loggedIn: true });
+          context.setState({ user: results.data, loggedIn: true, userMessage: '' });
           context.refreshShowList();
         }
       })
@@ -98,7 +100,7 @@ class App extends React.Component {
     })
       .then(function(results) {
         context.setState({loggedIn: false});
-        context.setState({user: {username: 'guest'}})
+        context.setState({user: {username: 'guest'}, userMessage: 'Log out successful!'})
       })
       .catch(function (err) {
         console.log('err', err);
@@ -147,6 +149,7 @@ class App extends React.Component {
             loggedIn: false
           });
         } else {
+          context.setState({userMessage: 'Show added!'})
           context.refreshShowList();
         }
       })
@@ -195,7 +198,7 @@ class App extends React.Component {
       }
     })
       .then(function(results) {
-        console.log('comment saved');
+        context.setState({userMessage: 'comment saved'});
         context.getUsersComments();
       })
       .catch(function(err) {
@@ -247,10 +250,11 @@ class App extends React.Component {
       return (
         <div>
           <h1 id = 'title' >PodStar</h1>
-          <nav className = 'nav-bar'> <ul class='.pt-list-unstyled'>
-            <li> Hello {this.state.user.username}! </li>
-            <li onClick = {this.goHome.bind(this)}> Home </li>
-            <li onClick = {this.logout.bind(this)}> Log Out </li>
+          <nav style={NavBarStyle}> <ul>
+            <li style={NavEntryStyle}> Hello {this.state.user.username}! </li>
+            <li style={NavEntryStyle} onClick = {this.goHome.bind(this)}> Home </li>
+            <li style={NavEntryStyle} onClick = {this.logout.bind(this)}> Log Out </li>
+            <li>{this.state.userMessage}</li>
           </ul> </nav>
           <ShowPage show = {show} saveComment = {this.saveComment.bind(this)}/>
         </div>
@@ -261,22 +265,23 @@ class App extends React.Component {
     } else if (this.state.loggedIn) {
       return (<div>
         <h1 id = 'title' >PodStar</h1>
-        <nav className = 'nav-bar'> <ul class='.pt-list-unstyled'>
-          <li> Hello {this.state.user.username}! </li>
-          <li onClick = {this.goHome.bind(this)}> Home </li>
-          <li onClick = {this.logout.bind(this)}> Log Out </li>
+        <nav style={NavBarStyle}> <ul>
+          <li style = {NavEntryStyle}> Hello {this.state.user.username}! </li>
+          <li style={NavEntryStyle} onClick = {this.goHome.bind(this)}> Home </li>
+          <li style={NavEntryStyle} onClick = {this.logout.bind(this)}> Log Out </li>
+          <li style={NavEntryStyle}>{this.state.userMessage}</li>
         </ul> </nav>
         <div style = {MainStyle}>
-        <ShowList shows={this.state.shows}
-          comments = {this.state.userComments}
-          saveComment = {this.saveComment.bind(this)}
-          makeShowActive = {this.makeShowActive.bind(this)}
-        />
-        <SearchList 
-          results={this.state.searchResults} 
-          search={this.search.bind(this)} 
-          addShow={this.addShow.bind(this)}
-        />
+          <ShowList shows={this.state.shows}
+            comments={this.state.userComments}
+            saveComment={this.saveComment.bind(this)}
+            makeShowActive={this.makeShowActive.bind(this)}
+          />
+          <SearchList
+            results={this.state.searchResults}
+            search={this.search.bind(this)}
+            addShow={this.addShow.bind(this)}
+          />
         </div>
       </div>)
 
@@ -285,8 +290,9 @@ class App extends React.Component {
       return (
       <div>
         <h1 id='title' >PodStar</h1>
-        <nav className='nav-bar'> <ul>
-          <li> Hello Guest! </li>
+        <nav style = {NavBarStyle}> <ul>
+          <li style={NavEntryStyle}> Hello Guest! </li>
+          <li style={NavEntryStyle}>{this.state.userMessage}</li>
         </ul> </nav>
         <Login login = {this.login.bind(this)}/>
         <Signup signup = {this.signup.bind(this)}/>

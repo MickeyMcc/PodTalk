@@ -1,5 +1,5 @@
 import React from 'react';
-import {EntryStyle, ButtonStyle, ShowInfoStyle, CommentsStyle, InputStyle} from '../styles.jsx';
+import {EntryStyle, ButtonStyle, ShowInfoStyle, CommentsStyle, CommentStyle, InputStyle} from '../styles.jsx';
 
 
 class ShowEntry extends React.Component {
@@ -15,8 +15,10 @@ class ShowEntry extends React.Component {
   }
 
   submit() {
-    this.props.saveComment(this.state.comment, this.props.show.id);
-    this.setState({comment: ''});
+    if (this.state.comment !== '') {
+      this.props.saveComment(this.state.comment, this.props.show.id);
+      this.setState({comment: ''});
+    }
   }
 
   goToShow() {
@@ -41,7 +43,7 @@ class ShowEntry extends React.Component {
         </div>
         <div style = {CommentsStyle}>
         What you've said before: 
-        {oldComments.map(comment => <div>{comment}<br/></div>)}
+        {oldComments.map(comment => <div style = {CommentStyle}>{comment}<br/></div>)}
         <textArea style = {InputStyle} value= {this.state.comment} placeholder = 'Say Something!' onChange = {this.comment.bind(this)}/>
         <button style = {ButtonStyle} onClick= {this.submit.bind(this)}> Save </button>
         </div>
