@@ -139,24 +139,24 @@ app.post('/comments', function(req, res) {
   });
 })
 
-app.get('/comments', function(req, res) {
+app.get('/comments', function (req, res) {
 
   const user = req.query.userID;
 
   if (user === 'all') {
-    db.getCommentsAll(req.query.showID, function(err, data) {
+    db.getCommentsAll(req.query.showID, function (err, data) {
       if (err) {
         console.log(err)
-        res.status(500).json({message: err});        
+        res.status(500).json({ message: err });
       } else {
         res.status(201).json(data);
       }
     })
 
   } else {
-    db.getCommentsUser(user, function(err, data) {
+    db.getCommentsUser(user, function (err, data) {
       if (err) {
-        res.status(500).json({message: err});        
+        res.status(500).json({ message: err });
       } else {
         res.status(201).json(data);
       }

@@ -1,12 +1,12 @@
 import React from 'react';
-
+import {EntryStyle, ButtonStyle, ShowInfoStyle, CommentsStyle, InputStyle} from '../styles.jsx';
 
 
 class ShowEntry extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      comment : 'Say Something!',
+      comment : '',
     };
   }
 
@@ -27,12 +27,6 @@ class ShowEntry extends React.Component {
     let oldComments = this.props.comments || [];
     
     const show = this.props.show;
-    
-    const entryStyle = {
-      border: '2px solid grey',
-      marginTop: '5px',
-      backgroundColor: 'rgb(235, 235, 235)'
-    }
 
     const thumbnailStyle = {
       display: 'inline',
@@ -40,13 +34,17 @@ class ShowEntry extends React.Component {
     }
 
     return (
-      <div style={entryStyle}>
-        <img style= {thumbnailStyle} src={show.bigImg} />
-        <h5 onClick = {this.goToShow.bind(this)}>{show.title}</h5>
+      <div style = {EntryStyle}>
+        <div style={ShowInfoStyle}>
+          <img style= {thumbnailStyle} src={show.bigImg} />
+          <h5 onClick = {this.goToShow.bind(this)}>{show.title}</h5>
+        </div>
+        <div style = {CommentsStyle}>
         What you've said before: 
-        {oldComments.map(comment => <div>{comment}</div>)}
-        <textArea value= {this.state.comment} onChange = {this.comment.bind(this)}/>
-        <button onClick= {this.submit.bind(this)}> Save </button>
+        {oldComments.map(comment => <div>{comment}<br/></div>)}
+        <textArea style = {InputStyle} value= {this.state.comment} placeholder = 'Say Something!' onChange = {this.comment.bind(this)}/>
+        <button style = {ButtonStyle} onClick= {this.submit.bind(this)}> Save </button>
+        </div>
       </div>
     )
   }

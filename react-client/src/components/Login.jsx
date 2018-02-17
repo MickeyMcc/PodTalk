@@ -1,4 +1,5 @@
 import React from 'react';
+import { PaneStyle, ButtonStyle } from '../styles.jsx';
 
 class Login extends React.Component {
   constructor(props) {
@@ -22,26 +23,19 @@ class Login extends React.Component {
   }
 
   render() {
-        let paneStyle = {
-      display: 'inline-block',
-      backgroundColor: 'rgb(235, 235, 235)',
-      border: '3px solid white',
-      marginTop: '10px',
-      marginLeft: '15px',
-      padding: '10px',
-      width: '40%'
-    };
 
     return (
-      <div style={paneStyle} >
-        <div>
-          <h3>Log In Here</h3>
-          <h5>username</h5>
-          <input type='text' value={this.state.username} onChange={this.userNameEntry.bind(this)} />
-
-          <h5>password</h5>
-          <input type='text' value={this.state.password} onChange={this.passwordEntry.bind(this)} />
-          <button onClick={this.handleSubmit.bind(this)}> Login </button>
+      <div style={PaneStyle} >
+        <div style={{ width: '100%' }}>
+          <h3 style={{ martinTop: '10px' }}>Log In Here</h3>
+          <h5>Username</h5>
+          <input type='text' placeholder= 'username' 
+            value={this.state.username} onChange={this.userNameEntry.bind(this)} />
+          <h5>Password</h5>
+          <input type='password' placeholder= 'password' 
+            value={this.state.password} onChange={this.passwordEntry.bind(this)} />
+          <br/>
+          <button style={ButtonStyle} onClick={this.handleSubmit.bind(this)} > Login </button>
         </div>
       </div>
     )

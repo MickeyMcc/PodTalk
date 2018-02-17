@@ -8,6 +8,7 @@ import Login from './components/Login.jsx';
 import Signup from './components/Signup.jsx';
 import ShowPage from './components/ShowPage.jsx';
 import axios from 'axios';
+import {MainStyle} from './styles.jsx';
 
 
 class App extends React.Component {
@@ -97,6 +98,7 @@ class App extends React.Component {
     })
       .then(function(results) {
         context.setState({loggedIn: false});
+        context.setState({user: {username: 'guest'}})
       })
       .catch(function (err) {
         console.log('err', err);
@@ -264,6 +266,7 @@ class App extends React.Component {
           <li onClick = {this.goHome.bind(this)}> Home </li>
           <li onClick = {this.logout.bind(this)}> Log Out </li>
         </ul> </nav>
+        <div style = {MainStyle}>
         <ShowList shows={this.state.shows}
           comments = {this.state.userComments}
           saveComment = {this.saveComment.bind(this)}
@@ -274,6 +277,7 @@ class App extends React.Component {
           search={this.search.bind(this)} 
           addShow={this.addShow.bind(this)}
         />
+        </div>
       </div>)
 
     //LOGIN VIEW

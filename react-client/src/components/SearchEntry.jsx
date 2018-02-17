@@ -1,4 +1,6 @@
 import React from 'react';
+import { EntryStyle} from '../styles.jsx';
+
 
 const SearchEntry = (props) => {
   const show = props.show;
@@ -25,7 +27,7 @@ const SearchEntry = (props) => {
   }
 
   return (
-    <div style = {entryStyle}>
+    <div style = {EntryStyle}>
       <div> 
         <img style = {thumbnailStyle} src = {show.bigImg}/>
         <div> 

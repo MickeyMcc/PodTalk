@@ -3,8 +3,8 @@ var bcrypt = require('bcrypt-nodejs');
 
 var connection = mysql.createConnection({
   host: 'localhost',
-  user: 'student',
-  password: 'student',
+  user: 'root',
+  password: '',
   database: 'podstar'
 });
 
