@@ -9,6 +9,7 @@ import Signup from './components/Signup.jsx';
 import ShowPage from './components/ShowPage.jsx';
 import axios from 'axios';
 
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -244,7 +245,7 @@ class App extends React.Component {
       return (
         <div>
           <h1 id = 'title' >PodStar</h1>
-          <nav className = 'nav-bar'> <ul>
+          <nav className = 'nav-bar'> <ul class='.pt-list-unstyled'>
             <li> Hello {this.state.user.username}! </li>
             <li onClick = {this.goHome.bind(this)}> Home </li>
             <li onClick = {this.logout.bind(this)}> Log Out </li>
@@ -258,7 +259,7 @@ class App extends React.Component {
     } else if (this.state.loggedIn) {
       return (<div>
         <h1 id = 'title' >PodStar</h1>
-        <nav className = 'nav-bar'> <ul>
+        <nav className = 'nav-bar'> <ul class='.pt-list-unstyled'>
           <li> Hello {this.state.user.username}! </li>
           <li onClick = {this.goHome.bind(this)}> Home </li>
           <li onClick = {this.logout.bind(this)}> Log Out </li>
