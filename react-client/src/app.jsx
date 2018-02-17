@@ -7,6 +7,7 @@ import SearchList from './components/SearchList.jsx';
 import Login from './components/Login.jsx';
 import Signup from './components/Signup.jsx';
 import ShowPage from './components/ShowPage.jsx';
+import PopularPage from './components/PopularPage.jsx';
 import axios from 'axios';
 import {MainStyle, NavBarStyle, NavEntryStyle} from './styles.jsx';
 
@@ -21,7 +22,8 @@ class App extends React.Component {
       userComments: {},
       loggedIn: false,
       activeShow: null,
-      userMessage: 'Please login or signup!'
+      userMessage: 'Please login or signup!',
+      activity: false,
     }
   };
 
@@ -32,11 +34,15 @@ class App extends React.Component {
   };
 
   goHome() {
-    this.setState({activeShow: null, userMessage: ''});
+    this.setState({activeShow: null, userMessage: '', activity: false});
+  }
+
+  goToStatsPage() {
+    this.setState({activeShow: null, activity: true});
   }
 
   makeShowActive(show) {
-    this.setState({activeShow: show, userMessage: ''});
+    this.setState({activeShow: show, userMessage: '', activity: false});
   }
 
 ///////////////////USERS\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -99,7 +105,8 @@ class App extends React.Component {
         context.setState({loggedIn: false});
         context.setState({user: {username: 'guest'}, 
           userMessage: 'Log out successful!',
-          activeShow: null})
+          activeShow: null,
+          activity: false})
       })
       .catch(function (err) {
         console.log('err', err);
@@ -239,36 +246,40 @@ class App extends React.Component {
 ///////////////////RENDER\\\\\\\\\\\\\\\\\\\\\\\\\\
 
   render () {
+    const navbar = (<nav style={NavBarStyle}> <ul>
+      <li style={NavEntryStyle}> Hello {this.state.user.username}! </li>
+      <li style={NavEntryStyle} onClick={this.goHome.bind(this)}> Home </li>
+      <li style={NavEntryStyle} onClick={this.logout.bind(this)}> Log Out </li>
+      <li style={NavEntryStyle} onClick={this.goToStatsPage.bind(this)}> Most Popular </li>
+      <li>{this.state.userMessage}</li>
+    </ul> </nav>)
 
     //FOCUS VIEW
     if (this.state.activeShow) {
       const show = this.state.activeShow;
       return (
         <div>
-          <h1 id = 'title' >PodStar</h1>
-          <nav style={NavBarStyle}> <ul>
-            <li style={NavEntryStyle}> Hello {this.state.user.username}! </li>
-            <li style={NavEntryStyle} onClick = {this.goHome.bind(this)}> Home </li>
-            <li style={NavEntryStyle} onClick = {this.logout.bind(this)}> Log Out </li>
-            <li>{this.state.userMessage}</li>
-          </ul> </nav>
+          <h1 id='title' >PodStar</h1>
+          {navbar}
           <ShowPage show = {show} saveComment = {this.saveComment.bind(this)}/>
         </div>
       );
 
+    //STATS VIEW
+    } else if (this.state.activity) {
+        return (<div>
+          <h1 id='title' >PodStar</h1>
+          {navbar}
+          <div style={MainStyle}>
+            <PopularPage/>
+          </div>
+        </div>)
 
     //NORMAL VIEW
     } else if (this.state.loggedIn) {
       return (<div>
-        <h1 id = 'title' >PodStar</h1>
-
-        <nav style={NavBarStyle}> <ul>
-          <li style = {NavEntryStyle}> Hello {this.state.user.username}! </li>
-          <li style={NavEntryStyle} onClick = {this.goHome.bind(this)}> Home </li>
-          <li style={NavEntryStyle} onClick = {this.logout.bind(this)}> Log Out </li>
-          <li style={NavEntryStyle}>{this.state.userMessage}</li>
-        </ul> </nav>
-
+        <h1 id='title' >PodStar</h1>
+        {navbar}
         <div style = {MainStyle}>
           <ShowList shows={this.state.shows}
             comments={this.state.userComments}
@@ -288,8 +299,7 @@ class App extends React.Component {
     } else {
       return (
       <div>
-
-        <h1 id='title' >PodStar</h1>
+        <h1 id='title'>PodStar</h1>
         <nav style = {NavBarStyle}> <ul>
           <li style={NavEntryStyle}> Hello Guest! </li>
           <li style={NavEntryStyle}>{this.state.userMessage}</li>
