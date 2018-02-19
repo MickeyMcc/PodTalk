@@ -6,7 +6,8 @@ class ShowPage extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      comments: []
+      comments: [],
+      owned: props.owned
     }
   }
 
@@ -41,39 +42,64 @@ class ShowPage extends React.Component {
     this.setState({comment: ''});
     this.getShowComments();
   }
+
+  addShow() {
+    this.props.addShow(this.props.show)
+    this.setState({owned:  true});
+  }
   
   render () {
     const show = this.props.show;
 
-    const entryStyle = {
-      border: '2px solid grey',
-      marginTop: '5px',
-      backgroundColor: 'rgb(235, 235, 235)'
-    }
-
     let oldComments = this.props.comments || [];
-    return (
-      <div style = {ShowPageStyle}>
-        <img style= {BigImgStyle} src={show.bigImg}/>
-        <div style={ShowInfoStyle}>
-          {show.title} <br/>
-          {show.maker} <br/>
-          {show.genre} <br/>
+    
+    if (this.state.owned) {
+      return (
+        <div style = {ShowPageStyle}>
+          <div style={ShowInfoStyle}>
+            <img style={BigImgStyle} src={show.bigImg} />          
+            <h5>{show.title} </h5>
+            <h5>{show.maker} </h5>
+            <h5>{show.genre} </h5>
+          </div>
+          <div style = {CommentsStyle}>
+          <h4 style ={{marginTop: '18px'}}>The Chatter</h4>
+          <ul>
+          {this.state.comments.map((comment, index) => 
+            {return (<li style = {CommentStyle} 
+              key = {index}>
+              {comment.username}: {comment.text}
+            </li>)})}
+              <textArea style={InputStyle} value={this.state.comment} placeholder='Say Something!' onChange={this.comment.bind(this)} />
+              <button style={ButtonStyle} onClick={this.submit.bind(this)}> Save </button>
+          </ul>
+          </div>
         </div>
-        <div style = {{display: 'flex', flexDirection: 'column'}}>
-        <h5>The Chatter</h5>
-        <ul style = {CommentsStyle}>
-        {this.state.comments.map((comment, index) => 
-          {return (<li style = {CommentStyle} 
-            key = {index}>
-            {comment.username}: {comment.text}
-          </li>)})}
-        </ul>
-        <textArea style = {InputStyle} value= {this.state.comment} onChange = {this.comment.bind(this)}/>
-        <button style = {ButtonStyle} onClick= {this.submit.bind(this)}> Save </button>
+      )
+    } else {
+      return (
+        <div style={ShowPageStyle}>
+          <div style={ShowInfoStyle}>
+            <img style={BigImgStyle} src={show.bigImg} />
+            <h5>{show.title} </h5>
+            <h5>{show.maker} </h5>
+            <h5>{show.genre} </h5>
+          </div>
+          <div style={CommentsStyle}>
+            <h4 style={{ marginTop: '18px' }}>The Chatter</h4>
+            <ul>
+              {this.state.comments.map((comment, index) => {
+                return (<li style={CommentStyle}
+                  key={index}>
+                  {comment.username}: {comment.text}
+                </li>)
+              })}
+              <button style={ButtonStyle} onClick={this.addShow.bind(this)}> Add Show </button>
+            </ul>
+          </div>
         </div>
-      </div>
-    )
+      )
+    }
   }
 }
 

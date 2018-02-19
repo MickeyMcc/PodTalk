@@ -33,6 +33,7 @@ class SearchList extends React.Component {
           <SearchEntry show={result}
             key={index}
             addShow = {this.props.addShow}
+            makeShowActive = {this.props.makeShowActive}
           />
         )}
       </div>

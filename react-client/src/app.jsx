@@ -24,6 +24,7 @@ class App extends React.Component {
       activeShow: null,
       userMessage: 'Please login or signup!',
       activity: false,
+      showIsOwned: false,
     }
   };
 
@@ -41,8 +42,8 @@ class App extends React.Component {
     this.setState({activeShow: null, activity: true});
   }
 
-  makeShowActive(show) {
-    this.setState({activeShow: show, userMessage: '', activity: false});
+  makeShowActive(show, showIsOwned) {
+    this.setState({activeShow: show, userMessage: '', activity: false, showIsOwned: showIsOwned});
   }
 
 ///////////////////USERS\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -251,7 +252,7 @@ class App extends React.Component {
       <li style={NavEntryStyle} onClick={this.goHome.bind(this)}> Home </li>
       <li style={NavEntryStyle} onClick={this.logout.bind(this)}> Log Out </li>
       <li style={NavEntryStyle} onClick={this.goToStatsPage.bind(this)}> Most Popular </li>
-      <li>{this.state.userMessage}</li>
+      <li style={NavEntryStyle}>{this.state.userMessage}</li>
     </ul> </nav>)
 
     //FOCUS VIEW
@@ -261,7 +262,11 @@ class App extends React.Component {
         <div>
           <h1 id='title' >PodStar</h1>
           {navbar}
-          <ShowPage show = {show} saveComment = {this.saveComment.bind(this)}/>
+          <ShowPage show = {show} 
+            saveComment = {this.saveComment.bind(this)} 
+            owned = {this.state.showIsOwned} 
+            addShow = {this.addShow.bind(this)}
+          />
         </div>
       );
 
@@ -291,6 +296,7 @@ class App extends React.Component {
             results={this.state.searchResults}
             search={this.search.bind(this)}
             addShow={this.addShow.bind(this)}
+            makeShowActive={this.makeShowActive.bind(this)}
           />
         </div>
       </div>)

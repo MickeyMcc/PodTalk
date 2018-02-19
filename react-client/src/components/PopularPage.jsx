@@ -65,18 +65,21 @@ class PopularPage extends React.Component {
   render() {
     return(
       <div style = {MainStyle}>  
-      <div style={PaneStyle}> Top Users
+      <div style={PaneStyle}> 
+        <h4>Top Users</h4>
+          <h5> Sort by :
+            <a onClick={this.sortUsers.bind(this, 'adds')}> Adds </a>
+            <a onClick={this.sortUsers.bind(this, 'comments')}>| Comments </a>
+          </h5>
         {this.renderEntry(this.state.users, this.state.usersSort)}
-        <p> class by: </p>
-        <div onClick = {this.sortUsers.bind(this, 'connections')}> Adds </div>
-        <div onClick = {this.sortUsers.bind(this, 'comments')}> Comments </div>
-
       </div>
-      <div style={PaneStyle}> Top Shows
+      <div style={PaneStyle}> 
+      <h4>Top Shows</h4>
+        <h5> Sort by :
+        <a onClick={this.sortShows.bind(this, 'adds')}> Adds </a>
+          <a onClick={this.sortShows.bind(this, 'comments')}>| Comments </a>
+        </h5>
         {this.renderEntry(this.state.shows, this.state.showsSort)}
-        <p> class by: </p>
-        <div onClick={this.sortShows.bind(this, 'connections')}> Adds </div>
-        <div onClick={this.sortShows.bind(this, 'comments')}> Comments </div>
       </div>
       </div>
     )

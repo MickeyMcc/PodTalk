@@ -22,7 +22,7 @@ class ShowEntry extends React.Component {
   }
 
   goToShow() {
-    this.props.makeShowActive(this.props.show);
+    this.props.makeShowActive(this.props.show, true);
   }  
 
   render() {
@@ -43,9 +43,8 @@ class ShowEntry extends React.Component {
             <h5 onClick = {this.goToShow.bind(this)}>{show.title}</h5>
           </div>
           <div style = {CommentsStyle}>
-            <br/>
+            <h5 style ={{ marginTop: '15px', marginLeft: '30px' }}>What you've said before:</h5>
             <ul> 
-              What you've said before:
               {oldComments.map(comment => <li style = {CommentStyle}>{comment}<br/></li>)}
             </ul>
           </div>

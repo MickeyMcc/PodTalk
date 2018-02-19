@@ -27,7 +27,7 @@ class Login extends React.Component {
     return (
       <div style={PaneStyle} >
         <div style={{ width: '100%' }}>
-          <h3 style={{ martinTop: '10px' }}>Log In Here</h3>
+          <h3 style={{ martinTop: '10px' }}>Log In</h3>
           <h5>Username</h5>
           <input style = {InputStyle} type='text' placeholder= 'username' 
             value={this.state.username} onChange={this.userNameEntry.bind(this)} />

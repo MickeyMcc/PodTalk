@@ -35,7 +35,7 @@ CREATE TABLE shows (
 
 CREATE TABLE comments (
   id int NOT NULL AUTO_INCREMENT,
-  text varchar(300) NOT NULL,
+  text varchar(500) NOT NULL,
   user_id INT NOT NULL,
   show_id INT NOT NULL,
   PRIMARY KEY (id),

@@ -17,13 +17,17 @@ const SearchEntry = (props) => {
     margin: '3px'
   }
 
+  const checkItOut = function () {
+    props.makeShowActive(props.show, false);
+  }
+
   return (
     <div style = {EntryStyle}>
       <div style={{ display: 'inline-flex', flexDirection: 'row' }}>
         <img style = {thumbnailStyle} src = {show.littleImg}/>
         <div> 
           <div style = {SearchInfoStyle}>
-          <h4>{show.title}</h4>
+          <h4 onClick = {checkItOut}>{show.title}</h4>
           <p>BTYB: {show.maker}, Topic: {show.genre}</p>
           </div>
         </div>

@@ -3,6 +3,7 @@ import Column from "antd/lib/table/Column";
 module.exports.MainStyle = {
   display: 'flex',
   flexDirection: 'row',
+  width: '100%'
 }
 
 
@@ -13,6 +14,7 @@ module.exports.PaneStyle = {
   border: '3px solid white',
   marginTop: '10px',
   marginLeft: '15px',
+  
   width: '44%',
   padding: '10px',
   textAlign: 'center'
@@ -20,13 +22,14 @@ module.exports.PaneStyle = {
 
 module.exports.ShowPageStyle = {
   display: 'inline-flex',
+  width: '95%',
   flexDirection: 'row',
   backgroundColor: 'rgb(235, 235, 235)',
   border: '3px solid white',
   marginTop: '10px',
   marginLeft: '15px',
   marginRight: '15px',
-  padding: '10px',
+  padding: '15px',
   textAlign: 'center'
 };
 
@@ -36,7 +39,7 @@ module.exports.BigImgStyle = {
 };
 
 module.exports.ButtonStyle = {
-  backgroundColor: 'rgb(79, 33, 122)', /* Green */
+  backgroundColor: 'rgb(79, 33, 122)',
   border: 'none',
   color: 'white',
   padding: '12px 20px',
@@ -47,10 +50,11 @@ module.exports.ButtonStyle = {
   height: '40px'
 };
 
+
 module.exports.EntryStyle = {
     display: 'flex',
     flexDirection: 'column',
-    borderTop: '3px solid rgb(79, 33, 122)',
+    borderTop: '3px solid white',
     textAlign: 'left',
     padding: '8px',
     marginTop: '5px',
@@ -61,7 +65,8 @@ module.exports.ShowInfoStyle = {
   flexDirection: 'column',
   marginTop: '20px',
   textAlign: 'center',
-  width: '30%'
+  width: '30%',
+  
 }
 
 module.exports.SearchInfoStyle = {
@@ -71,17 +76,24 @@ module.exports.SearchInfoStyle = {
 }
 
 module.exports.CommentsStyle = {
-  flexDirection: 'column',
+  border: '2px solid rgb(79, 33, 122)',
+  width: '70%',
+  marginLeft: '20px',
+  marginBottom: '15px',
 };
 
 module.exports.CommentStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  border: '2px solid white',
+  display: 'block',
+  float: 'right',
+  borderTop: '2px solid white',
   textAlign: 'left',
   padding: '8px',
   marginTop: '5px',
+  marginRight: '40px',
   textAlign: 'left',
+  width: '90%',
+  boxSizing: 'border-box',
+
 };
 
 module.exports.InputStyle = {
@@ -89,6 +101,14 @@ module.exports.InputStyle = {
   padding: '12px 20px',
   boxSizing: 'border-box',
   border: '2px solid rgb(79, 33, 122)',
+};
+
+module.exports.BigInputStyle = {
+  width: '70%',
+  padding: '12px 20px',
+  boxSizing: 'border-box',
+  border: '2px solid rgb(79, 33, 122)',
+  marginTop: '20px'
 };
 
 module.exports.NavBarStyle = {
