@@ -194,7 +194,7 @@ class App extends React.Component {
       method: 'post',
       url: '/shows',
       data: {
-        userId: context.state.user.id,
+        userID: context.state.user.id,
         show, // from search results, doesn't have id
       },
     })

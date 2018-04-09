@@ -8,7 +8,8 @@ class SearchList extends React.Component {
     this.state = {
       searchQuery: '',
     };
-    this.handleChange = this.handleChange.bing(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(event) {

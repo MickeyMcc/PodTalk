@@ -10,6 +10,7 @@ class Signup extends React.Component {
     };
     this.userNameEntry = this.userNameEntry.bind(this);
     this.passwordEntry = this.passwordEntry.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   userNameEntry(event) {
@@ -21,6 +22,7 @@ class Signup extends React.Component {
   }
 
   handleSubmit() {
+    console.log('submit', this.state.username, this.state.password);
     this.props.signup(this.state.username, this.state.password);
   }
 

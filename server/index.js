@@ -37,7 +37,7 @@ app.get('/users', (req, res) => {
   const { user, password } = req.query;
   db.login(user, password, (err, data) => {
     if (err) {
-      console.log('some login err');
+      console.log('some login err', err);
       res.status(204).end();
     } else {
       req.session.loggedIn = true;
@@ -47,10 +47,11 @@ app.get('/users', (req, res) => {
 });
 
 app.post('/users', (req, res) => {
-  const { user, password } = req.query;
+  const { user, password } = req.body;
+  console.log(req.body);
   db.createUser(user, password, (err, data) => {
     if (err) {
-      console.log('some err found');
+      console.log('some err found', err);
       res.status(204).end();
     } else {
       req.session.loggedIn = true;
