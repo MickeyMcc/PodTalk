@@ -1,10 +1,8 @@
-import Column from "antd/lib/table/Column";
-
 module.exports.MainStyle = {
   display: 'flex',
   flexDirection: 'row',
-  width: '100%'
-}
+  width: '100%',
+};
 
 
 module.exports.PaneStyle = {
@@ -14,10 +12,9 @@ module.exports.PaneStyle = {
   border: '3px solid white',
   marginTop: '10px',
   marginLeft: '15px',
-  
   width: '44%',
   padding: '10px',
-  textAlign: 'center'
+  textAlign: 'center',
 };
 
 module.exports.ShowPageStyle = {
@@ -30,12 +27,12 @@ module.exports.ShowPageStyle = {
   marginLeft: '15px',
   marginRight: '15px',
   padding: '15px',
-  textAlign: 'center'
+  textAlign: 'center',
 };
 
 module.exports.BigImgStyle = {
   width: '300px',
-  height: '300px'
+  height: '300px',
 };
 
 module.exports.ButtonStyle = {
@@ -47,18 +44,18 @@ module.exports.ButtonStyle = {
   textDecoration: 'none',
   fontSize: '14px',
   margin: '15px',
-  height: '40px'
+  height: '40px',
 };
 
 
 module.exports.EntryStyle = {
-    display: 'flex',
-    flexDirection: 'column',
-    borderTop: '3px solid white',
-    textAlign: 'left',
-    padding: '8px',
-    marginTop: '5px',
-    backgroundColor: 'rgb(235, 235, 235)'
+  display: 'flex',
+  flexDirection: 'column',
+  borderTop: '3px solid white',
+  textAlign: 'left',
+  padding: '8px',
+  marginTop: '5px',
+  backgroundColor: 'rgb(235, 235, 235)',
 };
 
 module.exports.ShowInfoStyle = {
@@ -66,14 +63,13 @@ module.exports.ShowInfoStyle = {
   marginTop: '20px',
   textAlign: 'center',
   width: '30%',
-  
-}
+};
 
 module.exports.SearchInfoStyle = {
   flexDirection: 'column',
   marginTop: '10px',
   textAlign: 'left',
-}
+};
 
 module.exports.CommentsStyle = {
   border: '2px solid rgb(79, 33, 122)',
@@ -86,7 +82,6 @@ module.exports.CommentStyle = {
   display: 'block',
   float: 'right',
   borderTop: '2px solid white',
-  textAlign: 'left',
   padding: '8px',
   marginTop: '5px',
   marginRight: '40px',
@@ -108,7 +103,7 @@ module.exports.BigInputStyle = {
   padding: '12px 20px',
   boxSizing: 'border-box',
   border: '2px solid rgb(79, 33, 122)',
-  marginTop: '20px'
+  marginTop: '20px',
 };
 
 module.exports.NavBarStyle = {
@@ -116,11 +111,11 @@ module.exports.NavBarStyle = {
   padding: '0px',
   width: '100%',
   height: '35px',
-  backgroundColor: 'rgb(79, 33, 122)'
+  backgroundColor: 'rgb(79, 33, 122)',
 };
 
 module.exports.NavEntryStyle = {
   color: 'white',
   marginTop: '8px',
-  marginRight: '25px' 
-}
+  marginRight: '25px',
+};

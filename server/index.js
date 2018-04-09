@@ -1,87 +1,77 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var itunes = require('./itunesHelpers');
-var session = require('express-session');
-var bcrypt = require('bcrypt-nodejs');
+const express = require('express');
+const bodyParser = require('body-parser');
+const itunes = require('./itunesHelpers');
+const session = require('express-session');
+const path = require('path');
 
-var db = require('../database-mysql');
+const db = require('../database-mysql');
 
-var app = express();
+const app = express();
 
-app.use(express.static(__dirname + '/../react-client/dist'));
+app.use(express.static(path.join(__dirname, '/../react-client/dist')));
 app.use(session({
   secret: 'mickey mouse',
   cookie: {
-    maxAge: 6000000
-  }
+    maxAge: 6000000,
+  },
 }));
 
 app.use(bodyParser.urlencoded());
 
 app.use(bodyParser.json());
 
-///////////////AUTHENTICATION\\\\\\\\\\\\\\\\\\\
+// /////////////AUTHENTICATION\\\\\\\\\\\\\\\\\\\
 
-const checkSession = function(req, res, next) {
-  
+const checkSession = (req, res, next) => {
   if (req.session.loggedIn === true) {
     next();
   } else {
     console.log('badCookies');
-    res.status(404).json({loggedIn: false});
+    res.status(404).json({ loggedIn: false });
   }
-}
+};
 
-///////////////////USERS\\\\\\\\\\\\\\\\\\\\\\\\\\
+// /////////////////USERS\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-app.get('/users', function(req, res) {
-  
-  const user = req.query.user;
-  const password = req.query.password;
-  
-  db.login(user, password, function(err, data) {
+app.get('/users', (req, res) => {
+  const { user, password } = req.query;
+  db.login(user, password, (err, data) => {
     if (err) {
       console.log('some login err');
       res.status(204).end();
     } else {
       req.session.loggedIn = true;
-      res.status(200).json({username: user, id: data});
+      res.status(200).json({ username: user, id: data });
     }
   });
 });
 
-app.post('/users', function (req, res) {
-  
-  const user = req.body.user;
-  const password = req.body.password;
-  
-  db.createUser(user, password, function(err, data) {
+app.post('/users', (req, res) => {
+  const { user, password } = req.query;
+  db.createUser(user, password, (err, data) => {
     if (err) {
       console.log('some err found');
       res.status(204).end();
     } else {
       req.session.loggedIn = true;
-      res.status(201).json({username: user, id: data.insertId});
+      res.status(201).json({ username: user, id: data.insertId });
     }
   });
 });
 
-app.delete('/users', function (req, res) {
-  
-  req.session.destroy( function() {
+app.delete('/users', (req, res) => {
+  req.session.destroy(() => {
     res.status(200).end();
   });
-})
+});
 
+// /////////////////SHOWS\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-///////////////////SHOWS\\\\\\\\\\\\\\\\\\\\\\\\\\
-
-app.get('/shows', checkSession, function (req, res) {
-  
+app.get('/shows', checkSession, (req, res) => {
   const user = req.query.userId;
-  
-  db.selectAllUserShows(user, function(err, data) {
-    if(err) {
+
+  db.selectAllUserShows(user, (err, data) => {
+    if (err) {
       console.log(err);
       res.status(500).json(err);
     } else {
@@ -90,29 +80,25 @@ app.get('/shows', checkSession, function (req, res) {
   });
 });
 
-app.post('/shows', function (req, res) {  //gets user and show
-  
-  const userId = req.body.userId;
-  const show = req.body.show;
-
-  db.addShowToUser(userId, show, function(err, data) {
+app.post('/shows', (req, res) => { // gets user and show
+  const { userID, show } = req.body;
+  db.addShowToUser(userID, show, (err) => {
     if (err) {
       console.log(err);
       res.end('show could not be added');
     } else {
-    res.end('show added to favorites');
+      res.end('show added to favorites');
     }
   });
-})
+});
 
-///////////////////SEARCH\\\\\\\\\\\\\\\\\\\\\\\\\\
+// /////////////////SEARCH\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 
-app.get('/search', checkSession, function(req, res) {
-
+app.get('/search', checkSession, (req, res) => {
   const query = req.query.terms;
 
-  itunes.search(query, function(err, data) {
+  itunes.search(query, (err, data) => {
     if (err) {
       res.status(500).json(err);
     } else {
@@ -121,52 +107,49 @@ app.get('/search', checkSession, function(req, res) {
   });
 });
 
-///////////////////COMMENTS\\\\\\\\\\\\\\\\\\\\\\\\\\
+// /////////////////COMMENTS\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-app.post('/comments', function(req, res) {
-
-  const comment = req.body.comment;
+app.post('/comments', (req, res) => {
+  const { comment } = req.body;
   const user = req.body.userID;
   const show = req.body.showID;
 
-  db.addComment(user, show, comment, function(err, data) {
+  db.addComment(user, show, comment, (err) => {
     if (err) {
-      res.status(500).json({message: err});
+      res.status(500).json({ message: err });
     } else {
       res.status(201).end();
     }
   });
-})
+});
 
-app.get('/comments', function (req, res) {
-
+app.get('/comments', (req, res) => {
   const user = req.query.userID;
 
   if (user === 'all') {
-    db.getCommentsAll(req.query.showID, function (err, data) {
+    db.getCommentsAll(req.query.showID, (err, data) => {
       if (err) {
-        console.log(err)
+        console.log(err);
         res.status(500).json({ message: err });
       } else {
         res.status(201).json(data);
       }
-    })
-
+    });
   } else {
-    db.getCommentsUser(user, function (err, data) {
+    db.getCommentsUser(user, (err, data) => {
       if (err) {
         res.status(500).json({ message: err });
       } else {
         res.status(201).json(data);
       }
-    })
+    });
   }
-})
+});
 
-///////////////////ACTIVITY\\\\\\\\\\\\\\\\\\\\\\\\\\
+// /////////////////ACTIVITY\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-app.get('/activity', function (req, res) {
-  function respond (err, data) {
+app.get('/activity', (req, res) => {
+  function respond(err, data) {
     if (err) {
       res.status(500).end();
     } else {
@@ -177,7 +160,7 @@ app.get('/activity', function (req, res) {
   const entity = req.query.type;
 
   if (entity === 'users') {
-    db.getUserActivity(respond)
+    db.getUserActivity(respond);
   } else if (entity === 'shows') {
     db.getShowActivity(respond);
   } else {
@@ -185,6 +168,6 @@ app.get('/activity', function (req, res) {
   }
 });
 
-app.listen(3000, function() {
+app.listen(3000, () => {
   console.log('listening on port 3000!');
 });

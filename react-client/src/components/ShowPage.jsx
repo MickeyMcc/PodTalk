@@ -1,14 +1,17 @@
 import React from 'react';
 import axios from 'axios';
-import { ShowPageStyle, ButtonStyle, CommentsStyle, CommentStyle, ShowInfoStyle, BigImgStyle, EntryStyle, InputStyle } from '../styles.jsx';
+import { ShowPageStyle, ButtonStyle, CommentsStyle, CommentStyle, ShowInfoStyle, BigImgStyle, InputStyle } from '../styles';
 
 class ShowPage extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.state = {
       comments: [],
-      owned: props.owned
-    }
+      owned: props.owned,
+    };
+    this.comment = this.comment.bind(this);
+    this.submit = this.submit.bind(this);
+    this.addShow = this.addShow.bind(this);
   }
 
   componentDidMount() {
@@ -16,71 +19,46 @@ class ShowPage extends React.Component {
   }
 
   getShowComments() {
-    let context = this;
+    const context = this;
     axios({
       method: 'get',
       url: '/comments',
       params: {
         userID: 'all',
-        showID: context.props.show.id
-      }
+        showID: context.props.show.id,
+      },
     })
-      .then(function(results) {
-        context.setState({comments: results.data});
+      .then((results) => {
+        context.setState({ comments: results.data });
       })
-      .catch(function(err) {
+      .catch((err) => {
         console.log(err);
-      }) 
-  };
+      });
+  }
 
   comment(e) {
-    this.setState({comment: e.target.value});
+    this.setState({ comment: e.target.value });
   }
 
   submit() {
     this.props.saveComment(this.state.comment, this.props.show.id);
-    this.setState({comment: ''});
+    this.setState({ comment: '' });
     this.getShowComments();
   }
 
   addShow() {
-    this.props.addShow(this.props.show)
-    this.setState({owned:  true});
+    this.props.addShow(this.props.show);
+    this.setState({ owned: true });
   }
-  
-  render () {
-    const show = this.props.show;
 
-    let oldComments = this.props.comments || [];
-    
+  render() {
+    const { show } = this.props.show;
+
     if (this.state.owned) {
-      return (
-        <div style = {ShowPageStyle}>
-          <div style={ShowInfoStyle}>
-            <img style={BigImgStyle} src={show.bigImg} />          
-            <h5>{show.title} </h5>
-            <h5>{show.maker} </h5>
-            <h5>{show.genre} </h5>
-          </div>
-          <div style = {CommentsStyle}>
-          <h4 style ={{marginTop: '18px'}}>The Chatter</h4>
-          <ul>
-          {this.state.comments.map((comment, index) => 
-            {return (<li style = {CommentStyle} 
-              key = {index}>
-              {comment.username}: {comment.text}
-            </li>)})}
-              <textArea style={InputStyle} value={this.state.comment} placeholder='Say Something!' onChange={this.comment.bind(this)} />
-              <button style={ButtonStyle} onClick={this.submit.bind(this)}> Save </button>
-          </ul>
-          </div>
-        </div>
-      )
-    } else {
       return (
         <div style={ShowPageStyle}>
           <div style={ShowInfoStyle}>
-            <img style={BigImgStyle} src={show.bigImg} />
+            <img style={BigImgStyle} src={show.bigImg} alt="" />
             <h5>{show.title} </h5>
             <h5>{show.maker} </h5>
             <h5>{show.genre} </h5>
@@ -88,18 +66,50 @@ class ShowPage extends React.Component {
           <div style={CommentsStyle}>
             <h4 style={{ marginTop: '18px' }}>The Chatter</h4>
             <ul>
-              {this.state.comments.map((comment, index) => {
-                return (<li style={CommentStyle}
-                  key={index}>
+              {this.state.comments.map((comment, index) => (
+                <li
+                  style={CommentStyle}
+                  key={index}
+                >
                   {comment.username}: {comment.text}
-                </li>)
-              })}
-              <button style={ButtonStyle} onClick={this.addShow.bind(this)}> Add Show </button>
+                </li>
+              ))}
+              <textArea
+                style={InputStyle}
+                value={this.state.comment}
+                placeholder="Say Something!"
+                onChange={this.comment}
+              />
+              <button style={ButtonStyle} onClick={this.submit}> Save </button>
             </ul>
           </div>
         </div>
-      )
+      );
     }
+    return (
+      <div style={ShowPageStyle}>
+        <div style={ShowInfoStyle}>
+          <img style={BigImgStyle} src={show.bigImg} alt="" />
+          <h5>{show.title} </h5>
+          <h5>{show.maker} </h5>
+          <h5>{show.genre} </h5>
+        </div>
+        <div style={CommentsStyle}>
+          <h4 style={{ marginTop: '18px' }}>The Chatter</h4>
+          <ul>
+            {this.state.comments.map((comment, index) => (
+              <li
+                style={CommentStyle}
+                key={index}
+              >
+                {comment.username}: {comment.text}
+              </li>
+            ))}
+            <button style={ButtonStyle} onClick={this.addShow}> Add Show </button>
+          </ul>
+        </div>
+      </div>
+    );
   }
 }
 

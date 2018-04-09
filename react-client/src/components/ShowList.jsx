@@ -1,6 +1,6 @@
 import React from 'react';
-import ShowEntry from './ShowEntry.jsx';
-import { PaneStyle, ButtonStyle } from '../styles.jsx';
+import ShowEntry from './ShowEntry';
+import { PaneStyle } from '../styles';
 
 
 const ShowList = (props) => {
@@ -12,23 +12,23 @@ const ShowList = (props) => {
   }
 
   if (!props.comments) {
-    comments = {};
+    props.comments = {};
   }
   return (
     <div style={PaneStyle}>
       <h4> Your Shows </h4>
       {message}
-      {props.shows.map((show, index) => 
+      {props.shows.map((show, index) => (
         <ShowEntry
-        show = {show} 
-        key = {index} 
-        comments = {props.comments[show.id]}
-        saveComment = {props.saveComment}
-        makeShowActive = {props.makeShowActive}
-        /> 
-      )}
+          show={show}
+          key={index}
+          comments={props.comments[show.id]}
+          saveComment={props.saveComment}
+          makeShowActive={props.makeShowActive}
+        />
+      ))}
     </div>
-  )
+  );
 };
 
 export default ShowList;

@@ -1,19 +1,21 @@
 
 import React from 'react';
 import axios from 'axios';
-import { EntryStyle, PaneStyle, MainStyle } from '../styles.jsx';
 import _ from 'lodash';
+import { EntryStyle, PaneStyle, MainStyle } from '../styles';
 
 class PopularPage extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
-      users: {}, //{username: {comments, conections}}
-      shows: {}, //{title: {comments, connections}}
+      users: {}, // {username: {comments, conections}}
+      shows: {}, // {title: {comments, connections}}
       usersSort: 'connections',
-      showsSort: 'connections'
-    }
+      showsSort: 'connections',
+    };
+    this.sortShows = this.sortShows.bind(this);
+    this.sortUsers = this.sortUsers.bind(this);
   }
 
   componentDidMount() {
@@ -21,70 +23,66 @@ class PopularPage extends React.Component {
     this.getInfo('shows');
   }
 
-  getInfo(entity) {  //entity = 'shows' or 'users'
-    let context = this;
+  getInfo(entity) { // entity = 'shows' or 'users'
+    const context = this;
     axios({
       method: 'get',
       url: '/activity',
       params: {
-        type: entity
-      }
+        type: entity,
+      },
     })
-      .then(function (results) {
+      .then((results) => {
         if (entity === 'users') {
-          context.setState({users: results.data});
+          context.setState({ users: results.data });
         } else {
-          context.setState({shows: results.data});
+          context.setState({ shows: results.data });
         }
       })
-      .catch(function (err) {
+      .catch((err) => {
         console.log('err', err);
       });
   }
 
   sortUsers(type) {
-    this.setState({usersSort: type});
+    this.setState({ usersSort: type });
   }
 
   sortShows(type) {
-    this.setState({showsSort: type})
+    this.setState({ showsSort: type });
   }
 
   renderEntry(data, sortType) {
-    console.log('hey', data);
-    var stuff = _.map(data, (entry, key) => {
-      console.log(key, '       ', entry, sortType);
+    const statEntry = _.map(data, (entry, key) => {
       if (entry[sortType] > 1) {
         return (<div style={EntryStyle}> {key} : {entry[sortType]} {sortType} </div>);
       }
     });
-    console.log(typeof stuff);
-    return stuff;
+    return statEntry;
   }
 
   render() {
-    return(
-      <div style = {MainStyle}>  
-      <div style={PaneStyle}> 
-        <h4>Top Users</h4>
+    return (
+      <div style={MainStyle}>
+        <div style={PaneStyle}>
+          <h4>Top Users</h4>
           <h5> Sort by :
-            <a onClick={this.sortUsers.bind(this, 'adds')}> Adds </a>
-            <a onClick={this.sortUsers.bind(this, 'comments')}>| Comments </a>
+            <a onClick={() => this.sortUsers('adds')}> Adds </a>
+            <a onClick={() => this.sortUsers('comments')}>| Comments </a>
           </h5>
-        {this.renderEntry(this.state.users, this.state.usersSort)}
+          {this.renderEntry(this.state.users, this.state.usersSort)}
+        </div>
+        <div style={PaneStyle}>
+          <h4>Top Shows</h4>
+          <h5> Sort by :
+            <a onClick={() => this.sortShows('adds')}> Adds </a>
+            <a onClick={() => this.sortShows('comments')}>| Comments </a>
+          </h5>
+          {this.renderEntry(this.state.shows, this.state.showsSort)}
+        </div>
       </div>
-      <div style={PaneStyle}> 
-      <h4>Top Shows</h4>
-        <h5> Sort by :
-        <a onClick={this.sortShows.bind(this, 'adds')}> Adds </a>
-          <a onClick={this.sortShows.bind(this, 'comments')}>| Comments </a>
-        </h5>
-        {this.renderEntry(this.state.shows, this.state.showsSort)}
-      </div>
-      </div>
-    )
+    );
   }
-
 }
 
 export default PopularPage;

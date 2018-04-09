@@ -1,41 +1,41 @@
 import React from 'react';
-import { EntryStyle, ButtonStyle, ShowInfoStyle, SearchInfoStyle} from '../styles.jsx';
+import { EntryStyle, ButtonStyle, SearchInfoStyle } from '../styles';
 
 
 const SearchEntry = (props) => {
-  const show = props.show;
+  const { show } = props;
   if (show.bigImg === undefined) {
-    show.bigImg = 'http://icons.iconarchive.com/icons/shwz/disney/64/mickey-mouse-icon.png'
+    show.bigImg = './images/mickey.png';
   }
 
-  const addShow = function () {
+  const addShow = () => {
     props.addShow(props.show);
-  }
-  
+  };
+
   const thumbnailStyle = {
     display: 'inline',
-    margin: '3px'
-  }
+    margin: '3px',
+  };
 
-  const checkItOut = function () {
+  const checkItOut = () => {
     props.makeShowActive(props.show, false);
-  }
+  };
 
   return (
-    <div style = {EntryStyle}>
+    <div style={EntryStyle}>
       <div style={{ display: 'inline-flex', flexDirection: 'row' }}>
-        <img style = {thumbnailStyle} src = {show.littleImg}/>
-        <div> 
-          <div style = {SearchInfoStyle}>
-          <h4 onClick = {checkItOut}>{show.title}</h4>
-          <p>BTYB: {show.maker}, Topic: {show.genre}</p>
+        <img style={thumbnailStyle} src={show.littleImg} alt="" />
+        <div>
+          <div style={SearchInfoStyle}>
+            <h4 onClick={checkItOut}>{show.title}</h4>
+            <p>BTYB: {show.maker}, Topic: {show.genre}</p>
           </div>
         </div>
-        <button style={ButtonStyle} onClick={addShow}> Add </button>        
+        <button style={ButtonStyle} onClick={addShow}> Add </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default SearchEntry;
 
