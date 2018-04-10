@@ -1,5 +1,4 @@
 import React from 'react';
-import { PaneStyle, ButtonStyle, InputStyle } from '../styles';
 
 class Signup extends React.Component {
   constructor(props) {
@@ -28,12 +27,11 @@ class Signup extends React.Component {
 
   render() {
     return (
-      <div style={PaneStyle} >
-        <div style={{ width: '100%' }}>
-          <h3 style={{ martinTop: '10px' }}>Sign Up</h3>
+      <div>
+        <div>
+          <h3>Sign Up</h3>
           <h5>Username</h5>
           <input
-            style={InputStyle}
             type="text"
             placeholder="username"
             value={this.state.username}
@@ -41,14 +39,13 @@ class Signup extends React.Component {
           />
           <h5>Password</h5>
           <input
-            style={InputStyle}
             type="password"
             placeholder="password"
             value={this.state.password}
             onChange={this.passwordEntry}
           />
           <br />
-          <button style={ButtonStyle} onClick={this.handleSubmit}>
+          <button onClick={this.handleSubmit}>
             Sign Me Up
           </button>
         </div>

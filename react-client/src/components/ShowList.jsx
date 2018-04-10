@@ -1,7 +1,5 @@
 import React from 'react';
 import ShowEntry from './ShowEntry';
-import { PaneStyle } from '../styles';
-
 
 const ShowList = (props) => {
   let message = '';
@@ -15,7 +13,7 @@ const ShowList = (props) => {
     props.comments = {};
   }
   return (
-    <div style={PaneStyle}>
+    <div>
       <h4> Your Shows </h4>
       {message}
       {props.shows.map((show, index) => (

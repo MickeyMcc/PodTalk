@@ -1,6 +1,4 @@
 import React from 'react';
-import { EntryStyle, ButtonStyle, ShowInfoStyle, CommentsStyle, CommentStyle, InputStyle } from '../styles';
-
 
 class ShowEntry extends React.Component {
   constructor(props) {
@@ -33,18 +31,11 @@ class ShowEntry extends React.Component {
 
     const { show } = this.props;
 
-    const thumbnailStyle = {
-      display: 'inline',
-      margin: '3px',
-    };
-
     return (
-      <div style={EntryStyle}>
-        <div style={{ display: 'inline-flex', flexDirection: 'row' }}>
-          <div style={ShowInfoStyle}>
-            <img style={thumbnailStyle} src={show.show_image} alt="" />
-            <h5 onClick={this.goToShow}>{show.title}</h5>
-          </div>
+      <div>
+        <div>
+          <img src={show.show_image} alt="" />
+          <h5 onClick={this.goToShow}>{show.title}</h5>
         </div>
       </div>
     );

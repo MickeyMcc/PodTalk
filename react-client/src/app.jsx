@@ -6,8 +6,6 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import ShowPage from './components/ShowPage';
 import PopularPage from './components/PopularPage';
-import { MainStyle, NavBarStyle, NavEntryStyle } from './styles';
-
 
 class App extends React.Component {
   constructor(props) {
@@ -256,13 +254,13 @@ class App extends React.Component {
 
   render() {
     const navbar = (
-      <nav style={NavBarStyle}>
+      <nav>
         <ul>
-          <li style={NavEntryStyle}> Hello {this.state.user.username}! </li>
-          <li style={NavEntryStyle} onClick={this.goHome}> Home </li>
-          <li style={NavEntryStyle} onClick={this.logout}> Log Out </li>
-          <li style={NavEntryStyle} onClick={this.goToStatsPage}> Most Popular </li>
-          <li style={NavEntryStyle}>{this.state.userMessage}</li>
+          <li> Hello {this.state.user.username}! </li>
+          <li onClick={this.goHome}> Home </li>
+          <li onClick={this.logout}> Log Out </li>
+          <li onClick={this.goToStatsPage}> Most Popular </li>
+          <li>{this.state.userMessage}</li>
         </ul>
       </nav>
     );
@@ -289,7 +287,7 @@ class App extends React.Component {
         <div>
           <h1 id="title" >PodStar</h1>
           {navbar}
-          <div style={MainStyle}>
+          <div>
             <PopularPage />
           </div>
         </div>
@@ -301,7 +299,7 @@ class App extends React.Component {
         <div>
           <h1 id="title" >PodStar</h1>
           {navbar}
-          <div style={MainStyle}>
+          <div>
             <ShowList
               shows={this.state.shows}
               comments={this.state.userComments}
@@ -323,10 +321,10 @@ class App extends React.Component {
     return (
       <div>
         <h1 id="title">PodStar</h1>
-        <nav style={NavBarStyle}>
+        <nav>
           <ul>
-            <li style={NavEntryStyle}> Hello Guest! </li>
-            <li style={NavEntryStyle}>{this.state.userMessage}</li>
+            <li> Hello Guest! </li>
+            <li>{this.state.userMessage}</li>
           </ul>
         </nav>
 

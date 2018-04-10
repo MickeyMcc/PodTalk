@@ -2,7 +2,6 @@
 import React from 'react';
 import axios from 'axios';
 import _ from 'lodash';
-import { EntryStyle, PaneStyle, MainStyle } from '../styles';
 
 class PopularPage extends React.Component {
   constructor(props) {
@@ -55,7 +54,7 @@ class PopularPage extends React.Component {
   renderEntry(data, sortType) {
     const statEntry = _.map(data, (entry, key) => {
       if (entry[sortType] > 1) {
-        return (<div style={EntryStyle}> {key} : {entry[sortType]} {sortType} </div>);
+        return (<div> {key} : {entry[sortType]} {sortType} </div>);
       }
     });
     return statEntry;
@@ -63,8 +62,8 @@ class PopularPage extends React.Component {
 
   render() {
     return (
-      <div style={MainStyle}>
-        <div style={PaneStyle}>
+      <div>
+        <div>
           <h4>Top Users</h4>
           <h5> Sort by :
             <a onClick={() => this.sortUsers('adds')}> Adds </a>
@@ -72,7 +71,7 @@ class PopularPage extends React.Component {
           </h5>
           {this.renderEntry(this.state.users, this.state.usersSort)}
         </div>
-        <div style={PaneStyle}>
+        <div>
           <h4>Top Shows</h4>
           <h5> Sort by :
             <a onClick={() => this.sortShows('adds')}> Adds </a>

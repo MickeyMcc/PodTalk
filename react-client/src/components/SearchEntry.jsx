@@ -1,6 +1,4 @@
 import React from 'react';
-import { EntryStyle, ButtonStyle, SearchInfoStyle } from '../styles';
-
 
 const SearchEntry = (props) => {
   const { show } = props;
@@ -12,26 +10,21 @@ const SearchEntry = (props) => {
     props.addShow(props.show);
   };
 
-  const thumbnailStyle = {
-    display: 'inline',
-    margin: '3px',
-  };
-
   const checkItOut = () => {
     props.makeShowActive(props.show, false);
   };
 
   return (
-    <div style={EntryStyle}>
-      <div style={{ display: 'inline-flex', flexDirection: 'row' }}>
-        <img style={thumbnailStyle} src={show.image} alt="" />
+    <div>
+      <div>
+        <img src={show.image} alt="" />
         <div>
-          <div style={SearchInfoStyle}>
+          <div>
             <h4 onClick={checkItOut}>{show.title}</h4>
             <p>BTYB: {show.maker}, Topic: {JSON.stringify(show.genre)}</p>
           </div>
         </div>
-        <button style={ButtonStyle} onClick={addShow}> Add </button>
+        <button onClick={addShow}> Add </button>
       </div>
     </div>
   );

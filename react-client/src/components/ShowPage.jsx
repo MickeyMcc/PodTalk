@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import { ShowPageStyle, ButtonStyle, CommentsStyle, CommentStyle, ShowInfoStyle, BigImgStyle, InputStyle } from '../styles';
 
 class ShowPage extends React.Component {
   constructor(props) {
@@ -52,9 +51,9 @@ class ShowPage extends React.Component {
 
     if (this.state.owned) {
       return (
-        <div style={ShowPageStyle}>
-          <div style={ShowInfoStyle}>
-            <img style={BigImgStyle} src={show.show_image} alt="" />
+        <div>
+          <div>
+            <img src={show.show_image} alt="" />
             <h5>{show.title} </h5>
             <h5>{show.maker} </h5>
             <h5>{show.genre} </h5>
@@ -63,25 +62,24 @@ class ShowPage extends React.Component {
       );
     }
     return (
-      <div style={ShowPageStyle}>
-        <div style={ShowInfoStyle}>
-          <img style={BigImgStyle} src={show.bigImg} alt="" />
+      <div>
+        <div>
+          <img src={show.bigImg} alt="" />
           <h5>{show.title} </h5>
           <h5>{show.maker} </h5>
           <h5>{show.genre} </h5>
         </div>
-        <div style={CommentsStyle}>
-          <h4 style={{ marginTop: '18px' }}>The Chatter</h4>
+        <div>
+          <h4>The Chatter</h4>
           <ul>
             {this.state.comments.map((comment, index) => (
               <li
-                style={CommentStyle}
                 key={index}
               >
                 {comment.username}: {comment.text}
               </li>
             ))}
-            <button style={ButtonStyle} onClick={this.addShow}> Add Show </button>
+            <button onClick={this.addShow}> Add Show </button>
           </ul>
         </div>
       </div>

@@ -1,6 +1,5 @@
 import React from 'react';
 import SearchEntry from './SearchEntry';
-import { PaneStyle, ButtonStyle, InputStyle } from '../styles';
 
 class SearchList extends React.Component {
   constructor(props) {
@@ -24,15 +23,14 @@ class SearchList extends React.Component {
 
   render() {
     return (
-      <div style={PaneStyle} >
+      <div>
         <div>
           <input
-            style={InputStyle}
             type="text"
             value={this.state.searchQuery}
             onChange={this.handleChange}
           />
-          <button style={ButtonStyle} onClick={this.handleSubmit}> Search! </button>
+          <button onClick={this.handleSubmit}> Search! </button>
         </div>
         <h4> Search Results </h4>
         {this.props.results.length} results found.
