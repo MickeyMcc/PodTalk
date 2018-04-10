@@ -82,6 +82,20 @@ function addShow(show, callback) {
     `VALUES ('${show.LNID}','${show.itunesID}', "${show.title}", "${show.maker}", '${show.image}', ` +
     `"${show.description}", '${show.website}', '${show.latestRelease}', '${JSON.stringify(show.genre)}')`;
 
+  connection.query(query, (err) => {
+    if (err) {
+      callback(err);
+    } else {
+      connection.query(query2, (err) => {
+        if (err) {
+          callback(err);
+        } else {
+          callback();
+        }
+      });
+    }
+  });
+
   standardDBCall(query, callback);
 }
 

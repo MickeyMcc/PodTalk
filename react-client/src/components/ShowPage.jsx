@@ -14,10 +14,6 @@ class ShowPage extends React.Component {
     this.addShow = this.addShow.bind(this);
   }
 
-  componentDidMount() {
-    this.getShowComments();
-  }
-
   getShowComments() {
     const context = this;
     axios({
@@ -52,36 +48,16 @@ class ShowPage extends React.Component {
   }
 
   render() {
-    const { show } = this.props.show;
+    const { show } = this.props;
 
     if (this.state.owned) {
       return (
         <div style={ShowPageStyle}>
           <div style={ShowInfoStyle}>
-            <img style={BigImgStyle} src={show.bigImg} alt="" />
+            <img style={BigImgStyle} src={show.show_image} alt="" />
             <h5>{show.title} </h5>
             <h5>{show.maker} </h5>
             <h5>{show.genre} </h5>
-          </div>
-          <div style={CommentsStyle}>
-            <h4 style={{ marginTop: '18px' }}>The Chatter</h4>
-            <ul>
-              {this.state.comments.map((comment, index) => (
-                <li
-                  style={CommentStyle}
-                  key={index}
-                >
-                  {comment.username}: {comment.text}
-                </li>
-              ))}
-              <textArea
-                style={InputStyle}
-                value={this.state.comment}
-                placeholder="Say Something!"
-                onChange={this.comment}
-              />
-              <button style={ButtonStyle} onClick={this.submit}> Save </button>
-            </ul>
           </div>
         </div>
       );

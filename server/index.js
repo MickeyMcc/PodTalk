@@ -112,12 +112,14 @@ app.get('/search', checkSession, (req, res) => {
 // /////////////////COMMENTS\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 app.post('/comments', (req, res) => {
+  console.log(req.body);
   const { comment } = req.body;
   const user = req.body.userID;
   const show = req.body.showID;
 
   db.addComment(user, show, comment, (err) => {
     if (err) {
+      console.log(err);
       res.status(500).json({ message: err });
     } else {
       res.status(201).end();

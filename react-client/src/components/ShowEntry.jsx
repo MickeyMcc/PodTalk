@@ -42,19 +42,9 @@ class ShowEntry extends React.Component {
       <div style={EntryStyle}>
         <div style={{ display: 'inline-flex', flexDirection: 'row' }}>
           <div style={ShowInfoStyle}>
-            <img style={thumbnailStyle} src={show.image} alt="" />
+            <img style={thumbnailStyle} src={show.show_image} alt="" />
             <h5 onClick={this.goToShow}>{show.title}</h5>
           </div>
-          <div style={CommentsStyle}>
-            <h5 style={{ marginTop: '15px', marginLeft: '30px' }}>What you've said before:</h5>
-            <ul>
-              {oldComments.map(comment => <li style={CommentStyle}>{comment}<br /></li>)}
-            </ul>
-          </div>
-        </div>
-        <div style={{ display: 'inline-flex', flexDirection: 'row' }}>
-          <textArea style={InputStyle} value={this.state.comment} placeholder="Say Something!" onChange={this.comment} />
-          <button style={ButtonStyle} onClick={this.submit}> Save </button>
         </div>
       </div>
     );
