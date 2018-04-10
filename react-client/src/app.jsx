@@ -216,6 +216,7 @@ class App extends React.Component {
   // /////////////////SEARCH\\\\\\\\\\\\\\\\\\\\\\\\\\
 
   search(query) {
+    console.log('search', query);
     const context = this;
     axios.get('/search', {
       params: {
@@ -223,6 +224,7 @@ class App extends React.Component {
       },
     })
       .then((results) => {
+        console.log(results);
         if (results.statusCode === 404) {
           context.setState({
             loggedIn: false,

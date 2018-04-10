@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const itunes = require('./itunesHelpers');
+const search = require('./itunesHelpers');
 const session = require('express-session');
 const path = require('path');
 
@@ -99,11 +99,13 @@ app.post('/shows', (req, res) => { // gets user and show
 app.get('/search', checkSession, (req, res) => {
   const query = req.query.terms;
 
-  itunes.search(query, (err, data) => {
+  search.searchListenNotes(query, (err, data) => {
     if (err) {
+      console.log(err);
       res.status(500).json(err);
     } else {
-      res.status(201).json(itunes.importantStuff(data));
+      console.log('DATA__________________________________________', data.results)
+      res.status(201).json(search.listenNotesProcess(data.results));
     }
   });
 });

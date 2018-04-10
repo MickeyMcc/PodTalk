@@ -7,6 +7,7 @@
 # production
 /build
 react-client/dist/bundle.js
+/server/config.js
 
 # misc
 .DS_Store
