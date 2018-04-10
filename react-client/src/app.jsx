@@ -44,8 +44,8 @@ class App extends React.Component {
 
   getUsersComments() {
     const context = this;
-    axios.get({
-      url: '/comments',
+    console.log(context.state.user.id);
+    axios.get('/comments', {
       params: {
         userID: context.state.user.id,
       },
@@ -60,14 +60,10 @@ class App extends React.Component {
 
   saveComment(comment, showID) {
     const context = this;
-    axios({
-      method: 'post',
-      url: '/comments',
-      data: {
-        comment,
-        showID,
-        userID: context.state.user.id,
-      },
+    axios.post('/comments', {
+      comment,
+      showID,
+      userID: context.state.user.id,
     })
       .then(() => {
         context.setState({ userMessage: 'comment saved' });
@@ -189,13 +185,9 @@ class App extends React.Component {
 
   addShow(show) {
     const context = this;
-    axios({
-      method: 'post',
-      url: '/shows',
-      data: {
-        userID: context.state.user.id,
-        show, // from search results, doesn't have id
-      },
+    axios.post('/shows', {
+      userID: context.state.user.id,
+      show, // from search results, doesn't have id
     })
       .then((results) => {
         if (results.statusCode === 404) {

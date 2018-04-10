@@ -5,7 +5,7 @@ const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'podstar',
+  database: 'podtalk',
 });
 
 // Factored out here to for less repetition
@@ -22,12 +22,6 @@ const standardDBCall = (query, callback) => {
 // /////////////////USERS\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 module.exports.createUser = (username, password, callback) => {
-  function insertUser(callback2) {
-    const insertQuery = `INSERT INTO USERS (username, password) VALUES ('${username}', '${bcrypt.hashSync(password)}')`;
-
-    standardDBCall(insertQuery, callback2);
-  }
-
   const checkForExisting = `SELECT id FROM users WHERE username = '${username}'`;
   connection.query(checkForExisting, (err, data) => {
     if (err) {
@@ -35,7 +29,8 @@ module.exports.createUser = (username, password, callback) => {
     } else if (data.length) {
       callback(true);
     } else {
-      insertUser(callback);
+      const insertQuery = `INSERT INTO USERS (username, password) VALUES ('${username}', '${bcrypt.hashSync(password)}')`;
+      standardDBCall(insertQuery, callback);
     }
   });
 };
@@ -69,7 +64,7 @@ module.exports.selectAllUserShows = (user, callback) => {
 
 function checkDBForShow(show, callback) {
   // check for show in db by title
-  const checkForShow = `SELECT id FROM shows WHERE '${show.title}' = title`;
+  const checkForShow = `SELECT id FROM shows WHERE '${show.LNID}' = id`;
 
   connection.query(checkForShow, (err, data) => {
     if (err) {
@@ -83,8 +78,9 @@ function checkDBForShow(show, callback) {
 function addShow(show, callback) {
   // add show from search data
   const query = 'INSERT INTO shows ' +
-    '(title, maker, itunesUrl, littleImg, bigImg, latestRelease, trackCount, genre) ' +
-    `VALUES ('${show.title}','${show.maker}','${show.itunesUrl}','${show.littleImg}','${show.bigImg}','${show.latestRelease}','${show.trackCount}','${show.genre}')`;
+    '(id, itunesID, title, maker, show_image, show_description, website, latestRelease, genre) ' +
+    `VALUES ('${show.LNID}','${show.itunesID}', "${show.title}", "${show.maker}", '${show.image}', ` +
+    `"${show.description}", '${show.website}', '${show.latestRelease}', '${JSON.stringify(show.genre)}')`;
 
   standardDBCall(query, callback);
 }
@@ -93,7 +89,7 @@ function checkForConnection(user, show, callback) {
   // show user entry on intersection table
   const checkConnection = 'SELECT shows_users.id FROM shows_users ' +
     'INNER JOIN shows ON shows.id = shows_users.show_id ' +
-    `WHERE shows_users.user_id = ${user} AND shows.title = '${show.title}'`;
+    `WHERE shows_users.user_id = ${user} AND shows.id = '${show.LNID}'`;
 
   connection.query(checkConnection, (err, data) => {
     if (err) {
@@ -106,12 +102,10 @@ function checkForConnection(user, show, callback) {
 
 // WELCOME TO HELL
 module.exports.addShowToUser = (user, show, callback) => {
-  console.log('user', user);
   function makeConection() {
     // add show - user to intersection table
     const connectShowUser = 'INSERT INTO shows_users (user_id, show_id) ' +
-      `VALUES (${user}, ` +
-      `(SELECT id FROM shows WHERE title = '${show.title}'))`;
+      `VALUES (${user}, '${show.LNID}')`;
 
     standardDBCall(connectShowUser, callback);
   }
@@ -144,28 +138,27 @@ module.exports.addShowToUser = (user, show, callback) => {
 
 // /////////////////COMMENTS\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-
-module.exports.addComment = (userID, showID, comment, callback) => {
+module.exports.addComment = (userID, episodeID, comment, callback) => {
   // add a comment by a user to a show
-  const query = 'INSERT INTO comments (user_id, show_id, text) ' +
-    `VALUES ('${userID}', '${showID}', '${comment}')`;
+  const query = 'INSERT INTO comments (user_id, episode_id, text) ' +
+    `VALUES ('${userID}', '${episodeID}', '${comment}')`;
 
   standardDBCall(query, callback);
 };
 
 module.exports.getCommentsUser = (userID, callback) => {
   // all comments by a user
-  const query = 'SELECT text, show_id FROM comments ' +
+  const query = 'SELECT * FROM comments ' +
     `WHERE ${userID} = comments.user_id;`;
 
   standardDBCall(query, callback);
 };
 
-module.exports.getCommentsAll = (showID, callback) => {
+module.exports.getCommentsAll = (episodeID, callback) => {
   // all comments on a show
   const query = 'SELECT comments.text, users.username FROM comments ' +
   'INNER JOIN users ON users.id = comments.user_id ' +
-  `WHERE comments.show_id = ${showID};`;
+  `WHERE comments.episode_id = ${episodeID};`;
 
   standardDBCall(query, callback);
 };
@@ -253,16 +246,3 @@ module.exports.getShowActivity = (callback) => {
   });
 };
 
-// DATA STRUCTURE FOR SHOWS
-/*
-{
-  "title": "Reply All",
-  "maker": "Gimlet",
-  "itunesUrl": "https://itunes.apple.com/us/podcast/reply-all/id941907967?mt=2&uo=4",
-  "littleImg": "http://is1.mzstatic.com/image/thumb/Music128/v4/22/0d/f6/220df688-843f-264a-b67e-28644b73c129/source/30x30bb.jpg",
-  "bigImg": "http://is1.mzstatic.com/image/thumb/Music128/v4/22/0d/f6/220df688-843f-264a-b67e-28644b73c129/source/60x60bb.jpg",
-  "latestRelease": "2018-02-15T11:00:00Z",
-  "trackCount": 135,
-  "genre": "Technology"
-}
-*/

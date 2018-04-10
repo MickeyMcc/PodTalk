@@ -23,9 +23,9 @@ CREATE TABLE users (
 
 CREATE TABLE shows (
   id varchar(255) NOT NULL,
-  itunesID varchar(100) NOT NULL,
-  title varchar(100) NOT NULL,
-  maker varchar(300) NOT NULL,
+  itunesID varchar(255) NOT NULL,
+  title varchar(255) NOT NULL,
+  maker varchar(255) NOT NULL,
   show_image varchar(255),
   show_description varchar(1500),
   website varchar(255),

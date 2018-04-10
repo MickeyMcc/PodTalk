@@ -23,15 +23,15 @@ module.exports.searchListenNotes = (query, callback) => {
 module.exports.parseShows = results => (
   results.reduce((podList, podcast) => {
     podList.push({
+      LNID: podcast.id,
+      itunesID: podcast.itunes_id,
       title: podcast.title_original,
       maker: podcast.publisher_original,
-      itunesID: podcast.itunes_id,
-      LNID: podcast.id,
       image: podcast.image,
+      description: podcast.description_original,
+      website: podcast.rss,
       latestRelease: podcast.lastest_pub_date_ms,
       genre: podcast.genres,
-      descriptions: podcast.description_original,
-      website: podcast.rss,
     });
     return podList;
   }, [])

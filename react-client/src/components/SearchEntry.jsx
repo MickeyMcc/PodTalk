@@ -4,8 +4,8 @@ import { EntryStyle, ButtonStyle, SearchInfoStyle } from '../styles';
 
 const SearchEntry = (props) => {
   const { show } = props;
-  if (show.bigImg === undefined) {
-    show.bigImg = './images/mickey.png';
+  if (show.image === undefined) {
+    show.image = './images/mickey.png';
   }
 
   const addShow = () => {
@@ -24,7 +24,7 @@ const SearchEntry = (props) => {
   return (
     <div style={EntryStyle}>
       <div style={{ display: 'inline-flex', flexDirection: 'row' }}>
-        <img style={thumbnailStyle} src={show.bigImg} alt="" />
+        <img style={thumbnailStyle} src={show.image} alt="" />
         <div>
           <div style={SearchInfoStyle}>
             <h4 onClick={checkItOut}>{show.title}</h4>
