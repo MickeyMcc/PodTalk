@@ -44,8 +44,7 @@ class App extends React.Component {
 
   getUsersComments() {
     const context = this;
-    axios({
-      method: 'get',
+    axios.get({
       url: '/comments',
       params: {
         userID: context.state.user.id,

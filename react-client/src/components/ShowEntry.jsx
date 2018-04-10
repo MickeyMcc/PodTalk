@@ -42,7 +42,7 @@ class ShowEntry extends React.Component {
       <div style={EntryStyle}>
         <div style={{ display: 'inline-flex', flexDirection: 'row' }}>
           <div style={ShowInfoStyle}>
-            <img style={thumbnailStyle} src={show.littleImg} alt="" />
+            <img style={thumbnailStyle} src={show.image} alt="" />
             <h5 onClick={this.goToShow}>{show.title}</h5>
           </div>
           <div style={CommentsStyle}>

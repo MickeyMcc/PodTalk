@@ -24,11 +24,11 @@ const SearchEntry = (props) => {
   return (
     <div style={EntryStyle}>
       <div style={{ display: 'inline-flex', flexDirection: 'row' }}>
-        <img style={thumbnailStyle} src={show.littleImg} alt="" />
+        <img style={thumbnailStyle} src={show.bigImg} alt="" />
         <div>
           <div style={SearchInfoStyle}>
             <h4 onClick={checkItOut}>{show.title}</h4>
-            <p>BTYB: {show.maker}, Topic: {show.genre}</p>
+            <p>BTYB: {show.maker}, Topic: {JSON.stringify(show.genre)}</p>
           </div>
         </div>
         <button style={ButtonStyle} onClick={addShow}> Add </button>

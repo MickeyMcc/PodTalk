@@ -104,8 +104,8 @@ app.get('/search', checkSession, (req, res) => {
       console.log(err);
       res.status(500).json(err);
     } else {
-      console.log('DATA__________________________________________', data.results)
-      res.status(201).json(search.listenNotesProcess(data.results));
+      console.log('DATA__________________________________________', data.results);
+      res.status(201).json(search.parseShows(data.results));
     }
   });
 });
