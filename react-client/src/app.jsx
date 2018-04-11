@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { Tabs, Tab } from 'material-ui/Tabs';
 import ShowList from './components/ShowList';
 import SearchList from './components/SearchList';
 import Login from './components/Login';
@@ -253,16 +254,49 @@ class App extends React.Component {
   // /////////////////RENDER\\\\\\\\\\\\\\\\\\\\\\\\\\
 
   render() {
+    if (!this.state.loggedIn) {
+      return (
+        <div>
+          <h1> PodTalk </h1>
+          <Tabs>
+            <Tab label="login">
+              <Login login={this.login} />
+            </Tab>
+            <Tab label="create account">
+              <Signup signup={this.signup} />
+            </Tab>
+          </Tabs>
+        </div>
+      );
+    }
+
     const navbar = (
-      <nav>
-        <ul>
-          <li> Hello {this.state.user.username}! </li>
-          <li onClick={this.goHome}> Home </li>
-          <li onClick={this.logout}> Log Out </li>
-          <li onClick={this.goToStatsPage}> Most Popular </li>
-          <li>{this.state.userMessage}</li>
-        </ul>
-      </nav>
+      <Tabs>
+        <Tab label="Search">
+          <SearchList
+            results={this.state.searchResults}
+            search={this.search}
+            addShow={this.addShow}
+            makeShowActive={this.makeShowActive}
+          />
+        </Tab>
+        <Tab label="Your Shows">
+          <ShowList
+            shows={this.state.shows}
+            comments={this.state.userComments}
+            saveComment={this.saveComment}
+            makeShowActive={this.makeShowActive}
+          />
+        </Tab>
+        <Tab label="Stats">
+          <ShowList
+            shows={this.state.shows}
+            comments={this.state.userComments}
+            saveComment={this.saveComment}
+            makeShowActive={this.makeShowActive}
+          />
+        </Tab>
+      </Tabs>
     );
 
     // FOCUS VIEW
@@ -270,7 +304,7 @@ class App extends React.Component {
       const show = this.state.activeShow;
       return (
         <div>
-          <h1 id="title" >PodStar</h1>
+          <h1 id="title" >PodTalk</h1>
           {navbar}
           <ShowPage
             show={show}
@@ -292,46 +326,9 @@ class App extends React.Component {
           </div>
         </div>
       );
-
-    // NORMAL VIEW
-    } else if (this.state.loggedIn) {
-      return (
-        <div>
-          <h1 id="title" >PodStar</h1>
-          {navbar}
-          <div>
-            <ShowList
-              shows={this.state.shows}
-              comments={this.state.userComments}
-              saveComment={this.saveComment}
-              makeShowActive={this.makeShowActive}
-            />
-
-            <SearchList
-              results={this.state.searchResults}
-              search={this.search}
-              addShow={this.addShow}
-              makeShowActive={this.makeShowActive}
-            />
-          </div>
-        </div>
-      );
-    // LOGIN VIEW
     }
-    return (
-      <div>
-        <h1 id="title">PodStar</h1>
-        <nav>
-          <ul>
-            <li> Hello Guest! </li>
-            <li>{this.state.userMessage}</li>
-          </ul>
-        </nav>
 
-        <Login login={this.login} />
-        <Signup signup={this.signup} />
-      </div>
-    );
+    return (<div>{navbar}</div>);
   }
 }
 

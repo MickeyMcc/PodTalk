@@ -1,5 +1,6 @@
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
 
 class Login extends React.Component {
   constructor(props) {
@@ -28,25 +29,23 @@ class Login extends React.Component {
   render() {
     return (
       <div>
-        <div>
-          <h3>Log In</h3>
-          <h5>Username</h5>
-          <input
-            type="text"
-            placeholder="username"
-            value={this.state.username}
-            onChange={this.userNameEntry}
-          />
-          <h5>Password</h5>
-          <input
-            type="password"
-            placeholder="password"
-            value={this.state.password}
-            onChange={this.passwordEntry}
-          />
-          <br />
-          <RaisedButton onClick={this.handleSubmit} Login="Default" />
-        </div>
+        <TextField
+          style={{ marginLeft: '10px' }}
+          floatingLabelText="Username"
+          value={this.state.username}
+          onChange={this.userNameEntry}
+        />
+        <TextField
+          style={{ marginLeft: '10px' }}
+          floatingLabelText="Password"
+          value={this.state.password}
+          onChange={this.passwordEntry}
+        />
+        <RaisedButton 
+          style={{ marginLeft: '10px' }}
+          onClick={this.handleSubmit}
+          label="Login"
+        />
       </div>
     );
   }
