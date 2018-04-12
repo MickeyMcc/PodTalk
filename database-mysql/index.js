@@ -27,7 +27,7 @@ module.exports.createUser = (username, password, callback) => {
     if (err) {
       callback(err);
     } else if (data.length) {
-      callback(true);
+      callback('username');
     } else {
       const insertQuery = `INSERT INTO USERS (username, password) VALUES ('${username}', '${bcrypt.hashSync(password)}')`;
       standardDBCall(insertQuery, callback);
@@ -42,11 +42,11 @@ module.exports.login = (username, password, callback) => {
     if (err) {
       callback(err);
     } else if (!data.length) {
-      callback('ERROR: username does not exist');
+      callback('username');
     } else if (bcrypt.compareSync(password, data[0].password)) {
       callback(null, data[0].id);
     } else {
-      callback('ERROR: username and password do not match');
+      callback('password');
     }
   });
 };

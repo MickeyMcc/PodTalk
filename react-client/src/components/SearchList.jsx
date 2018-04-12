@@ -22,6 +22,7 @@ class SearchList extends React.Component {
   }
 
   render() {
+
     return (
       <div>
         <div>

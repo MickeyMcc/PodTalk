@@ -1,14 +1,21 @@
 import React from 'react';
+import { GridTile } from 'material-ui/GridList';
+import CommentMode from 'material-ui/svg-icons/editor/mode-comment';
+import IconButton from 'material-ui/IconButton';
+import Dialog from 'material-ui/Dialog';
+import { white } from 'material-ui/styles/colors';
 
 class ShowEntry extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       comment: '',
+      open: false,
     };
     this.submit = this.submit.bind(this);
     this.comment = this.comment.bind(this);
-    this.goToShow = this.goToShow.bind(this);
+    this.openShow = this.openShow.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   comment(e) {
@@ -22,21 +29,44 @@ class ShowEntry extends React.Component {
     }
   }
 
-  goToShow() {
-    this.props.makeShowActive(this.props.show, true);
+  openShow() {
+    this.setState({ open: true });
+  }
+
+  handleClose() {
+    this.setState({ open: false });
   }
 
   render() {
     const oldComments = this.props.comments || [];
 
     const { show } = this.props;
+    const iconStyle = {
+      marginRight: '10px',
+    };
 
     return (
       <div>
-        <div>
+        <GridTile
+          style={{ marginTop: '8px' }}
+          title={show.title}
+          subtitle={<span>by <b>{show.maker}</b></span>}
+          actionIcon={
+            <IconButton onClick={this.openShow}>
+              <CommentMode color={white} style={iconStyle} />
+            </IconButton>
+          }
+        >
           <img src={show.show_image} alt="" />
-          <h5 onClick={this.goToShow}>{show.title}</h5>
-        </div>
+        </GridTile>
+        <Dialog
+          title={show.title}
+          modal={false}
+          open={this.state.open}
+          onRequestClose={this.handleClose}
+        >
+          The actions in this window were passed in as an array of React objects.
+        </Dialog>
       </div>
     );
   }

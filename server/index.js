@@ -27,7 +27,7 @@ const checkSession = (req, res, next) => {
     next();
   } else {
     console.log('badCookies');
-    res.status(404).json({ loggedIn: false });
+    res.status(404).end('login');
   }
 };
 
@@ -37,8 +37,7 @@ app.get('/users', (req, res) => {
   const { user, password } = req.query;
   db.login(user, password, (err, data) => {
     if (err) {
-      console.log('some login err', err);
-      res.status(204).end();
+      res.status(404).end(err);
     } else {
       req.session.loggedIn = true;
       res.status(200).json({ username: user, id: data });
@@ -48,11 +47,9 @@ app.get('/users', (req, res) => {
 
 app.post('/users', (req, res) => {
   const { user, password } = req.body;
-  console.log(req.body);
   db.createUser(user, password, (err, data) => {
     if (err) {
-      console.log('some err found', err);
-      res.status(204).end();
+      res.status(404).end(err);
     } else {
       req.session.loggedIn = true;
       res.status(201).json({ username: user, id: data.insertId });

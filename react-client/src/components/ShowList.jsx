@@ -1,5 +1,6 @@
 import React from 'react';
 import ShowEntry from './ShowEntry';
+import { GridList } from 'material-ui/GridList';
 
 const ShowList = (props) => {
   let message = '';
@@ -12,19 +13,25 @@ const ShowList = (props) => {
   if (!props.comments) {
     props.comments = {};
   }
+
+  const cols = window.innerWidth > 500 ? 3 : 2;
+
   return (
     <div>
-      <h4> Your Shows </h4>
-      {message}
-      {props.shows.map((show, index) => (
-        <ShowEntry
-          show={show}
-          key={index}
-          comments={props.comments[show.id]}
-          saveComment={props.saveComment}
-          makeShowActive={props.makeShowActive}
-        />
-      ))}
+      <GridList
+        cellHeight={window.innerWidth / cols}
+        cols={cols}
+      >
+        {props.shows.map((show, index) => (
+          <ShowEntry
+            show={show}
+            key={show.id}
+            comments={props.comments[show.id]}
+            saveComment={props.saveComment}
+            makeShowActive={props.makeShowActive}
+          />
+        ))}
+      </GridList>
     </div>
   );
 };

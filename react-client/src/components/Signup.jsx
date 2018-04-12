@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
@@ -11,11 +12,19 @@ class Signup extends React.Component {
       password2: '',
       mismatch: false,
       shortUser: false,
+      usernameInUse: false,
     };
     this.userNameEntry = this.userNameEntry.bind(this);
     this.passwordEntry = this.passwordEntry.bind(this);
     this.password2Entry = this.password2Entry.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+  }
+
+  handleKeyPress(event) {
+    if (event.key == 'Enter' && !(this.state.mismatch || this.state.shortUser || !this.state.username || !this.state.password || !this.state.password2)) {
+      this.handleSubmit();
+    }
   }
 
   userNameEntry(event) {
@@ -41,11 +50,31 @@ class Signup extends React.Component {
   }
 
   handleSubmit() {
-    console.log('submit', this.state.username, this.state.password);
-    this.props.signup(this.state.username, this.state.password);
+    axios({
+      method: 'post',
+      url: '/users',
+      data: {
+        user: this.state.username,
+        password: this.state.password,
+      },
+    })
+      .then((results) => {
+        this.props.setUser(results.data);
+      })
+      .catch((err) => {
+        if (err.response && err.response.data === 'username') {
+          this.setState({ usernameInUse: true });
+        }
+        console.log('err', err);
+      });
   }
 
   render() {
+    const errorStyle = {
+      position: 'absolute',
+      bottom: '-0.9rem',
+    };
+
     return (
       <div>
         <div>
@@ -54,7 +83,8 @@ class Signup extends React.Component {
             floatingLabelText="Username"
             value={this.state.username}
             onChange={this.userNameEntry}
-            errorText={this.state.shortUser ? 'Username must be at least 4 chars' : ''}
+            errorText={this.state.shortUser ? 'Username must be at least 4 chars' : (this.state.usernameInUse ? 'Username already in use!' : '')}
+            errorStyle={errorStyle}
           />
           <TextField
             style={{ marginLeft: '10px' }}
@@ -70,17 +100,20 @@ class Signup extends React.Component {
             value={this.state.password2}
             onChange={this.password2Entry}
             errorText={this.state.mismatch ? 'Passwords do not match' : ''}
+            errorStyle={errorStyle}
+            onKeyPress={this.handleKeyPress}
           />
           <RaisedButton
             style={{ marginLeft: '10px' }}
-            disabled={this.state.mismatch || this.state.shortUser || !this.state.username || !this.state.password || !this.state.password2}
             onClick={this.handleSubmit}
-            label="Login"
+            label="Create"
+            disabled={this.state.mismatch || this.state.shortUser || !this.state.username || !this.state.password || !this.state.password2}
           />
         </div>
       </div>
     );
   }
 }
+
 
 export default Signup;

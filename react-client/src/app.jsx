@@ -2,11 +2,8 @@ import React from 'react';
 import axios from 'axios';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import ShowList from './components/ShowList';
-import SearchList from './components/SearchList';
 import Login from './components/Login';
 import Signup from './components/Signup';
-import ShowPage from './components/ShowPage';
-import PopularPage from './components/PopularPage';
 
 class App extends React.Component {
   constructor(props) {
@@ -18,7 +15,6 @@ class App extends React.Component {
       userComments: {},
       loggedIn: false,
       activeShow: null,
-      userMessage: 'Please login or signup!',
       activity: false,
       showIsOwned: false,
     };
@@ -26,11 +22,8 @@ class App extends React.Component {
     this.addShow = this.addShow.bind(this);
     this.goHome = this.goHome.bind(this);
     this.logout = this.logout.bind(this);
-    this.goToStatsPage = this.goToStatsPage.bind(this);
-    this.makeShowActive = this.makeShowActive.bind(this);
     this.search = this.search.bind(this);
-    this.login = this.login.bind(this);
-    this.signup = this.signup.bind(this);
+    this.setUser = this.setUser.bind(this);
   }
 
   componentDidMount() {
@@ -89,51 +82,9 @@ class App extends React.Component {
 
   // /////////////////USERS\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-  signup(username, password) {
-    const context = this;
-    axios({
-      method: 'post',
-      url: '/users',
-      data: {
-        user: username,
-        password,
-      },
-    })
-      .then((results) => {
-        if (results.status === 204) {
-          context.setState({ userMessage: 'Sorry, could not create that user. Try a different username' });
-        } else {
-          console.log(`WELCOME TO PODSTAR ${username}!`);
-          context.setState({ user: results.data, loggedIn: true, userMessage: '' });
-        }
-      })
-      .catch((err) => {
-        console.log('err', err);
-      });
-  }
-
-  login(username = 'new', password = 'user') {
-    const context = this;
-    axios({
-      method: 'get',
-      url: '/users',
-      params: {
-        user: username,
-        password,
-      },
-    })
-      .then((results) => {
-        if (results.status === 204) {
-          context.setState({ userMessage: 'Sorry, please check username-password combination' });
-        } else {
-          console.log(`WELCOME BACK ${results.data.username}!`);
-          context.setState({ user: results.data, loggedIn: true, userMessage: '' });
-          context.refreshShowList();
-        }
-      })
-      .catch((err) => {
-        console.log('err', err);
-      });
+  setUser(userObj) {
+    this.setState({ user: userObj, loggedIn: true, userMessage: '' });
+    this.refreshShowList();
   }
 
   logout() {
@@ -239,10 +190,6 @@ class App extends React.Component {
     });
   }
 
-  goToStatsPage() {
-    this.setState({ activeShow: null, activity: true });
-  }
-
   goHome() {
     this.setState({
       activeShow: null,
@@ -257,13 +204,13 @@ class App extends React.Component {
     if (!this.state.loggedIn) {
       return (
         <div>
-          <h1> PodTalk </h1>
+          <img style={{ width: '96%', maxWidth: '400px', marginLeft: '2%', marginRight: '2%' }} src="./images/logo.png" alt="" />
           <Tabs>
             <Tab label="login">
-              <Login login={this.login} />
+              <Login setUser={this.setUser} />
             </Tab>
             <Tab label="create account">
-              <Signup signup={this.signup} />
+              <Signup setUser={this.setUser} />
             </Tab>
           </Tabs>
         </div>
@@ -272,15 +219,7 @@ class App extends React.Component {
 
     const navbar = (
       <Tabs>
-        <Tab label="Search">
-          <SearchList
-            results={this.state.searchResults}
-            search={this.search}
-            addShow={this.addShow}
-            makeShowActive={this.makeShowActive}
-          />
-        </Tab>
-        <Tab label="Your Shows">
+        <Tab label="Your Feed">
           <ShowList
             shows={this.state.shows}
             comments={this.state.userComments}
@@ -288,7 +227,7 @@ class App extends React.Component {
             makeShowActive={this.makeShowActive}
           />
         </Tab>
-        <Tab label="Stats">
+        <Tab label="World Feed">
           <ShowList
             shows={this.state.shows}
             comments={this.state.userComments}
@@ -299,36 +238,21 @@ class App extends React.Component {
       </Tabs>
     );
 
-    // FOCUS VIEW
-    if (this.state.activeShow) {
-      const show = this.state.activeShow;
-      return (
-        <div>
-          <h1 id="title" >PodTalk</h1>
-          {navbar}
-          <ShowPage
-            show={show}
-            saveComment={this.saveComment}
-            owned={this.state.showIsOwned}
-            addShow={this.addShow}
-          />
-        </div>
-      );
-
-    // STATS VIEW
-    } else if (this.state.activity) {
-      return (
-        <div>
-          <h1 id="title" >PodStar</h1>
-          {navbar}
-          <div>
-            <PopularPage />
-          </div>
-        </div>
-      );
-    }
-
-    return (<div>{navbar}</div>);
+    return (
+      <div>
+        <img
+          style={{
+            width: '96%',
+            maxWidth: '400px',
+            marginLeft: '2%',
+            marginRight: '2%',
+          }}
+          src="./images/logo.png"
+          alt=""
+        />
+        {navbar}
+      </div>
+    );
   }
 }
 
