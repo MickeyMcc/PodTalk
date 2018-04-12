@@ -90,6 +90,19 @@ app.post('/shows', (req, res) => { // gets user and show
   });
 });
 
+app.get('/episodeList', (req, res) => {
+  const { showID } = req.query;
+  search.episodesForShow(showID, (err, data) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json(err);
+    } else {
+      console.log(data);
+      res.status(201).json(search.parseEpisodes(data));
+    }
+  });
+});
+
 // /////////////////SEARCH\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 

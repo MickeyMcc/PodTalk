@@ -1,9 +1,15 @@
 import React from 'react';
+import axios from 'axios';
 import { GridTile } from 'material-ui/GridList';
 import CommentMode from 'material-ui/svg-icons/editor/mode-comment';
 import IconButton from 'material-ui/IconButton';
 import Dialog from 'material-ui/Dialog';
 import { white } from 'material-ui/styles/colors';
+import RefreshIndicator from 'material-ui/RefreshIndicator';
+import List from 'material-ui/List';
+import Subheader from 'material-ui/Subheader';
+import Divider from 'material-ui/Divider';
+import EpisodeEntry from './EpisodeEntry';
 
 class ShowEntry extends React.Component {
   constructor(props) {
@@ -11,11 +17,12 @@ class ShowEntry extends React.Component {
     this.state = {
       comment: '',
       open: false,
+      epList: [],
+      loading: true,
     };
     this.submit = this.submit.bind(this);
     this.comment = this.comment.bind(this);
     this.openShow = this.openShow.bind(this);
-    this.handleClose = this.handleClose.bind(this);
   }
 
   comment(e) {
@@ -29,7 +36,18 @@ class ShowEntry extends React.Component {
     }
   }
 
-  openShow() {
+  openShow(showID) {
+    axios.get('/episodeList', {
+      params: {
+        showID,
+      },
+    })
+      .then((results) => {
+        this.setState({ epList: results.data, loading: false });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     this.setState({ open: true });
   }
 
@@ -38,8 +56,6 @@ class ShowEntry extends React.Component {
   }
 
   render() {
-    const oldComments = this.props.comments || [];
-
     const { show } = this.props;
     const iconStyle = {
       marginRight: '10px',
@@ -48,11 +64,10 @@ class ShowEntry extends React.Component {
     return (
       <div>
         <GridTile
-          style={{ marginTop: '8px' }}
           title={show.title}
           subtitle={<span>by <b>{show.maker}</b></span>}
           actionIcon={
-            <IconButton onClick={this.openShow}>
+            <IconButton onClick={() => this.openShow(show.id)}>
               <CommentMode color={white} style={iconStyle} />
             </IconButton>
           }
@@ -63,9 +78,25 @@ class ShowEntry extends React.Component {
           title={show.title}
           modal={false}
           open={this.state.open}
-          onRequestClose={this.handleClose}
+          onRequestClose={() => this.handleClose()}
         >
-          The actions in this window were passed in as an array of React objects.
+          {show.show_description}
+          <Divider />
+          {this.state.loading ?
+            <RefreshIndicator
+              size={40}
+              left={300}
+              top={150}
+              status="loading"
+            />
+          :
+            <List>
+              <Subheader> Recent Episodes </Subheader>
+              {this.state.epList.map(episode => (
+                <EpisodeEntry episode={episode} key={episode.LNID} />
+              ))}
+            </List>
+          }
         </Dialog>
       </div>
     );
