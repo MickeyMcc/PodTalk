@@ -1,51 +1,40 @@
 import React from 'react';
+import Paper from 'material-ui/Paper';
+import Divider from 'material-ui/Divider';
+import { List, ListItem } from 'material-ui/List';
+import { white } from 'material-ui/styles/colors';
 import SearchEntry from './SearchEntry';
 
-class SearchList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      searchQuery: '',
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleChange(event) {
-    this.setState({ searchQuery: event.target.value });
-  }
-
-  handleSubmit() {
-    if (this.state.searchQuery !== '') {
-      this.props.search(this.state.searchQuery);
-    }
-  }
-
-  render() {
-
-    return (
-      <div>
-        <div>
-          <input
-            type="text"
-            value={this.state.searchQuery}
-            onChange={this.handleChange}
-          />
-          <button onClick={this.handleSubmit}> Search! </button>
-        </div>
-        <h4> Search Results </h4>
-        {this.props.results.length} results found.
-        {this.props.results.map((result, index) => (
+const SearchList = props => (
+  <Paper
+    zDepth={1}
+    rounded={false}
+    style={{
+      marginTop: 10,
+      marginLeft: 10,
+      width: 380,
+    }}
+  >
+    {props.searchResults.length ?
+      <List>
+        <ListItem
+          hoverColor={white}
+          primaryText="Results"
+        />
+        <Divider />
+        {props.searchResults.map((result, index) => (
           <SearchEntry
             show={result}
             key={index}
-            addShow={this.props.addShow}
-            makeShowActive={this.props.makeShowActive}
+            addShow={props.addShow}
+            userid={props.userid}
           />
         ))}
-      </div>
-    );
-  }
-}
+      </List>
+    :
+      null
+    }
+  </Paper>
+);
 
 export default SearchList;

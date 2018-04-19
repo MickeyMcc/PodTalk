@@ -79,6 +79,7 @@ class ShowEntry extends React.Component {
           modal={false}
           open={this.state.open}
           onRequestClose={() => this.handleClose()}
+          autoScrollBodyContent={true}
         >
           {show.show_description}
           <Divider />

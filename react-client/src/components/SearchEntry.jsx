@@ -1,4 +1,9 @@
 import React from 'react';
+import { ListItem } from 'material-ui/List';
+import expandMore from 'material-ui/svg-icons/navigation/expand-more';
+import Avatar from 'material-ui/Avatar';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+import axios from 'axios';
 
 const SearchEntry = (props) => {
   const { show } = props;
@@ -7,38 +12,34 @@ const SearchEntry = (props) => {
   }
 
   const addShow = () => {
-    props.addShow(props.show);
-  };
-
-  const checkItOut = () => {
-    props.makeShowActive(props.show, false);
+    console.log(show);
+    axios.post('/shows', {
+      show,
+      userID: props.userID,
+    })
+      .then(() => {
+        console.log('done@');
+      })
+      .catch((err) => {
+        console.log('err', err);
+      });
   };
 
   return (
-    <div>
-      <div>
-        <img src={show.image} alt="" />
-        <div>
-          <div>
-            <h4 onClick={checkItOut}>{show.title}</h4>
-            <p>BTYB: {show.maker}, Topic: {JSON.stringify(show.genre)}</p>
-          </div>
-        </div>
-        <button onClick={addShow}> Add </button>
-      </div>
-    </div>
+    <ListItem
+      primaryText={show.title}
+      leftAvatar={<Avatar src={show.image} />}
+      rightIcon={<expandMore />}
+      primaryTogglesNestedList
+      nestedItems={[
+        <ListItem
+          primaryText={<p> {show.description} </p>}
+          secondaryText={show.maker}
+          rightIcon={<ContentAdd color="#00675b" onClick={addShow} />}
+        />,
+      ]}
+    />
   );
 };
 
 export default SearchEntry;
-
-// {
-//   "title": "Reply All",
-//   "maker": "Gimlet",
-//   "itunesUrl": "https://itunes.apple.com/us/podcast/reply-all/id941907967?mt=2&uo=4",
-//   "littleImg": "http://is1.mzstatic.com/image/thumb/Music128/v4/22/0d/f6/220df688-843f-264a-b67e-28644b73c129/source/30x30bb.jpg",
-//   "bigImg": "http://is1.mzstatic.com/image/thumb/Music128/v4/22/0d/f6/220df688-843f-264a-b67e-28644b73c129/source/60x60bb.jpg",
-//   "latestRelease": "2018-02-15T11:00:00Z",
-//   "trackCount": 135,
-//   "genre": "Technology"
-// }

@@ -1,9 +1,11 @@
 import React from 'react';
 import axios from 'axios';
 import { Tabs, Tab } from 'material-ui/Tabs';
+import RaisedButton from 'material-ui/RaisedButton';
 import ShowList from './components/ShowList';
 import Login from './components/Login';
 import Signup from './components/Signup';
+import SearchDrawer from './components/SearchDrawer';
 
 class App extends React.Component {
   constructor(props) {
@@ -11,19 +13,15 @@ class App extends React.Component {
     this.state = {
       user: {},
       shows: [],
-      searchResults: [],
       userComments: {},
       loggedIn: false,
-      activeShow: null,
-      activity: false,
-      showIsOwned: false,
+      searchOpen: false,
     };
-    this.saveComment = this.saveComment.bind(this);
     this.addShow = this.addShow.bind(this);
-    this.goHome = this.goHome.bind(this);
     this.logout = this.logout.bind(this);
     this.search = this.search.bind(this);
     this.setUser = this.setUser.bind(this);
+    this.openSearch = this.openSearch.bind(this);
   }
 
   componentDidMount() {
@@ -48,36 +46,6 @@ class App extends React.Component {
       .catch((err) => {
         console.log(err);
       });
-  }
-
-  saveComment(comment, showID) {
-    const context = this;
-    axios.post('/comments', {
-      comment,
-      showID,
-      userID: context.state.user.id,
-    })
-      .then(() => {
-        context.setState({ userMessage: 'comment saved' });
-        context.getUsersComments();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-
-  transformComments(comments) {
-    const commentsObj = {};
-
-    for (const comment of comments) {
-      if (!commentsObj[comment.show_id]) {
-        commentsObj[comment.show_id] = [comment.text];
-      } else {
-        commentsObj[comment.show_id].push(comment.text);
-      }
-    }
-    return commentsObj;
   }
 
   // /////////////////USERS\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -156,6 +124,10 @@ class App extends React.Component {
 
   // /////////////////SEARCH\\\\\\\\\\\\\\\\\\\\\\\\\\
 
+  openSearch() {
+    this.setState({ searchOpen: !this.state.searchOpen });
+  }
+
   search(query) {
     console.log('search', query);
     const context = this;
@@ -179,23 +151,6 @@ class App extends React.Component {
       .catch((err) => {
         console.log('err', err);
       });
-  }
-
-  makeShowActive(show, showIsOwned) {
-    this.setState({
-      activeShow: show,
-      userMessage: '',
-      activity: false,
-      showIsOwned,
-    });
-  }
-
-  goHome() {
-    this.setState({
-      activeShow: null,
-      userMessage: '',
-      activity: false,
-    });
   }
 
   // /////////////////RENDER\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -250,6 +205,13 @@ class App extends React.Component {
           src="./images/logo.png"
           alt=""
         />
+        <RaisedButton
+          style={{ float: 'right', marginRight: '15px', marginTop: '15px' }}
+          onClick={this.openSearch}
+          label="Search"
+          secondary
+        />
+        <SearchDrawer open={this.state.searchOpen} close={this.openSearch} userid={this.state.user.id} />
         {navbar}
       </div>
     );

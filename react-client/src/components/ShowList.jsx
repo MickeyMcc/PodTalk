@@ -1,6 +1,6 @@
 import React from 'react';
-import ShowEntry from './ShowEntry';
 import { GridList } from 'material-ui/GridList';
+import ShowEntry from './ShowEntry';
 
 const ShowList = (props) => {
   let message = '';

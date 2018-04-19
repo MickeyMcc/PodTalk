@@ -26,7 +26,6 @@ const checkSession = (req, res, next) => {
   if (req.session.loggedIn === true) {
     next();
   } else {
-    console.log('badCookies');
     res.status(404).end('login');
   }
 };
@@ -37,7 +36,7 @@ app.get('/users', (req, res) => {
   const { user, password } = req.query;
   db.login(user, password, (err, data) => {
     if (err) {
-      res.status(404).end(err);
+      res.status(404).end();
     } else {
       req.session.loggedIn = true;
       res.status(200).json({ username: user, id: data });
@@ -70,7 +69,6 @@ app.get('/shows', checkSession, (req, res) => {
 
   db.selectAllUserShows(user, (err, data) => {
     if (err) {
-      console.log(err);
       res.status(500).json(err);
     } else {
       res.status(200).end(JSON.stringify(data));
@@ -82,7 +80,6 @@ app.post('/shows', (req, res) => { // gets user and show
   const { userID, show } = req.body;
   db.addShowToUser(userID, show, (err) => {
     if (err) {
-      console.log(err);
       res.end('show could not be added');
     } else {
       res.end('show added to favorites');
@@ -94,10 +91,8 @@ app.get('/episodeList', (req, res) => {
   const { showID } = req.query;
   search.episodesForShow(showID, (err, data) => {
     if (err) {
-      console.log(err);
       res.status(500).json(err);
     } else {
-      console.log(data);
       res.status(201).json(search.parseEpisodes(data));
     }
   });
@@ -111,7 +106,6 @@ app.get('/search', checkSession, (req, res) => {
 
   search.searchListenNotes(query, (err, data) => {
     if (err) {
-      console.log(err);
       res.status(500).json(err);
     } else {
       res.status(201).json(search.parseShows(data.results));
@@ -122,14 +116,12 @@ app.get('/search', checkSession, (req, res) => {
 // /////////////////COMMENTS\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 app.post('/comments', (req, res) => {
-  console.log(req.body);
   const { comment } = req.body;
   const user = req.body.userID;
   const show = req.body.showID;
 
   db.addComment(user, show, comment, (err) => {
     if (err) {
-      console.log(err);
       res.status(500).json({ message: err });
     } else {
       res.status(201).end();
@@ -143,7 +135,6 @@ app.get('/comments', (req, res) => {
   if (user === 'all') {
     db.getCommentsAll(req.query.showID, (err, data) => {
       if (err) {
-        console.log(err);
         res.status(500).json({ message: err });
       } else {
         res.status(201).json(data);

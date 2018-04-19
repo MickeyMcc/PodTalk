@@ -51,15 +51,6 @@ class PopularPage extends React.Component {
     this.setState({ showsSort: type });
   }
 
-  renderEntry(data, sortType) {
-    const statEntry = _.map(data, (entry, key) => {
-      if (entry[sortType] > 1) {
-        return (<div> {key} : {entry[sortType]} {sortType} </div>);
-      }
-    });
-    return statEntry;
-  }
-
   render() {
     return (
       <div>
