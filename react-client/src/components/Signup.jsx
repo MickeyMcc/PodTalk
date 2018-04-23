@@ -14,9 +14,9 @@ class Signup extends React.Component {
       shortUser: false,
       usernameInUse: false,
     };
-    this.userNameEntry = this.userNameEntry.bind(this);
-    this.passwordEntry = this.passwordEntry.bind(this);
-    this.password2Entry = this.password2Entry.bind(this);
+    this.usernameCheck = this.usernameCheck.bind(this);
+    this.password2Check = this.password2Check.bind(this);
+    this.fieldEntry = this.fieldEntry.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
   }
@@ -27,25 +27,24 @@ class Signup extends React.Component {
     }
   }
 
-  userNameEntry(event) {
-    this.setState({ username: event.target.value });
-    if (event.target.value.length < 4) {
-      this.setState({ shortUser: true });
-    } else {
-      this.setState({ shortUser: false });
-    }
+  fieldEntry(event, key, target) {
+    this.setState({ [target]: event.target.value })
+    this[`${target}Check`] ? this[`${target}Check`](event.target.value): null;
   }
 
-  passwordEntry(event) {
-    this.setState({ password: event.target.value });
-  }
-
-  password2Entry(event) {
-    this.setState({ password2: event.target.value });
-    if (this.state.password !== event.target.value) {
+  password2Check(newValue) {
+    if (this.state.password !== newValue) {
       this.setState({ mismatch: true });
     } else {
       this.setState({ mismatch: false });
+    }
+  }
+
+  usernameCheck(newValue) {
+    if (newValue.length < 4) {
+      this.setState({ shortUser: true });
+    } else {
+      this.setState({ shortUser: false });
     }
   }
 
@@ -82,23 +81,25 @@ class Signup extends React.Component {
             style={{ marginLeft: '10px' }}
             floatingLabelText="Username"
             value={this.state.username}
-            onChange={this.userNameEntry}
+            onChange={(event) => this.fieldEntry(event, null, 'username')}
             errorText={this.state.shortUser ? 'Username must be at least 4 chars' : (this.state.usernameInUse ? 'Username already in use!' : '')}
             errorStyle={errorStyle}
+            onKeyPress={this.handleKeyPress}
           />
           <TextField
             style={{ marginLeft: '10px' }}
             floatingLabelText="Password"
             type="password"
             value={this.state.password}
-            onChange={this.passwordEntry}
+            onChange={(event) => this.fieldEntry(event, null, 'password')}
+            onKeyPress={this.handleKeyPress}
           />
           <TextField
             style={{ marginLeft: '10px' }}
             floatingLabelText="Password Again"
             type="password"
             value={this.state.password2}
-            onChange={this.password2Entry}
+            onChange={(event) => this.fieldEntry(event, null, 'password2')}
             errorText={this.state.mismatch ? 'Passwords do not match' : ''}
             errorStyle={errorStyle}
             onKeyPress={this.handleKeyPress}

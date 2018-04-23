@@ -62,3 +62,6 @@ CREATE TABLE shows_users (
   FOREIGN KEY (user_id) REFERENCES users (id),
   FOREIGN KEY (show_id) REFERENCES shows (id)
 );
+
+INSERT INTO shows (id, itunesID, title, maker, show_image, show_description, website, latestRelease, genre) VALUES
+('f11c5d2586c245edac2c94314a45a885', '121493804', "Wait Wait... Don't Tell Me!", "NPR", "https://d3sv2eduhewoas.cloudfront.net/channel/image/c10e4e2f4112490a83f13e060b816095.jpg", "NPR's weekly current events quiz. Have a laugh and test your news knowledge while figuring out what's real and what we've made up.", "https://www.npr.org/rss/podcast.php?id=344098539", "2 days ago", '[82,133]');

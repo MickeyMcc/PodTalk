@@ -36,7 +36,11 @@ app.get('/users', (req, res) => {
   const { user, password } = req.query;
   db.login(user, password, (err, data) => {
     if (err) {
+<<<<<<< HEAD
       res.status(404).end();
+=======
+      res.status(404).send(err);
+>>>>>>> fancy-fy signup form
     } else {
       req.session.loggedIn = true;
       res.status(200).json({ username: user, id: data });
@@ -48,7 +52,7 @@ app.post('/users', (req, res) => {
   const { user, password } = req.body;
   db.createUser(user, password, (err, data) => {
     if (err) {
-      res.status(404).end(err);
+      res.status(404).send(err);
     } else {
       req.session.loggedIn = true;
       res.status(201).json({ username: user, id: data.insertId });
@@ -101,7 +105,7 @@ app.get('/episodeList', (req, res) => {
 // /////////////////SEARCH\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 
-app.get('/search', checkSession, (req, res) => {
+app.get('/search', (req, res) => {
   const query = req.query.terms;
 
   search.searchListenNotes(query, (err, data) => {
