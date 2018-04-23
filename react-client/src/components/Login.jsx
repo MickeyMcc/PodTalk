@@ -12,8 +12,7 @@ class Login extends React.Component {
       usernameError: '',
       passwordError: '',
     };
-    this.userNameEntry = this.userNameEntry.bind(this);
-    this.passwordEntry = this.passwordEntry.bind(this);
+    this.fieldEntry = this.fieldEntry.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
   }
@@ -24,12 +23,8 @@ class Login extends React.Component {
     }
   }
 
-  userNameEntry(event) {
-    this.setState({ username: event.target.value });
-  }
-
-  passwordEntry(event) {
-    this.setState({ password: event.target.value });
+  fieldEntry(event, key, target) {
+    this.setState({ [target]: event.target.value });
   }
 
   handleSubmit() {
@@ -69,7 +64,7 @@ class Login extends React.Component {
           style={{ marginLeft: '10px' }}
           floatingLabelText="Username"
           value={this.state.username}
-          onChange={this.userNameEntry}
+          onChange={(event) => this.fieldEntry(event, null, 'username')}
           errorText={this.state.usernameError}
           errorStyle={errorStyle}
         />
@@ -77,7 +72,7 @@ class Login extends React.Component {
           style={{ marginLeft: '10px' }}
           floatingLabelText="Password"
           value={this.state.password}
-          onChange={this.passwordEntry}
+          onChange={(event) => this.fieldEntry(event, null, 'password')}
           errorText={this.state.passwordError}
           errorStyle={errorStyle}
           onKeyUp={this.handleKeyPress}
