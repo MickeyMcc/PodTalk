@@ -88,7 +88,6 @@ module.exports.parseEpisodes = (results, showID) => (
 //   //audio
 //   //LNID
 //   //audio_length
-//   //episode id
 // }
 
 // 'podcast' search result ListenNotes

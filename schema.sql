@@ -11,16 +11,6 @@ CREATE TABLE users (
   PRIMARY KEY (id)
 );
 
-  -- title: podcast.title_original,
-  -- maker: podcast.publisher_original,
-  -- itunesID: podcast.itunes_id,
-  -- LNID: podcast.id,
-  -- showImage: podcast.image,
-  -- latestRelease: podcast.lastest_pub_date_ms,
-  -- genre: podcast.genres,
-  -- descriptions: podcast.description_original,
-  -- website: podcast.rss,
-
 CREATE TABLE shows (
   id varchar(255) NOT NULL,
   itunesID varchar(255) NOT NULL,
@@ -36,7 +26,7 @@ CREATE TABLE shows (
 
 CREATE TABLE episodes (
   id varchar(255) NOT NULL,
-  show_id varchar(255) NOT NULL,
+  show_id varchar(255),
   episode_description varchar(1500),
   episode_url varchar(255),
   episode_length varchar(255),
@@ -45,13 +35,16 @@ CREATE TABLE episodes (
 );
 
 CREATE TABLE comments (
-  id int NOT NULL AUTO_INCREMENT,
+  id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   text varchar(500) NOT NULL,
   user_id int NOT NULL,
-  episode_id varchar(255) NOT NULL,
-  PRIMARY KEY (id),
+  show_id varchar(255),
+  episode_id varchar(255),
+  comment_id int NULL,
   FOREIGN KEY (user_id) REFERENCES users (id),
-  FOREIGN KEY (episode_id) REFERENCES episodes (id)
+  FOREIGN KEY (episode_id) REFERENCES episodes (id),
+  FOREIGN KEY (show_id) REFERENCES shows (id),
+  FOREIGN KEY (comment_id) REFERENCES comments (id)
 );
 
 CREATE TABLE shows_users (
@@ -61,6 +54,17 @@ CREATE TABLE shows_users (
   PRIMARY KEY (id),
   FOREIGN KEY (user_id) REFERENCES users (id),
   FOREIGN KEY (show_id) REFERENCES shows (id)
+);
+
+CREATE TABLE episodes_users (
+  id int NOT NULL AUTO_INCREMENT,
+  user_id int NOT NULL,
+  episode_id varchar(255) NOT NULL,
+  listened bit(1) DEFAULT 0,
+  commented bit(1) DEFAULT 0,
+  PRIMARY KEY (id),
+  FOREIGN KEY (user_id) REFERENCES users (id),
+  FOREIGN KEY (episode_id) REFERENCES episodes (id)
 );
 
 INSERT INTO shows (id, itunesID, title, maker, show_image, show_description, website, latestRelease, genre) VALUES

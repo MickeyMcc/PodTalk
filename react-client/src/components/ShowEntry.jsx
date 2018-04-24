@@ -9,6 +9,7 @@ import RefreshIndicator from 'material-ui/RefreshIndicator';
 import List from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
+import {Tabs, Tab } from 'material-ui/Tabs';
 import EpisodeEntry from './EpisodeEntry';
 
 class ShowEntry extends React.Component {
@@ -78,26 +79,38 @@ class ShowEntry extends React.Component {
           title={show.title}
           modal={false}
           open={this.state.open}
+<<<<<<< HEAD
           onRequestClose={() => this.handleClose()}
           autoScrollBodyContent={true}
+=======
+          onRequestClose={this.handleClose}
+>>>>>>> adds tabs to show entry, adds episodes_users to schema and modifies comments
         >
           {show.show_description}
-          <Divider />
-          {this.state.loading ?
-            <RefreshIndicator
-              size={40}
-              left={300}
-              top={150}
-              status="loading"
-            />
-          :
-            <List>
-              <Subheader> Recent Episodes </Subheader>
-              {this.state.epList.map(episode => (
-                <EpisodeEntry episode={episode} key={episode.LNID} />
-              ))}
-            </List>
-          }
+          <Divider style={{ marginTop: 8 }} />
+          <Tabs>
+            <Tab label="Your Eps">
+              Hello!
+            </Tab>
+            <Tab label="Recent Eps">
+              {this.state.loading ?
+                <RefreshIndicator
+                  size={40}
+                  style={{ position : 'relative'}}
+                  left={50}
+                  top={20}
+                  status="loading"
+                />
+              :
+                <List style={{ maxHeight: 300, overflow: 'auto'}} >
+                  {this.state.epList.map(episode => (
+                    <EpisodeEntry episode={episode} key={episode.LNID} />
+                  ))}
+                </List>
+              }
+            </Tab>
+          </Tabs>
+          {/* <EpisodesView show={show} user={this.props.user} /> */}
         </Dialog>
       </div>
     );
