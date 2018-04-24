@@ -80,7 +80,7 @@ app.get('/shows', checkSession, (req, res) => {
   });
 });
 
-app.post('/shows', (req, res) => { // gets user and show
+app.post('/shows', (req, res) => { // receives user and show
   const { userID, show } = req.body;
   db.addShowToUser(userID, show, (err) => {
     if (err) {
@@ -91,16 +91,34 @@ app.post('/shows', (req, res) => { // gets user and show
   });
 });
 
-app.get('/episodeList', (req, res) => {
+app.get('/episodes/recent', (req, res) => {
   const { showID } = req.query;
   search.episodesForShow(showID, (err, data) => {
     if (err) {
+<<<<<<< HEAD
       res.status(500).json(err);
+=======
+      console.log(err);
+      res.status(500).send(err);
+>>>>>>> write server route, pull userID into episodeEntry
     } else {
       res.status(201).json(search.parseEpisodes(data));
     }
   });
 });
+
+app.post('/episodes/listen', (req, res) => {
+  const { episodeID, userID } = req.body;
+  db.episodeListen(episodeID, userID, (err, data) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send(err);
+    } else {
+      console.log(data);
+      res.status(200).end();
+    }
+  })
+})
 
 // /////////////////SEARCH\\\\\\\\\\\\\\\\\\\\\\\\\\
 

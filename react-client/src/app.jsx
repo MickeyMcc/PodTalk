@@ -11,7 +11,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: {},
+      user: null,
       shows: [],
       userComments: {},
       loggedIn: false,
@@ -51,7 +51,8 @@ class App extends React.Component {
   // /////////////////USERS\\\\\\\\\\\\\\\\\\\\\\\\\\
 
   setUser(userObj) {
-    this.setState({ user: userObj, loggedIn: true, userMessage: '' });
+    console.log(userObj);
+    this.setState({ user: userObj, loggedIn: true });
     this.refreshShowList();
   }
 
@@ -93,7 +94,6 @@ class App extends React.Component {
           context.setState({
             shows: results.data,
           });
-          context.getUsersComments();
         }
       })
       .catch((err) => {
@@ -156,7 +156,7 @@ class App extends React.Component {
   // /////////////////RENDER\\\\\\\\\\\\\\\\\\\\\\\\\\
 
   render() {
-    if (!this.state.loggedIn) {
+    if (this.state.user === null) {
       return (
         <div>
           <img style={{ width: '96%', maxWidth: '400px', marginLeft: '2%', marginRight: '2%' }} src="./images/logo.png" alt="" />
@@ -176,18 +176,14 @@ class App extends React.Component {
       <Tabs>
         <Tab label="Your Feed">
           <ShowList
+            userID={this.state.user.id}
             shows={this.state.shows}
-            comments={this.state.userComments}
-            saveComment={this.saveComment}
-            makeShowActive={this.makeShowActive}
           />
         </Tab>
         <Tab label="World Feed">
           <ShowList
+            userID={this.state.user.id}
             shows={this.state.shows}
-            comments={this.state.userComments}
-            saveComment={this.saveComment}
-            makeShowActive={this.makeShowActive}
           />
         </Tab>
       </Tabs>

@@ -17,6 +17,7 @@ class EpisodeEntry extends React.Component {
 
   markListened() {
     this.setState({ listened: true });
+    console.log(this.props);
     axios.post('/episodes/listen', {
       userID: this.props.userID,
       episodeID: this.props.LNID,

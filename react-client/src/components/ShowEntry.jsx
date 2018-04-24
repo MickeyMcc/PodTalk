@@ -38,7 +38,7 @@ class ShowEntry extends React.Component {
   }
 
   openShow(showID) {
-    axios.get('/episodeList', {
+    axios.get('/episodes/recent', {
       params: {
         showID,
       },
@@ -57,7 +57,7 @@ class ShowEntry extends React.Component {
   }
 
   render() {
-    const { show } = this.props;
+    const { show, userID } = this.props;
     const iconStyle = {
       marginRight: '10px',
     };
@@ -104,7 +104,7 @@ class ShowEntry extends React.Component {
               :
                 <List style={{ maxHeight: 300, overflow: 'auto'}} >
                   {this.state.epList.map(episode => (
-                    <EpisodeEntry episode={episode} key={episode.LNID} />
+                    <EpisodeEntry episode={episode} key={episode.LNID} userID={userID} />
                   ))}
                 </List>
               }

@@ -10,10 +10,6 @@ const ShowList = (props) => {
     message = `You have ${props.shows.length} shows so far.`;
   }
 
-  if (!props.comments) {
-    props.comments = {};
-  }
-
   const cols = window.innerWidth > 500 ? 3 : 2;
 
   return (
@@ -26,9 +22,7 @@ const ShowList = (props) => {
           <ShowEntry
             show={show}
             key={show.id}
-            comments={props.comments[show.id]}
-            saveComment={props.saveComment}
-            makeShowActive={props.makeShowActive}
+            userID={props.userID}
           />
         ))}
       </GridList>
