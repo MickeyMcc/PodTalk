@@ -144,6 +144,56 @@ module.exports.addShowToUser = (user, show, callback) => {
   });
 };
 
+// ////////////////////EPISODES\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+module.exports.userEpisodeListen = (userID, episode, showID, callback) => {
+  const episodeID = episode.LNID;
+  let markListened = "UPDATE episodes_users SET listened=b'1' WHERE user_id = " + 
+    `${userID} AND episode_id = '${episodeID}';`;
+
+  let makeConnEntry = "INSERT INTO episodes_users (user_id, episode_id, listened) VALUES " +
+    `('${userID}', '${episodeID}', b'1');`;
+
+  const check4conn = `SELECT id from episodes_users WHERE user_id = ${userID} AND episode_id = '${episodeID}';`;
+
+  const check4epp = `SELECT id FROM episodes WHERE id = '${episodeID}';`;
+
+  const insertEpp = 'INSERT INTO episodes (id, show_id, episode_description, episode_url, episode_length) ' +
+    `VALUES ('${episodeID}', '${showID}', '${cleanQuotes(episode.description)}', '${episode.audio}', '${episode.length}')`;
+
+  connection.query(check4epp, (err, res) => {
+    if (err) {
+      callback(err);
+    } else if (!res.length) { // episode is not yet in database
+      connection.query(insertEpp, (err, res) => { // add epp
+        if (err) {
+          callback(err);
+        } else {
+          connection.query(makeConnEntry, (err, res) => { // add user
+            callback(err, res);
+          });
+        }
+      });
+    } else { // episode in database
+      connection.query(check4conn, (err, res) => { // see if there is already a relationship
+        if (err) {
+          callback(err);
+        } else {
+          if (res.length) { // user already owns episode
+            connection.query(markListened, (err, res) => {
+              callback(err, res);
+            });
+          } else { // user does not own episode, make entry
+            connection.query(makeConnEntry, (err, res) => {
+              callback(err, res);
+            })
+          }
+        }
+      });
+    }
+  });
+}
+
 // /////////////////COMMENTS\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 module.exports.addComment = (userID, episodeID, comment, callback) => {

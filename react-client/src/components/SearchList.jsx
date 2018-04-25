@@ -28,6 +28,7 @@ const SearchList = props => (
             key={index}
             addShow={props.addShow}
             userID={props.userID}
+            refreshUserShows={props.refreshUserShows}
           />
         ))}
       </List>

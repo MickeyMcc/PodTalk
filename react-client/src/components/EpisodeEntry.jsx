@@ -20,7 +20,8 @@ class EpisodeEntry extends React.Component {
     console.log(this.props);
     axios.post('/episodes/listen', {
       userID: this.props.userID,
-      episodeID: this.props.LNID,
+      episode: this.props.episode,
+      showID: this.props.showID,
     })
       .then((results) => {
         this.setState({ listened: true });
@@ -37,9 +38,11 @@ class EpisodeEntry extends React.Component {
         <Card>
           <CardHeader
             title={this.props.episode.title}
+            actAsExpander
+            showExpandableButton
           />
-          <CardText>
-            {this.props.episode.description}
+          <CardText expandable>
+            <div dangerouslySetInnerHTML={{ __html: this.props.episode.description }} />
           </CardText>
           <CardActions>
             <FlatButton label='Talk About it' primary={true} />

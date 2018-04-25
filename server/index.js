@@ -98,6 +98,19 @@ app.get('/episodes/recent', (req, res) => {
   });
 });
 
+app.post('/episodes/listen', (req, res) => {
+  console.log(req.body);
+  const { userID, episode, showID } = req.body;
+  db.userEpisodeListen(userID, episode, showID, (err) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send(err);
+    } else  {
+      res.status(200);
+    }
+  }) 
+})
+
 // /////////////////SEARCH\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 

@@ -26,7 +26,7 @@ CREATE TABLE shows (
 
 CREATE TABLE episodes (
   id varchar(255) NOT NULL,
-  show_id varchar(255),
+  show_id varchar(560),
   episode_description varchar(1500),
   episode_url varchar(255),
   episode_length varchar(255),
@@ -60,8 +60,8 @@ CREATE TABLE episodes_users (
   id int NOT NULL AUTO_INCREMENT,
   user_id int NOT NULL,
   episode_id varchar(255) NOT NULL,
-  listened bit(1) DEFAULT 0,
-  commented bit(1) DEFAULT 0,
+  listened bit(1) DEFAULT b'0',
+  commented bit(1) DEFAULT b'0',
   PRIMARY KEY (id),
   FOREIGN KEY (user_id) REFERENCES users (id),
   FOREIGN KEY (episode_id) REFERENCES episodes (id)

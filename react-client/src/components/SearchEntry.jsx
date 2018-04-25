@@ -18,7 +18,8 @@ const SearchEntry = (props) => {
       userID: props.userID,
     })
       .then(() => {
-        console.log('done@');
+        console.log('done@', props, props.refreshUserShows);
+        props.refreshUserShows();
       })
       .catch((err) => {
         console.log('err', err);

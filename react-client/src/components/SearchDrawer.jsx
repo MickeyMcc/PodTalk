@@ -44,7 +44,7 @@ class SearchDrawer extends React.Component {
         onRequestChange={this.props.close}
       >
         <SearchForm query={this.query} enterSearch={this.enterSearch} submitSearch={this.submitSearch} />
-        <SearchList searchResults={this.state.searchResults} userID={this.props.userID} />
+        <SearchList searchResults={this.state.searchResults} userID={this.props.userID} refreshUserShows={this.props.refreshUserShows} />
       </Drawer>
     );
   }

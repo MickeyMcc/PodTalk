@@ -22,6 +22,7 @@ class App extends React.Component {
     this.search = this.search.bind(this);
     this.setUser = this.setUser.bind(this);
     this.openSearch = this.openSearch.bind(this);
+    this.refreshShowList = this.refreshShowList.bind(this);
   }
 
   componentDidMount() {
@@ -207,7 +208,7 @@ class App extends React.Component {
           label="Search"
           secondary
         />
-        <SearchDrawer open={this.state.searchOpen} close={this.openSearch} userID={this.state.user.id} />
+        <SearchDrawer open={this.state.searchOpen} close={this.openSearch} userID={this.state.user.id} refreshUserShows={this.refreshShowList} />
         {navbar}
       </div>
     );
