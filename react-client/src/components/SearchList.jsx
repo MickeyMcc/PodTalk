@@ -27,7 +27,7 @@ const SearchList = props => (
             show={result}
             key={index}
             addShow={props.addShow}
-            userid={props.userid}
+            userID={props.userID}
           />
         ))}
       </List>

@@ -211,7 +211,7 @@ class App extends React.Component {
           label="Search"
           secondary
         />
-        <SearchDrawer open={this.state.searchOpen} close={this.openSearch} userid={this.state.user.id} />
+        <SearchDrawer open={this.state.searchOpen} close={this.openSearch} userID={this.state.user.id} />
         {navbar}
       </div>
     );

@@ -12,7 +12,7 @@ const SearchEntry = (props) => {
   }
 
   const addShow = () => {
-    console.log(show);
+    console.log(show, props.userID);
     axios.post('/shows', {
       show,
       userID: props.userID,

@@ -79,20 +79,14 @@ function addShow(show, callback) {
   // add show from search data
   const query = 'INSERT INTO shows ' +
     '(id, itunesID, title, maker, show_image, show_description, website, latestRelease, genre) ' +
-    `VALUES ('${show.LNID}','${show.itunesID}', "${show.title}", "${show.maker}", '${show.image}', ` +
-    `"${show.description}", '${show.website}', '${show.latestRelease}', '${JSON.stringify(show.genre)}')`;
+    `VALUES ('${show.LNID}','${show.itunesID}', (SELECT QUOTE(${show.title})), (SELECT QUOTE(${show.maker})), '${show.image}', ` +
+    `(SELECT QUOTE(${show.description})), '${show.website}', '${show.latestRelease}', '${JSON.stringify(show.genre)}')`;
 
   connection.query(query, (err) => {
     if (err) {
       callback(err);
     } else {
-      connection.query(query2, (err) => {
-        if (err) {
-          callback(err);
-        } else {
-          callback();
-        }
-      });
+      callback(null);
     }
   });
 
@@ -120,7 +114,7 @@ module.exports.addShowToUser = (user, show, callback) => {
     // add show - user to intersection table
     const connectShowUser = 'INSERT INTO shows_users (user_id, show_id) ' +
       `VALUES (${user}, '${show.LNID}')`;
-
+    console.log(connectShowUser);
     standardDBCall(connectShowUser, callback);
   }
   // makes connection between user and show. adds show to database if needed
@@ -132,9 +126,11 @@ module.exports.addShowToUser = (user, show, callback) => {
       // show has never been added to db
       addShow(show, (err2) => {
         if (err2) {
+          console.log('err!', err2);
           callback(err2);
         } else {
           // make user-show connection
+          console.log('making connection');
           makeConection(callback);
         }
       });
