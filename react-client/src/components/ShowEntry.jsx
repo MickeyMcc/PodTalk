@@ -79,12 +79,8 @@ class ShowEntry extends React.Component {
           title={show.title}
           modal={false}
           open={this.state.open}
-<<<<<<< HEAD
           onRequestClose={() => this.handleClose()}
           autoScrollBodyContent={true}
-=======
-          onRequestClose={this.handleClose}
->>>>>>> adds tabs to show entry, adds episodes_users to schema and modifies comments
         >
           {show.show_description}
           <Divider style={{ marginTop: 8 }} />

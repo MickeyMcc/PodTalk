@@ -19,6 +19,14 @@ const standardDBCall = (query, callback) => {
   });
 };
 
+const cleanQuotes = (string) => {
+  let resingle = /'/gi;
+  let redouble = /"/gi;
+  let single = string.replace(resingle,'\'\'');
+  let double = single.replace(redouble, "\"\"");
+  return double;
+;}
+
 // /////////////////USERS\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 module.exports.createUser = (username, password, callback) => {
@@ -79,16 +87,8 @@ function addShow(show, callback) {
   // add show from search data
   const query = 'INSERT INTO shows ' +
     '(id, itunesID, title, maker, show_image, show_description, website, latestRelease, genre) ' +
-    `VALUES ('${show.LNID}','${show.itunesID}', (SELECT QUOTE(${show.title})), (SELECT QUOTE(${show.maker})), '${show.image}', ` +
-    `(SELECT QUOTE(${show.description})), '${show.website}', '${show.latestRelease}', '${JSON.stringify(show.genre)}')`;
-
-  connection.query(query, (err) => {
-    if (err) {
-      callback(err);
-    } else {
-      callback(null);
-    }
-  });
+    `VALUES ('${show.LNID}','${show.itunesID}', '${cleanQuotes(show.title)}', '${cleanQuotes(show.maker)}', '${show.image}', ` +
+    `'${cleanQuotes(show.description)}', '${show.website}', '${show.latestRelease}', '${JSON.stringify(show.genre)}')`;
 
   standardDBCall(query, callback);
 }
@@ -114,7 +114,6 @@ module.exports.addShowToUser = (user, show, callback) => {
     // add show - user to intersection table
     const connectShowUser = 'INSERT INTO shows_users (user_id, show_id) ' +
       `VALUES (${user}, '${show.LNID}')`;
-    console.log(connectShowUser);
     standardDBCall(connectShowUser, callback);
   }
   // makes connection between user and show. adds show to database if needed
@@ -130,7 +129,6 @@ module.exports.addShowToUser = (user, show, callback) => {
           callback(err2);
         } else {
           // make user-show connection
-          console.log('making connection');
           makeConection(callback);
         }
       });
