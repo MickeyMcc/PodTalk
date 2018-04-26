@@ -18,12 +18,15 @@ class ShowEntry extends React.Component {
     this.state = {
       comment: '',
       open: false,
-      epList: [],
-      loading: true,
+      recentEpList: [],
+      userEpList: [],
+      recentLoading: true,
+      yourLoading: true,
     };
     this.submit = this.submit.bind(this);
     this.comment = this.comment.bind(this);
     this.openShow = this.openShow.bind(this);
+    this.fetchUserEps = this.fetchUserEps.bind(this);
   }
 
   comment(e) {
@@ -37,19 +40,39 @@ class ShowEntry extends React.Component {
     }
   }
 
-  openShow(showID) {
-    console.log('fetching eps!');
-    axios.get('/episodes/recent', {
+  fetchUserEps() {
+    axios.get('/episodes/user', {
       params: {
-        showID,
-      },
+        userID: this.props.userID,
+        showID: this.props.show.id,
+      }
     })
       .then((results) => {
-        this.setState({ epList: results.data, loading: false });
+        console.log(results.data, 'foundEps');
+        this.setState({ userEpList: results.data, userLoading: false })
       })
       .catch((err) => {
         console.log(err);
       });
+  }
+
+  fetchRecentEps() {
+    axios.get('/episodes/recent', {
+      params: {
+        showID: this.props.show.id,
+      },
+    })
+      .then((results) => {
+        this.setState({ recentEpList: results.data, recentLoading: false });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  openShow() {
+    this.fetchRecentEps();
+    this.fetchUserEps();
     this.setState({ open: true });
   }
 
@@ -69,7 +92,7 @@ class ShowEntry extends React.Component {
           title={show.title}
           subtitle={<span>by <b>{show.maker}</b></span>}
           actionIcon={
-            <IconButton onClick={() => this.openShow(show.id)}>
+            <IconButton onClick={this.openShow}>
               <CommentMode color={white} style={iconStyle} />
             </IconButton>
           }
@@ -80,17 +103,34 @@ class ShowEntry extends React.Component {
           title={show.title}
           modal={false}
           open={this.state.open}
-          onRequestClose={() => this.handleClose()}
+          onRequestClose={this.handleClose}
           autoScrollBodyContent={true}
         >
           {show.show_description}
           <Divider style={{ marginTop: 8 }} />
           <Tabs>
             <Tab label="Your Eps">
-              Hello!
+              {this.state.userLoading ?
+                <RefreshIndicator
+                  size={40}
+                  style={{ position: 'relative' }}
+                  left={50}
+                  top={20}
+                  status="loading"
+                />
+              :
+                this.state.userEpList.length ? 
+                  <List style={{ maxHeight: 300, overflow: 'auto' }}>
+                    {this.state.userEpList.map(episode => (
+                      <EpisodeEntry episode={episode} key={episode.id} userID={userID} showID={show.id} />
+                    ))}
+                  </List>
+                  :
+                  <div> You haven't listened to any episodes of this show yet! </div>
+              }
             </Tab>
             <Tab label="Recent Eps">
-              {this.state.loading ?
+              {this.state.recentLoading ?
                 <RefreshIndicator
                   size={40}
                   style={{ position : 'relative'}}
@@ -100,8 +140,14 @@ class ShowEntry extends React.Component {
                 />
               :
                 <List style={{ maxHeight: 300, overflow: 'auto'}} >
-                  {this.state.epList.map(episode => (
-                    <EpisodeEntry episode={episode} key={episode.LNID} userID={userID} showID={show.id} />
+                  {this.state.recentEpList.map(episode => (
+                    <EpisodeEntry
+                      episode={episode}
+                      key={episode.LNID}
+                      userID={userID}
+                      showID={show.id}
+                      refreshShow={this.fetchUserEps}
+                    />
                   ))}
                 </List>
               }

@@ -17,8 +17,8 @@ CREATE TABLE shows (
   title varchar(255) NOT NULL,
   maker varchar(255) NOT NULL,
   show_image varchar(255),
-  show_description varchar(1500),
-  website varchar(255),
+  show_description varchar(2500),
+  website varchar(550),
   latestRelease varchar(255),
   genre varchar(255) NOT NULL,
   PRIMARY KEY (id)
@@ -27,8 +27,8 @@ CREATE TABLE shows (
 CREATE TABLE episodes (
   id varchar(255) NOT NULL,
   show_id varchar(560),
-  episode_description varchar(1500),
-  episode_url varchar(255),
+  episode_description varchar(2500),
+  episode_url varchar(550),
   episode_length varchar(255),
   PRIMARY KEY (id),
   FOREIGN KEY (show_id) REFERENCES shows (id)

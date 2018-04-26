@@ -22,8 +22,8 @@ const standardDBCall = (query, callback) => {
 const cleanQuotes = (string) => {
   let resingle = /'/gi;
   let redouble = /"/gi;
-  let single = string.replace(resingle,'\'\'');
-  let double = single.replace(redouble, "\"\"");
+  let single = string.replace(resingle,"\'\'");
+  let double = single.replace(redouble, '\"\"');
   return double;
 ;}
 
@@ -159,7 +159,7 @@ module.exports.userEpisodeListen = (userID, episode, showID, callback) => {
   const check4epp = `SELECT id FROM episodes WHERE id = '${episodeID}';`;
 
   const insertEpp = 'INSERT INTO episodes (id, show_id, episode_description, episode_url, episode_length) ' +
-    `VALUES ('${episodeID}', '${showID}', '${cleanQuotes(episode.description)}', '${episode.audio}', '${episode.length}')`;
+    `VALUES ('${episodeID}', '${showID}', '${cleanQuotes(episode.description)}', '${episode.audio}', '${episode.audioLength}')`;
 
   connection.query(check4epp, (err, res) => {
     if (err) {
@@ -192,6 +192,15 @@ module.exports.userEpisodeListen = (userID, episode, showID, callback) => {
       });
     }
   });
+}
+
+module.exports.getUserEpsForShow= (userID, showID, callback) => {
+  console.log(userID, showID, 'params in getuserepsforshow');
+  // find episodes the user has mark listened or commented on
+  const getEps = 'SELECT * FROM episodes_users INNER JOIN episodes ON episodes.id = ' +
+   `episodes_users.episode_id WHERE episodes.show_id = '${showID}' AND episodes_users.user_id = ${userID}`;
+
+  standardDBCall(getEps, callback);
 }
 
 // /////////////////COMMENTS\\\\\\\\\\\\\\\\\\\\\\\\\\

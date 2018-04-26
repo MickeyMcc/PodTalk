@@ -25,6 +25,7 @@ class EpisodeEntry extends React.Component {
     })
       .then((results) => {
         this.setState({ listened: true });
+        this.props.refreshShow();
       })
       .catch((err)=> {
         console.log(err);
