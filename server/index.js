@@ -89,7 +89,6 @@ app.post('/shows', (req, res) => { // gets user and show
 
 app.get('/episodes/user', (req, res) => {
   const { showID, userID } = req.query;
-  console.log('episodes/user', req.query)
   db.getUserEpsForShow(userID, showID, (err, data)=> {
     if (err) {
       res.status(500).send(err);
@@ -101,7 +100,6 @@ app.get('/episodes/user', (req, res) => {
 
 app.get('/episodes/recent', (req, res) => {
   const { showID } = req.query;
-  console.log(showID, 'showId recent eps');
   search.episodesForShow(showID, (err, data) => {
     if (err) {
       res.status(500).send(err);
@@ -112,14 +110,13 @@ app.get('/episodes/recent', (req, res) => {
 });
 
 app.post('/episodes/listen', (req, res) => {
-  console.log(req.body);
   const { userID, episode, showID } = req.body;
   db.userEpisodeListen(userID, episode, showID, (err) => {
     if (err) {
       console.log(err);
       res.status(500).send(err);
     } else  {
-      res.status(200);
+      res.status(200).end();
     }
   }) 
 })

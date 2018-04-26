@@ -27,6 +27,7 @@ class ShowEntry extends React.Component {
     this.comment = this.comment.bind(this);
     this.openShow = this.openShow.bind(this);
     this.fetchUserEps = this.fetchUserEps.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   comment(e) {
@@ -48,7 +49,6 @@ class ShowEntry extends React.Component {
       }
     })
       .then((results) => {
-        console.log(results.data, 'foundEps');
         this.setState({ userEpList: results.data, userLoading: false })
       })
       .catch((err) => {
@@ -87,7 +87,6 @@ class ShowEntry extends React.Component {
     };
 
     return (
-      <div>
         <GridTile
           title={show.title}
           subtitle={<span>by <b>{show.maker}</b></span>}
@@ -98,64 +97,69 @@ class ShowEntry extends React.Component {
           }
         >
           <img src={show.show_image} alt="" />
-        </GridTile>
-        <Dialog
-          title={show.title}
-          modal={false}
-          open={this.state.open}
-          onRequestClose={this.handleClose}
-          autoScrollBodyContent={true}
-        >
-          {show.show_description}
-          <Divider style={{ marginTop: 8 }} />
-          <Tabs>
-            <Tab label="Your Eps">
-              {this.state.userLoading ?
-                <RefreshIndicator
-                  size={40}
-                  style={{ position: 'relative' }}
-                  left={50}
-                  top={20}
-                  status="loading"
-                />
-              :
-                this.state.userEpList.length ? 
-                  <List style={{ maxHeight: 300, overflow: 'auto' }}>
-                    {this.state.userEpList.map(episode => (
-                      <EpisodeEntry episode={episode} key={episode.id} userID={userID} showID={show.id} />
+          <Dialog
+            title={show.title}
+            modal={false}
+            open={this.state.open}
+            onRequestClose={this.handleClose}
+            autoScrollBodyContent={true}
+          >
+            {show.show_description}
+            <Divider style={{ marginTop: 8 }} />
+            <Tabs>
+              <Tab label="Your Eps">
+                {this.state.userLoading ?
+                  <RefreshIndicator
+                    size={40}
+                    style={{ position: 'relative' }}
+                    left={50}
+                    top={20}
+                    status="loading"
+                  />
+                :
+                  this.state.userEpList.length ? 
+                    <List style={{ maxHeight: 300, overflow: 'auto' }}>
+                      {this.state.userEpList.map(episode => (
+                        <EpisodeEntry
+                          episode={episode}
+                          key={episode.id}
+                          userID={userID}
+                          showID={show.id}
+                          fetchUserEps={this.fetchUserEps}
+                        />
+                      ))}
+                    </List>
+                    :
+                    <div> You haven't listened to any episodes of this show yet! </div>
+                }
+              </Tab>
+              <Tab label="Recent Eps">
+                {this.state.recentLoading ?
+                  <RefreshIndicator
+                    size={40}
+                    style={{ position : 'relative'}}
+                    left={50}
+                    top={20}
+                    status="loading"
+                  />
+                :
+                  <List style={{ maxHeight: 300, overflow: 'auto'}} >
+                    {this.state.recentEpList.map(episode => (
+                      <EpisodeEntry
+                        episode={episode}
+                        key={episode.LNID}
+                        userID={userID}
+                        showID={show.id}
+                        fetchUserEps={this.fetchUserEps}
+                      />
                     ))}
                   </List>
-                  :
-                  <div> You haven't listened to any episodes of this show yet! </div>
-              }
-            </Tab>
-            <Tab label="Recent Eps">
-              {this.state.recentLoading ?
-                <RefreshIndicator
-                  size={40}
-                  style={{ position : 'relative'}}
-                  left={50}
-                  top={20}
-                  status="loading"
-                />
-              :
-                <List style={{ maxHeight: 300, overflow: 'auto'}} >
-                  {this.state.recentEpList.map(episode => (
-                    <EpisodeEntry
-                      episode={episode}
-                      key={episode.LNID}
-                      userID={userID}
-                      showID={show.id}
-                      refreshShow={this.fetchUserEps}
-                    />
-                  ))}
-                </List>
-              }
-            </Tab>
-          </Tabs>
-          {/* <EpisodesView show={show} user={this.props.user} /> */}
-        </Dialog>
-      </div>
+                }
+              </Tab>
+            </Tabs>
+            {/* <EpisodesView show={show} user={this.props.user} /> */}
+          </Dialog>
+        </GridTile>
     );
   }
 }

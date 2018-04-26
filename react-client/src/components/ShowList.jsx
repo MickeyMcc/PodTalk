@@ -15,8 +15,8 @@ const ShowList = (props) => {
   return (
     <div>
       <GridList
-        cellHeight={window.innerWidth / cols}
-        cols={cols}
+        cellHeight = { 200 }
+        cols = { cols }
       >
         {props.shows.map((show, index) => (
           <ShowEntry

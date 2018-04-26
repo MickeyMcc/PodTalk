@@ -16,16 +16,14 @@ class EpisodeEntry extends React.Component {
   }
 
   markListened() {
-    this.setState({ listened: true });
-    console.log(this.props);
     axios.post('/episodes/listen', {
       userID: this.props.userID,
       episode: this.props.episode,
       showID: this.props.showID,
     })
       .then((results) => {
-        this.setState({ listened: true });
-        this.props.refreshShow();
+        this.setState({ listened: !this.state.listened });
+        this.props.fetchUserEps();
       })
       .catch((err)=> {
         console.log(err);
@@ -47,7 +45,7 @@ class EpisodeEntry extends React.Component {
           </CardText>
           <CardActions>
             <FlatButton label='Talk About it' primary={true} />
-            <FlatButton onClick={this.markListened} label='Mark Listened' primary={!this.state.listened} default={this.state.listened} />
+            <FlatButton onClick={this.markListened} label={this.state.listened ? 'Unlisten' : 'Mark Listened'} primary={!this.state.listened} default={this.state.listened} />
           </CardActions>
         </Card>
       </ListItem>

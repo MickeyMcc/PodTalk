@@ -8,8 +8,8 @@ class PopularPage extends React.Component {
     super(props);
 
     this.state = {
-      users: {}, // {username: {comments, conections}}
-      shows: {}, // {title: {comments, connections}}
+      users: {},
+      shows: {},
       usersSort: 'connections',
       showsSort: 'connections',
     };

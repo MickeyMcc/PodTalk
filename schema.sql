@@ -27,9 +27,10 @@ CREATE TABLE shows (
 CREATE TABLE episodes (
   id varchar(255) NOT NULL,
   show_id varchar(560),
-  episode_description varchar(2500),
-  episode_url varchar(550),
-  episode_length varchar(255),
+  title varchar(255),
+  description varchar(2500),
+  url varchar(550),
+  audioLength varchar(255),
   PRIMARY KEY (id),
   FOREIGN KEY (show_id) REFERENCES shows (id)
 );

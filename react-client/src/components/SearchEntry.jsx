@@ -12,13 +12,11 @@ const SearchEntry = (props) => {
   }
 
   const addShow = () => {
-    console.log(show, props.userID);
     axios.post('/shows', {
       show,
       userID: props.userID,
     })
       .then(() => {
-        console.log('done@', props, props.refreshUserShows);
         props.refreshUserShows();
       })
       .catch((err) => {
