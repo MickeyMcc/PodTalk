@@ -1,3 +1,5 @@
+/* jshint esversion: 6 */
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const search = require('./itunesHelpers');
@@ -89,13 +91,13 @@ app.post('/shows', (req, res) => { // gets user and show
 
 app.get('/episodes/user', (req, res) => {
   const { showID, userID } = req.query;
-  db.getUserEpsForShow(userID, showID, (err, data)=> {
+  db.getUserEpsForShow(userID, showID, (err, data) => {
     if (err) {
       res.status(500).send(err);
     } else {
       res.status(201).json(data);
     }
-  })
+  });
 });
 
 app.get('/episodes/recent', (req, res) => {
@@ -115,11 +117,11 @@ app.post('/episodes/listen', (req, res) => {
     if (err) {
       console.log(err);
       res.status(500).send(err);
-    } else  {
+    } else {
       res.status(200).end();
     }
-  }) 
-})
+  });
+});
 
 // /////////////////SEARCH\\\\\\\\\\\\\\\\\\\\\\\\\\
 

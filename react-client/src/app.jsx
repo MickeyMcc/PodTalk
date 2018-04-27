@@ -1,3 +1,5 @@
+/* jshint esversion: 6 */
+
 import React from 'react';
 import axios from 'axios';
 import { Tabs, Tab } from 'material-ui/Tabs';
@@ -13,7 +15,6 @@ class App extends React.Component {
     this.state = {
       user: null,
       shows: [],
-      userComments: {},
       loggedIn: false,
       searchOpen: false,
     };
@@ -35,7 +36,6 @@ class App extends React.Component {
 
   getUsersComments() {
     const context = this;
-    console.log(context.state.user.id);
     axios.get('/comments', {
       params: {
         userID: context.state.user.id,
@@ -52,7 +52,6 @@ class App extends React.Component {
   // /////////////////USERS\\\\\\\\\\\\\\\\\\\\\\\\\\
 
   setUser(userObj) {
-    console.log(userObj);
     this.setState({ user: userObj, loggedIn: true });
     this.refreshShowList();
   }
@@ -130,7 +129,6 @@ class App extends React.Component {
   }
 
   search(query) {
-    console.log('search', query);
     const context = this;
     axios.get('/search', {
       params: {
@@ -138,7 +136,6 @@ class App extends React.Component {
       },
     })
       .then((results) => {
-        console.log(results);
         if (results.statusCode === 404) {
           context.setState({
             loggedIn: false,
@@ -160,7 +157,16 @@ class App extends React.Component {
     if (this.state.user === null) {
       return (
         <div>
-          <img style={{ width: '96%', maxWidth: '400px', marginLeft: '2%', marginRight: '2%' }} src="./images/logo.png" alt="" />
+          <img
+            style={{
+              width: '96%',
+              maxWidth: '400px',
+              marginLeft: '2%',
+              marginRight: '2%',
+            }}
+            src="./images/logo.png"
+            alt=""
+          />
           <Tabs>
             <Tab label="login">
               <Login setUser={this.setUser} />
@@ -208,7 +214,12 @@ class App extends React.Component {
           label="Search"
           secondary
         />
-        <SearchDrawer open={this.state.searchOpen} close={this.openSearch} userID={this.state.user.id} refreshUserShows={this.refreshShowList} />
+        <SearchDrawer
+          open={this.state.searchOpen}
+          close={this.openSearch}
+          userID={this.state.user.id}
+          refreshUserShows={this.refreshShowList}
+        />
         {navbar}
       </div>
     );

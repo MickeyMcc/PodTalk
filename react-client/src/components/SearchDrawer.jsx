@@ -1,7 +1,9 @@
+/* jshint esversion: 6 */
+
 import React from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import Drawer from 'material-ui/Drawer';
-
 import SearchList from './SearchList';
 import SearchForm from './SearchForm';
 
@@ -21,7 +23,6 @@ class SearchDrawer extends React.Component {
   }
 
   submitSearch() {
-    console.log(this.state.query);
     axios.get('/search', {
       params: {
         terms: this.state.query,
@@ -43,11 +44,26 @@ class SearchDrawer extends React.Component {
         open={this.props.open}
         onRequestChange={this.props.close}
       >
-        <SearchForm query={this.query} enterSearch={this.enterSearch} submitSearch={this.submitSearch} />
-        <SearchList searchResults={this.state.searchResults} userID={this.props.userID} refreshUserShows={this.props.refreshUserShows} />
+        <SearchForm
+          query={this.query}
+          enterSearch={this.enterSearch}
+          submitSearch={this.submitSearch}
+        />
+        <SearchList
+          searchResults={this.state.searchResults}
+          userID={this.props.userID}
+          refreshUserShows={this.props.refreshUserShows}
+        />
       </Drawer>
     );
   }
 }
+
+SearchDrawer.propTypes = {
+  open: PropTypes.bool.isRequired,
+  close: PropTypes.func.isRequired,
+  userID: PropTypes.number.isRequired,
+  refreshUserShows: PropTypes.func.isRequired,
+};
 
 export default SearchDrawer;

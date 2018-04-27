@@ -1,4 +1,7 @@
+/* jshint esversion: 6 */
+
 import React from 'react';
+import PropTypes from 'prop-types';
 import { ListItem } from 'material-ui/List';
 import expandMore from 'material-ui/svg-icons/navigation/expand-more';
 import Avatar from 'material-ui/Avatar';
@@ -39,6 +42,16 @@ const SearchEntry = (props) => {
       ]}
     />
   );
+};
+
+SearchEntry.propTypes = {
+  show: PropTypes.shape({
+    LNID: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+  }).isRequired,
+  userID: PropTypes.number.isRequired,
+  refreshUserShows: PropTypes.func.isRequired,
 };
 
 export default SearchEntry;

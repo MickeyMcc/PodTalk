@@ -1,5 +1,8 @@
+/* jshint esversion: 6 */
+
 import React from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
@@ -18,7 +21,7 @@ class Login extends React.Component {
   }
 
   handleKeyPress(event) {
-    if (event.key == 'Enter' && !(!this.state.username || !this.state.password)) {
+    if (event.key === 'Enter' && !(!this.state.username || !this.state.password)) {
       this.handleSubmit();
     }
   }
@@ -64,7 +67,7 @@ class Login extends React.Component {
           style={{ marginLeft: '10px' }}
           floatingLabelText="Username"
           value={this.state.username}
-          onChange={(event) => this.fieldEntry(event, null, 'username')}
+          onChange={event => this.fieldEntry(event, null, 'username')}
           errorText={this.state.usernameError}
           errorStyle={errorStyle}
         />
@@ -72,7 +75,7 @@ class Login extends React.Component {
           style={{ marginLeft: '10px' }}
           floatingLabelText="Password"
           value={this.state.password}
-          onChange={(event) => this.fieldEntry(event, null, 'password')}
+          onChange={event => this.fieldEntry(event, null, 'password')}
           errorText={this.state.passwordError}
           errorStyle={errorStyle}
           onKeyUp={this.handleKeyPress}
@@ -87,5 +90,9 @@ class Login extends React.Component {
     );
   }
 }
+
+Login.propTypes = {
+  setUser: PropTypes.func.isRequired,
+};
 
 export default Login;

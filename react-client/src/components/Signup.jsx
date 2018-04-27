@@ -1,5 +1,8 @@
+/* jshint esversion: 6 */
+
 import React from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
@@ -22,14 +25,16 @@ class Signup extends React.Component {
   }
 
   handleKeyPress(event) {
-    if (event.key == 'Enter' && !(this.state.mismatch || this.state.shortUser || !this.state.username || !this.state.password || !this.state.password2)) {
+    if (event.key === 'Enter' && !(this.state.mismatch || this.state.shortUser || !this.state.username || !this.state.password || !this.state.password2)) {
       this.handleSubmit();
     }
   }
 
   fieldEntry(event, key, target) {
-    this.setState({ [target]: event.target.value })
-    this[`${target}Check`] ? this[`${target}Check`](event.target.value): null;
+    this.setState({ [target]: event.target.value });
+    if (this[`${target}Check`]) {
+      this[`${target}Check`](event.target.value);
+    }
   }
 
   password2Check(newValue) {
@@ -81,8 +86,17 @@ class Signup extends React.Component {
             style={{ marginLeft: '10px' }}
             floatingLabelText="Username"
             value={this.state.username}
-            onChange={(event) => this.fieldEntry(event, null, 'username')}
-            errorText={this.state.shortUser ? 'Username must be at least 4 chars' : (this.state.usernameInUse ? 'Username already in use!' : '')}
+            onChange={event => this.fieldEntry(event, null, 'username')}
+            errorText={(function writeError() {
+              if (this.state.shortUser) {
+                return 'Username must be at least 4 chars';
+              }
+              if (this.state.usernameInUse) {
+                return 'Username already in use!';
+              }
+              return '';
+            }())
+            }
             errorStyle={errorStyle}
             onKeyPress={this.handleKeyPress}
           />
@@ -91,7 +105,7 @@ class Signup extends React.Component {
             floatingLabelText="Password"
             type="password"
             value={this.state.password}
-            onChange={(event) => this.fieldEntry(event, null, 'password')}
+            onChange={event => this.fieldEntry(event, null, 'password')}
             onKeyPress={this.handleKeyPress}
           />
           <TextField
@@ -99,7 +113,7 @@ class Signup extends React.Component {
             floatingLabelText="Password Again"
             type="password"
             value={this.state.password2}
-            onChange={(event) => this.fieldEntry(event, null, 'password2')}
+            onChange={event => this.fieldEntry(event, null, 'password2')}
             errorText={this.state.mismatch ? 'Passwords do not match' : ''}
             errorStyle={errorStyle}
             onKeyPress={this.handleKeyPress}
@@ -108,12 +122,17 @@ class Signup extends React.Component {
             style={{ marginLeft: '10px' }}
             onClick={this.handleSubmit}
             label="Create"
-            disabled={this.state.mismatch || this.state.shortUser || !this.state.username || !this.state.password || !this.state.password2}
+            disabled={this.state.mismatch || this.state.shortUser || !this.state.username
+              || !this.state.password || !this.state.password2}
           />
         </div>
       </div>
     );
   }
 }
+
+Signup.propTypes = {
+  setUser: PropTypes.func.isRequired,
+};
 
 export default Signup;

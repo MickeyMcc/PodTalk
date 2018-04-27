@@ -1,5 +1,8 @@
+/* jshint esversion: 6 */
+
 import React from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import { GridTile } from 'material-ui/GridList';
 import CommentMode from 'material-ui/svg-icons/editor/mode-comment';
 import IconButton from 'material-ui/IconButton';
@@ -7,9 +10,8 @@ import Dialog from 'material-ui/Dialog';
 import { white } from 'material-ui/styles/colors';
 import RefreshIndicator from 'material-ui/RefreshIndicator';
 import List from 'material-ui/List';
-import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
-import {Tabs, Tab } from 'material-ui/Tabs';
+import { Tabs, Tab } from 'material-ui/Tabs';
 import EpisodeEntry from './EpisodeEntry';
 
 class ShowEntry extends React.Component {
@@ -21,7 +23,7 @@ class ShowEntry extends React.Component {
       recentEpList: [],
       userEpList: [],
       recentLoading: true,
-      yourLoading: true,
+      userLoading: true,
     };
     this.submit = this.submit.bind(this);
     this.comment = this.comment.bind(this);
@@ -46,10 +48,10 @@ class ShowEntry extends React.Component {
       params: {
         userID: this.props.userID,
         showID: this.props.show.id,
-      }
+      },
     })
       .then((results) => {
-        this.setState({ userEpList: results.data, userLoading: false })
+        this.setState({ userEpList: results.data, userLoading: false });
       })
       .catch((err) => {
         console.log(err);
@@ -87,81 +89,90 @@ class ShowEntry extends React.Component {
     };
 
     return (
-        <GridTile
+      <GridTile
+        title={show.title}
+        subtitle={<span>by <b>{show.maker}</b></span>}
+        actionIcon={
+          <IconButton onClick={this.openShow}>
+            <CommentMode color={white} style={iconStyle} />
+          </IconButton>
+        }
+      >
+        <img src={show.show_image} alt="" />
+        <Dialog
           title={show.title}
-          subtitle={<span>by <b>{show.maker}</b></span>}
-          actionIcon={
-            <IconButton onClick={this.openShow}>
-              <CommentMode color={white} style={iconStyle} />
-            </IconButton>
-          }
+          modal={false}
+          open={this.state.open}
+          onRequestClose={this.handleClose}
+          autoScrollBodyContent
         >
-          <img src={show.show_image} alt="" />
-          <Dialog
-            title={show.title}
-            modal={false}
-            open={this.state.open}
-            onRequestClose={this.handleClose}
-            autoScrollBodyContent={true}
-          >
-            {show.show_description}
-            <Divider style={{ marginTop: 8 }} />
-            <Tabs>
-              <Tab label="Your Eps">
-                {this.state.userLoading ?
-                  <RefreshIndicator
-                    size={40}
-                    style={{ position: 'relative' }}
-                    left={50}
-                    top={20}
-                    status="loading"
-                  />
-                :
-                  this.state.userEpList.length ? 
-                    <List style={{ maxHeight: 300, overflow: 'auto' }}>
-                      {this.state.userEpList.map(episode => (
-                        <EpisodeEntry
-                          episode={episode}
-                          key={episode.id}
-                          userID={userID}
-                          showID={show.id}
-                          fetchUserEps={this.fetchUserEps}
-                        />
-                      ))}
-                    </List>
-                    :
-                    <div> You haven't listened to any episodes of this show yet! </div>
-                }
-              </Tab>
-              <Tab label="Recent Eps">
-                {this.state.recentLoading ?
-                  <RefreshIndicator
-                    size={40}
-                    style={{ position : 'relative'}}
-                    left={50}
-                    top={20}
-                    status="loading"
-                  />
-                :
-                  <List style={{ maxHeight: 300, overflow: 'auto'}} >
-                    {this.state.recentEpList.map(episode => (
+          {show.show_description}
+          <Divider style={{ marginTop: 8 }} />
+          <Tabs>
+            <Tab label="Your Eps">
+              {this.state.userLoading ?
+                <RefreshIndicator
+                  size={40}
+                  style={{ position: 'relative' }}
+                  left={50}
+                  top={20}
+                  status="loading"
+                />
+              :
+                this.state.userEpList.length ?
+                  <List style={{ maxHeight: 300, overflow: 'auto' }}>
+                    {this.state.userEpList.map(episode => (
                       <EpisodeEntry
                         episode={episode}
-                        key={episode.LNID}
+                        key={episode.id}
                         userID={userID}
                         showID={show.id}
                         fetchUserEps={this.fetchUserEps}
                       />
                     ))}
                   </List>
-                }
-              </Tab>
-            </Tabs>
-            {/* <EpisodesView show={show} user={this.props.user} /> */}
-          </Dialog>
-        </GridTile>
+                  :
+                  <div> You have not listened to any episodes of this show yet! </div>
+              }
+            </Tab>
+            <Tab label="Recent Eps">
+              {this.state.recentLoading ?
+                <RefreshIndicator
+                  size={40}
+                  style={{ position: 'relative' }}
+                  left={50}
+                  top={20}
+                  status="loading"
+                />
+              :
+                <List style={{ maxHeight: 300, overflow: 'auto' }} >
+                  {this.state.recentEpList.map(episode => (
+                    <EpisodeEntry
+                      episode={episode}
+                      key={episode.LNID}
+                      userID={userID}
+                      showID={show.id}
+                      fetchUserEps={this.fetchUserEps}
+                    />
+                  ))}
+                </List>
+              }
+            </Tab>
+          </Tabs>
+        </Dialog>
+      </GridTile>
     );
   }
 }
+
+ShowEntry.propTypes = {
+  saveComment: PropTypes.func.isRequired,
+  show: PropTypes.shape({
+    title: PropTypes.string,
+    description: PropTypes.string,
+    id: PropTypes.string,
+  }).isRequired,
+  userID: PropTypes.number.isRequired,
+};
 
 export default ShowEntry;

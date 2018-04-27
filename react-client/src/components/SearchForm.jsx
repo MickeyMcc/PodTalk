@@ -1,4 +1,7 @@
+/* jshint esversion: 6 */
+
 import React from 'react';
+import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
@@ -27,5 +30,10 @@ const SearchForm = props => (
     />
   </Paper>
 );
+
+SearchForm.propTypes = {
+  enterSearch: PropTypes.func.isRequired,
+  submitSearch: PropTypes.func.isRequired,
+};
 
 export default SearchForm;

@@ -1,3 +1,5 @@
+/* jshint esversion: 6 */
+
 const mysql = require('mysql');
 const bcrypt = require('bcrypt-nodejs');
 
@@ -20,12 +22,12 @@ const standardDBCall = (query, callback) => {
 };
 
 const cleanQuotes = (string) => {
-  let resingle = /'/gi;
-  let redouble = /"/gi;
-  let single = string.replace(resingle,"\'\'");
-  let double = single.replace(redouble, '\"\"');
+  const resingle = /'/gi;
+  const redouble = /"/gi;
+  const single = string.replace(resingle, '\'\'');
+  const double = single.replace(redouble, '""');
   return double;
-;}
+};
 
 // /////////////////USERS\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -148,10 +150,10 @@ module.exports.addShowToUser = (user, show, callback) => {
 
 module.exports.userEpisodeListen = (userID, episode, showID, callback) => {
   const episodeID = episode.LNID;
-  let markListened = "UPDATE episodes_users SET listened=b'1' WHERE user_id = " + 
+  const markListened = "UPDATE episodes_users SET listened=b'1' WHERE user_id = " +
     `${userID} AND episode_id = '${episodeID}';`;
 
-  let makeConnEntry = "INSERT INTO episodes_users (user_id, episode_id, listened) VALUES " +
+  const makeConnEntry = 'INSERT INTO episodes_users (user_id, episode_id, listened) VALUES ' +
     `('${userID}', '${episodeID}', b'1');`;
 
   const check4conn = `SELECT id from episodes_users WHERE user_id = ${userID} AND episode_id = '${episodeID}';`;
@@ -178,29 +180,27 @@ module.exports.userEpisodeListen = (userID, episode, showID, callback) => {
       connection.query(check4conn, (err, res) => { // see if there is already a relationship
         if (err) {
           callback(err);
-        } else {
-          if (res.length) { // user already owns episode
-            connection.query(markListened, (err, res) => {
-              callback(err, res);
-            });
-          } else { // user does not own episode, make entry
-            connection.query(makeConnEntry, (err, res) => {
-              callback(err, res);
-            })
-          }
+        } else if (res.length) { // user already owns episode
+          connection.query(markListened, (err, res) => {
+            callback(err, res);
+          });
+        } else { // user does not own episode, make entry
+          connection.query(makeConnEntry, (err, res) => {
+            callback(err, res);
+          });
         }
       });
     }
   });
-}
+};
 
-module.exports.getUserEpsForShow= (userID, showID, callback) => {
+module.exports.getUserEpsForShow = (userID, showID, callback) => {
   // find episodes the user has mark listened or commented on
   const getEps = 'SELECT * FROM episodes_users INNER JOIN episodes ON episodes.id = ' +
    `episodes_users.episode_id WHERE episodes.show_id = '${showID}' AND episodes_users.user_id = ${userID}`;
 
   standardDBCall(getEps, callback);
-}
+};
 
 // /////////////////COMMENTS\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -230,85 +230,85 @@ module.exports.getCommentsAll = (episodeID, callback) => {
 };
 
 // /////////////////POPULARITY\\\\\\\\\\\\\\\\\\\\\\\\\\
-function synthesizeUsers(comments, shows) {
-  const userActivity = {};
-  for (const show of shows) {
-    if (!userActivity[show.username]) {
-      userActivity[show.username] = { connections: 0, comments: 0 };
-    }
-    userActivity[show.username].connections++;
-  }
-  for (const comment of comments) {
-    if (!userActivity[comment.username]) {
-      userActivity[comment.username] = { connections: 0, comments: 0 };
-    }
-    userActivity[comment.username].comments++;
-  }
-  return userActivity;
-}
+// function synthesizeUsers(comments, shows) {
+//   const userActivity = {};
+//   for (const show of shows) {
+//     if (!userActivity[show.username]) {
+//       userActivity[show.username] = { connections: 0, comments: 0 };
+//     }
+//     userActivity[show.username].connections++;
+//   }
+//   for (const comment of comments) {
+//     if (!userActivity[comment.username]) {
+//       userActivity[comment.username] = { connections: 0, comments: 0 };
+//     }
+//     userActivity[comment.username].comments++;
+//   }
+//   return userActivity;
+// }
 
-function synthesizeShows(comments, connections) {
-  const showActivity = {};
-  for (const connection of connections) {
-    if (!showActivity[connection.title]) {
-      showActivity[connection.title] = { connections: 0, comments: 0 };
-    }
-    showActivity[connection.title].connections++;
-  }
-  for (const comment of comments) {
-    if (!showActivity[comment.title]) {
-      showActivity[comment.title] = { connections: 0, comments: 0 };
-    }
-    showActivity[comment.title].comments++;
-  }
-  return showActivity;
-}
+// function synthesizeShows(comments, connections) {
+//   const showActivity = {};
+//   for (const connection of connections) {
+//     if (!showActivity[connection.title]) {
+//       showActivity[connection.title] = { connections: 0, comments: 0 };
+//     }
+//     showActivity[connection.title].connections++;
+//   }
+//   for (const comment of comments) {
+//     if (!showActivity[comment.title]) {
+//       showActivity[comment.title] = { connections: 0, comments: 0 };
+//     }
+//     showActivity[comment.title].comments++;
+//   }
+//   return showActivity;
+// }
 
-module.exports.getUserActivity = (callback) => {
-  const getComments = 'SELECT users.username, comments.id AS "comments" FROM users INNER JOIN comments ON users.id = comments.user_id;';
+// module.exports.getUserActivity = (callback) => {
+//   const getComments = 'SELECT users.username, comments.id AS "comments" FROM users INNER JOIN comments ON users.id = comments.user_id;';
 
-  connection.query(getComments, (err, data) => {
-    if (err) {
-      callback(err);
-    } else {
-      const comments = data;
-      const showConnections = 'SELECT users.username, shows_users.id AS "shows" FROM users INNER JOIN shows_users ON users.id = shows_users.user_id;';
+//   connection.query(getComments, (err, data) => {
+//     if (err) {
+//       callback(err);
+//     } else {
+//       const comments = data;
+//       const showConnections = 'SELECT users.username, shows_users.id AS "shows" FROM users INNER JOIN shows_users ON users.id = shows_users.user_id;';
 
-      connection.query(showConnections, (err2, data) => {
-        if (err2) {
-          console.log('err');
-          callback(err2);
-        } else {
-          const shows = data;
-          const processedData = synthesizeUsers(comments, shows);
-          callback(null, processedData);
-        }
-      });
-    }
-  });
-};
+//       connection.query(showConnections, (err2, data) => {
+//         if (err2) {
+//           console.log('err');
+//           callback(err2);
+//         } else {
+//           const shows = data;
+//           const processedData = synthesizeUsers(comments, shows);
+//           callback(null, processedData);
+//         }
+//       });
+//     }
+//   });
+// };
 
-module.exports.getShowActivity = (callback) => {
-  const getComments = 'SELECT shows.title, comments.id AS "comments" FROM shows LEFT OUTER JOIN comments ON shows.id = comments.show_id;';
+// module.exports.getShowActivity = (callback) => {
+//   const getComments = 'SELECT shows.title, comments.id AS "comments" FROM shows LEFT OUTER JOIN comments ON shows.id = comments.show_id;';
 
-  connection.query(getComments, (err, data) => {
-    if (err) {
-      callback(err);
-    } else {
-      const comments = data;
+//   connection.query(getComments, (err, data) => {
+//     if (err) {
+//       callback(err);
+//     } else {
+//       const comments = data;
 
-      const showConnections = 'SELECT shows.title, shows.id AS "shows" FROM shows LEFT OUTER JOIN shows_users ON shows.id = shows_users.show_id;';
+//       const showConnections = 'SELECT shows.title, shows.id AS "shows" FROM shows LEFT OUTER JOIN shows_users ON shows.id = shows_users.show_id;';
 
-      connection.query(showConnections, (err, data) => {
-        if (err) {
-          callback(err);
-        } else {
-          const connections = data;
-          const processedData = synthesizeShows(comments, connections);
-          callback(null, processedData);
-        }
-      });
-    }
-  });
-};
+//       connection.query(showConnections, (err, data) => {
+//         if (err) {
+//           callback(err);
+//         } else {
+//           const connections = data;
+//           const processedData = synthesizeShows(comments, connections);
+//           callback(null, processedData);
+//         }
+//       });
+//     }
+//   });
+// };
 
