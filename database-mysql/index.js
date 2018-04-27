@@ -160,8 +160,8 @@ module.exports.userEpisodeListen = (userID, episode, showID, callback) => {
 
   const check4epp = `SELECT id FROM episodes WHERE id = '${episodeID}';`;
 
-  const insertEpp = 'INSERT INTO episodes (id, show_id, title, description, url, audioLength) ' +
-    `VALUES ('${episodeID}', '${showID}', '${cleanQuotes(episode.title)}', '${cleanQuotes(episode.description)}', '${episode.audio}', '${episode.audioLength}')`;
+  const insertEpp = 'INSERT INTO episodes (id, show_id, title, description, url, audioLength, pubDate) ' +
+    `VALUES ('${episodeID}', '${showID}', '${cleanQuotes(episode.title)}', '${cleanQuotes(episode.description)}', '${episode.audio}', '${episode.audioLength}', ${episode.pubDate})`;
 
   connection.query(check4epp, (err, res) => {
     if (err) {
@@ -197,7 +197,8 @@ module.exports.userEpisodeListen = (userID, episode, showID, callback) => {
 module.exports.getUserEpsForShow = (userID, showID, callback) => {
   // find episodes the user has mark listened or commented on
   const getEps = 'SELECT * FROM episodes_users INNER JOIN episodes ON episodes.id = ' +
-   `episodes_users.episode_id WHERE episodes.show_id = '${showID}' AND episodes_users.user_id = ${userID}`;
+   `episodes_users.episode_id WHERE episodes.show_id = '${showID}' AND episodes_users.user_id = ${userID} ` +
+   'ORDER BY episodes.pubDate DESC;';
 
   standardDBCall(getEps, callback);
 };

@@ -28,7 +28,7 @@ const ShowList = (props) => {
 
 ShowList.propTypes = {
   shows: PropTypes.arrayOf(PropTypes.object).isRequired,
-  userID: PropTypes.string.isRequired,
+  userID: PropTypes.number.isRequired,
 };
 
 export default ShowList;

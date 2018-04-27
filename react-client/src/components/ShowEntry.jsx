@@ -18,30 +18,29 @@ class ShowEntry extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      comment: '',
       open: false,
       recentEpList: [],
       userEpList: [],
       recentLoading: true,
       userLoading: true,
     };
-    this.submit = this.submit.bind(this);
-    this.comment = this.comment.bind(this);
+    // this.submit = this.submit.bind(this);
+    // this.comment = this.comment.bind(this);
     this.openShow = this.openShow.bind(this);
     this.fetchUserEps = this.fetchUserEps.bind(this);
     this.handleClose = this.handleClose.bind(this);
   }
 
-  comment(e) {
-    this.setState({ comment: e.target.value });
-  }
+  // comment(e) {
+  //   this.setState({ comment: e.target.value });
+  // }
 
-  submit() {
-    if (this.state.comment !== '') {
-      this.props.saveComment(this.state.comment, this.props.show.id);
-      this.setState({ comment: '' });
-    }
-  }
+  // submit() {
+  //   if (this.state.comment !== '') {
+  //     this.props.saveComment(this.state.comment, this.props.show.id);
+  //     this.setState({ comment: '' });
+  //   }
+  // }
 
   fetchUserEps() {
     axios.get('/episodes/user', {
@@ -166,7 +165,6 @@ class ShowEntry extends React.Component {
 }
 
 ShowEntry.propTypes = {
-  saveComment: PropTypes.func.isRequired,
   show: PropTypes.shape({
     title: PropTypes.string,
     description: PropTypes.string,

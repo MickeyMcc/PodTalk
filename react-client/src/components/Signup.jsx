@@ -73,6 +73,16 @@ class Signup extends React.Component {
       });
   }
 
+  writeError() {
+    if (this.state.shortUser) {
+      return 'Username must be at least 4 chars';
+    }
+    if (this.state.usernameInUse) {
+      return 'Username already in use!';
+    }
+    return '';
+  }
+
   render() {
     const errorStyle = {
       position: 'absolute',
@@ -87,16 +97,7 @@ class Signup extends React.Component {
             floatingLabelText="Username"
             value={this.state.username}
             onChange={event => this.fieldEntry(event, null, 'username')}
-            errorText={(function writeError() {
-              if (this.state.shortUser) {
-                return 'Username must be at least 4 chars';
-              }
-              if (this.state.usernameInUse) {
-                return 'Username already in use!';
-              }
-              return '';
-            }())
-            }
+            errorText={this.writeError()}
             errorStyle={errorStyle}
             onKeyPress={this.handleKeyPress}
           />

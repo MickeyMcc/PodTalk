@@ -29,12 +29,14 @@ const SearchEntry = (props) => {
 
   return (
     <ListItem
+      key={show.LNID}
       primaryText={show.title}
       leftAvatar={<Avatar src={show.image} />}
       rightIcon={<expandMore />}
       primaryTogglesNestedList
       nestedItems={[
         <ListItem
+          key={show.LNID}
           primaryText={<p> {show.description} </p>}
           secondaryText={show.maker}
           rightIcon={<ContentAdd color="#00675b" onClick={addShow} />}

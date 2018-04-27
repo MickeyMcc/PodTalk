@@ -29,7 +29,6 @@ const SearchList = props => (
           <SearchEntry
             show={result}
             key={result.LNID}
-            addShow={props.addShow}
             userID={props.userID}
             refreshUserShows={props.refreshUserShows}
           />
@@ -43,7 +42,6 @@ const SearchList = props => (
 
 SearchList.propTypes = {
   searchResults: PropTypes.arrayOf(PropTypes.object).isRequired,
-  addShow: PropTypes.func.isRequired,
   userID: PropTypes.number.isRequired,
   refreshUserShows: PropTypes.func.isRequired,
 };

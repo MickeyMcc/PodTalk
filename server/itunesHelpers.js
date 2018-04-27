@@ -63,6 +63,7 @@ module.exports.parseEpisodes = (results, showID) => (
       LNID: podcast.id,
       showID,
       audioLength: podcast.audio_length,
+      pubDate: podcast.pub_date_ms,
     });
     return epList;
   }, [])

@@ -31,6 +31,7 @@ CREATE TABLE episodes (
   description varchar(2500),
   url varchar(550),
   audioLength varchar(255),
+  pubDate bigint,
   PRIMARY KEY (id),
   FOREIGN KEY (show_id) REFERENCES shows (id)
 );
@@ -52,6 +53,7 @@ CREATE TABLE shows_users (
   id int NOT NULL AUTO_INCREMENT,
   user_id int NOT NULL,
   show_id varchar(255) NOT NULL,
+  addDate datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   FOREIGN KEY (user_id) REFERENCES users (id),
   FOREIGN KEY (show_id) REFERENCES shows (id)
@@ -63,6 +65,7 @@ CREATE TABLE episodes_users (
   episode_id varchar(255) NOT NULL,
   listened bit(1) DEFAULT b'0',
   commented bit(1) DEFAULT b'0',
+  addDate datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   FOREIGN KEY (user_id) REFERENCES users (id),
   FOREIGN KEY (episode_id) REFERENCES episodes (id)
