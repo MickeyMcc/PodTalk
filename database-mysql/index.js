@@ -1,5 +1,3 @@
-/* jshint esversion: 6 */
-
 const mysql = require('mysql');
 const bcrypt = require('bcrypt-nodejs');
 
@@ -167,26 +165,26 @@ module.exports.userEpisodeListen = (userID, episode, showID, callback) => {
     if (err) {
       callback(err);
     } else if (!res.length) { // episode is not yet in database
-      connection.query(insertEpp, (err, res) => { // add epp
-        if (err) {
-          callback(err);
+      connection.query(insertEpp, (err1) => { // add epp
+        if (err1) {
+          callback(err1);
         } else {
-          connection.query(makeConnEntry, (err, res) => { // add user
-            callback(err, res);
+          connection.query(makeConnEntry, (err2, data) => { // add user
+            callback(err2, data);
           });
         }
       });
     } else { // episode in database
-      connection.query(check4conn, (err, res) => { // see if there is already a relationship
-        if (err) {
-          callback(err);
+      connection.query(check4conn, (err1) => { // see if there is already a relationship
+        if (err1) {
+          callback(err1);
         } else if (res.length) { // user already owns episode
-          connection.query(markListened, (err, res) => {
-            callback(err, res);
+          connection.query(markListened, (err2, data1) => {
+            callback(err2, data1);
           });
         } else { // user does not own episode, make entry
-          connection.query(makeConnEntry, (err, res) => {
-            callback(err, res);
+          connection.query(makeConnEntry, (err3, data2) => {
+            callback(err3, data2);
           });
         }
       });

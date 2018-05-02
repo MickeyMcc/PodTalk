@@ -1,9 +1,8 @@
-/* jshint esversion: 6 */
-
 import React from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import Drawer from 'material-ui/Drawer';
+import RefreshIndicator from 'material-ui/RefreshIndicator';
 import SearchList from './SearchList';
 import SearchForm from './SearchForm';
 
@@ -13,6 +12,7 @@ class SearchDrawer extends React.Component {
     this.state = {
       query: 'hey',
       searchResults: [],
+      searchLoading: false,
     };
     this.enterSearch = this.enterSearch.bind(this);
     this.submitSearch = this.submitSearch.bind(this);
@@ -23,13 +23,14 @@ class SearchDrawer extends React.Component {
   }
 
   submitSearch() {
+    this.setState({ searchLoading: true })
     axios.get('/search', {
       params: {
         terms: this.state.query,
       },
     })
       .then((results) => {
-        this.setState({ searchResults: results.data });
+        this.setState({ searchResults: results.data, searchLoading: false });
       })
       .catch((err) => {
         console.log(err);
@@ -49,11 +50,21 @@ class SearchDrawer extends React.Component {
           enterSearch={this.enterSearch}
           submitSearch={this.submitSearch}
         />
-        <SearchList
-          searchResults={this.state.searchResults}
-          userID={this.props.userID}
-          refreshUserShows={this.props.refreshUserShows}
-        />
+        {this.state.searchLoading ?
+          <RefreshIndicator
+            size={60}
+            style={{ position: 'relative' }}
+            left={50}
+            top={20}
+            status="loading"
+          />
+        :
+          <SearchList
+            searchResults={this.state.searchResults}
+            userID={this.props.userID}
+            refreshUserShows={this.props.refreshUserShows}
+          />
+        }
       </Drawer>
     );
   }

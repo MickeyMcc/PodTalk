@@ -1,5 +1,3 @@
-/* jshint esversion: 6 */
-
 import React from 'react';
 import axios from 'axios';
 import { Tabs, Tab } from 'material-ui/Tabs';

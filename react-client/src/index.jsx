@@ -1,5 +1,3 @@
-/* jshint esversion: 6 */
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -20,11 +18,11 @@ const getTheme = () => {
     },
   };
   return getMuiTheme(baseTheme, overwrites);
-}
+};
 
 ReactDOM.render(
   <MuiThemeProvider muiTheme={getTheme()}>
     <App />
   </MuiThemeProvider>,
-  document.getElementById('app')
+  document.getElementById('app'),
 );

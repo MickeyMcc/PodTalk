@@ -1,5 +1,3 @@
-/* jshint esversion: 6 */
-
 const axios = require('axios');
 const config = require('./config');
 
