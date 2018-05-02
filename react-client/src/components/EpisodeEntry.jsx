@@ -9,7 +9,7 @@ class EpisodeEntry extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      listened: this.props.isOwned,
+      listened: this.props.episode.listened,
     };
     this.toggleListened = this.toggleListened.bind(this);
   }
@@ -28,7 +28,6 @@ class EpisodeEntry extends React.Component {
         console.log(err);
       });
   }
-
 
   render() {
     return (
@@ -52,19 +51,15 @@ class EpisodeEntry extends React.Component {
   }
 }
 
-EpisodeEntry.defaultProps = {
-  isOwned: false,
-};
-
 EpisodeEntry.propTypes = {
   episode: PropTypes.shape({
     title: PropTypes.string,
     description: PropTypes.string,
+    listened: PropTypes.number, // actually bool
   }).isRequired,
   userID: PropTypes.number.isRequired,
   showID: PropTypes.string.isRequired,
   fetchUserEps: PropTypes.func.isRequired,
-  isOwned: PropTypes.bool,
 };
 
 export default EpisodeEntry;

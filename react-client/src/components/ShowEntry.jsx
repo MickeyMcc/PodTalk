@@ -59,6 +59,7 @@ class ShowEntry extends React.Component {
   fetchRecentEps() {
     axios.get('/episodes/recent', {
       params: {
+        userID: this.props.userID,
         showID: this.props.show.id,
       },
     })
@@ -126,7 +127,6 @@ class ShowEntry extends React.Component {
                         userID={userID}
                         showID={show.id}
                         fetchUserEps={this.fetchUserEps}
-                        isOwned
                       />
                     ))}
                   </List>
@@ -148,7 +148,7 @@ class ShowEntry extends React.Component {
                   {this.state.recentEpList.map(episode => (
                     <EpisodeEntry
                       episode={episode}
-                      key={episode.LNID}
+                      key={episode.id}
                       userID={userID}
                       showID={show.id}
                       fetchUserEps={this.fetchUserEps}

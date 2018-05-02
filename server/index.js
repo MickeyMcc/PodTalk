@@ -99,12 +99,18 @@ app.get('/episodes/user', (req, res) => {
 });
 
 app.get('/episodes/recent', (req, res) => {
-  const { showID } = req.query;
-  search.episodesForShow(showID, (err, data) => {
+  const { showID, userID } = req.query;
+  search.episodesForShow(showID, (err, rawEps) => {
     if (err) {
       res.status(500).send(err);
     } else {
-      res.status(201).json(search.parseEpisodes(data));
+      db.markOwnership(userID, showID, search.parseEpisodes(rawEps), (err2, eps) => {
+        if (err) {
+          res.status(500).send(err2);
+        } else {
+          res.status(201).json(eps);
+        }
+      });
     }
   });
 });

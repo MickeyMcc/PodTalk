@@ -26,7 +26,7 @@ const SearchList = props => (
         {props.searchResults.map(result => (
           <SearchEntry
             show={result}
-            key={result.LNID}
+            key={result.id}
             userID={props.userID}
             refreshUserShows={props.refreshUserShows}
           />

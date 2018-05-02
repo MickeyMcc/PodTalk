@@ -27,14 +27,14 @@ const SearchEntry = (props) => {
 
   return (
     <ListItem
-      key={show.LNID}
+      key={show.id}
       primaryText={show.title}
       leftAvatar={<Avatar src={show.image} />}
       rightIcon={<expandMore />}
       primaryTogglesNestedList
       nestedItems={[
         <ListItem
-          key={show.LNID}
+          key={show.id}
           primaryText={<p> {show.description} </p>}
           secondaryText={show.maker}
           rightIcon={<ContentAdd color="#00675b" onClick={addShow} />}
@@ -46,7 +46,7 @@ const SearchEntry = (props) => {
 
 SearchEntry.propTypes = {
   show: PropTypes.shape({
-    LNID: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
   }).isRequired,

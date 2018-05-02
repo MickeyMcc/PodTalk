@@ -38,7 +38,7 @@ module.exports.episodesForShow = (showID, callback) => {
 module.exports.parseShows = results => (
   results.reduce((podList, podcast) => {
     podList.push({
-      LNID: podcast.id,
+      id: podcast.id,
       itunesID: podcast.itunes_id,
       title: podcast.title_original,
       maker: podcast.publisher_original,
@@ -58,7 +58,7 @@ module.exports.parseEpisodes = (results, showID) => (
       title: podcast.title,
       description: podcast.description,
       audio: podcast.audio,
-      LNID: podcast.id,
+      id: podcast.id,
       showID,
       audioLength: podcast.audio_length,
       pubDate: podcast.pub_date_ms,
@@ -87,7 +87,7 @@ module.exports.parseEpisodes = (results, showID) => (
 //   //show_id
 //   //description
 //   //audio
-//   //LNID
+//   //id
 //   //audio_length
 // }
 

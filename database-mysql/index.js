@@ -72,7 +72,7 @@ module.exports.selectAllUserShows = (user, callback) => {
 
 function checkDBForShow(show, callback) {
   // check for show in db by title
-  const checkForShow = `SELECT id FROM shows WHERE '${show.LNID}' = id`;
+  const checkForShow = `SELECT id FROM shows WHERE '${show.id}' = id`;
 
   connection.query(checkForShow, (err, data) => {
     if (err) {
@@ -87,7 +87,7 @@ function addShow(show, callback) {
   // add show from search data
   const query = 'INSERT INTO shows ' +
     '(id, itunesID, title, maker, show_image, show_description, website, latestRelease, genre) ' +
-    `VALUES ('${show.LNID}','${show.itunesID}', '${cleanQuotes(show.title)}', '${cleanQuotes(show.maker)}', '${show.image}', ` +
+    `VALUES ('${show.id}','${show.itunesID}', '${cleanQuotes(show.title)}', '${cleanQuotes(show.maker)}', '${show.image}', ` +
     `'${cleanQuotes(show.description)}', '${show.website}', '${show.latestRelease}', '${JSON.stringify(show.genre)}')`;
 
   standardDBCall(query, callback);
@@ -97,7 +97,7 @@ function checkForConnection(user, show, callback) {
   // show user entry on intersection table
   const checkConnection = 'SELECT shows_users.id FROM shows_users ' +
     'INNER JOIN shows ON shows.id = shows_users.show_id ' +
-    `WHERE shows_users.user_id = ${user} AND shows.id = '${show.LNID}'`;
+    `WHERE shows_users.user_id = ${user} AND shows.id = '${show.id}'`;
 
   connection.query(checkConnection, (err, data) => {
     if (err) {
@@ -113,7 +113,7 @@ module.exports.addShowToUser = (user, show, callback) => {
   function makeConection() {
     // add show - user to intersection table
     const connectShowUser = 'INSERT INTO shows_users (user_id, show_id) ' +
-      `VALUES (${user}, '${show.LNID}')`;
+      `VALUES (${user}, '${show.id}')`;
     standardDBCall(connectShowUser, callback);
   }
   // makes connection between user and show. adds show to database if needed
@@ -146,9 +146,47 @@ module.exports.addShowToUser = (user, show, callback) => {
 
 // ////////////////////EPISODES\\\\\\\\\\\\\\\\\\\\\\\\\\
 
+const getUserEpsForShow = (userID, showID, callback) => {
+  // find episodes the user has mark listened or commented on
+  const getEps = 'SELECT * FROM episodes_users INNER JOIN episodes ON episodes.id = ' +
+    `episodes_users.episode_id WHERE episodes.show_id = '${showID}' AND episodes_users.user_id = ${userID} ` +
+    'AND (episodes_users.listened OR episodes_users.commented) ORDER BY episodes.pubDate DESC;';
+
+  standardDBCall(getEps, callback);
+};
+module.exports.getUserEpsForShow = getUserEpsForShow;
+
+module.exports.markOwnership = (userID, showID, searchEpList, callback) => {
+  const targetEps = searchEpList.slice();
+  getUserEpsForShow(userID, showID, (err, ownedEps) => {
+    let targetEpsIndex = 0;
+    let ownedEpsIndex = 0;
+    // they are both sorted descending by publish date
+    // 1s and 0s instead of true/false to match sequel syntax;
+    while (targetEpsIndex < targetEps.length && ownedEpsIndex < ownedEps.length) {
+      if (targetEps[targetEpsIndex].id === ownedEps[ownedEpsIndex].id) {
+        targetEps[targetEpsIndex].listened = 1;
+        ownedEpsIndex += 1;
+        targetEpsIndex += 1;
+      } else if (targetEps[targetEpsIndex].pubDate > ownedEps[ownedEpsIndex].pubDate) {
+        targetEps[targetEpsIndex].listened = 0;
+        targetEpsIndex += 1;
+      } else {
+        ownedEpsIndex += 1;
+      }
+    }
+    // fill in the rest of the falses at end of array
+    for (targetEpsIndex; targetEpsIndex < targetEps.length; targetEpsIndex += 1) {
+      targetEps[targetEpsIndex].listened = 0;
+    }
+
+    callback(err, targetEps);
+  });
+};
+
 module.exports.userEpisodeListen = (userID, episode, showID, callback) => {
-  const episodeID = episode.LNID;
-  const markListened = "UPDATE episodes_users SET listened=!listened WHERE user_id = " +
+  const episodeID = episode.id;
+  const markListened = 'UPDATE episodes_users SET listened = !listened WHERE user_id = ' +
     `${userID} AND episode_id = '${episodeID}';`;
 
   const makeConnEntry = 'INSERT INTO episodes_users (user_id, episode_id, listened) VALUES ' +
@@ -175,10 +213,12 @@ module.exports.userEpisodeListen = (userID, episode, showID, callback) => {
         }
       });
     } else { // episode in database
-      connection.query(check4conn, (err1) => { // see if there is already a relationship
+      console.log('episode found');
+      connection.query(check4conn, (err1, data) => { // see if there is already a relationship
         if (err1) {
           callback(err1);
-        } else if (res.length) { // user already owns episode
+        } else if (data.length) { // user already owns episode
+          console.log('user owns episode');
           connection.query(markListened, (err2, data1) => {
             callback(err2, data1);
           });
@@ -190,15 +230,6 @@ module.exports.userEpisodeListen = (userID, episode, showID, callback) => {
       });
     }
   });
-};
-
-module.exports.getUserEpsForShow = (userID, showID, callback) => {
-  // find episodes the user has mark listened or commented on
-  const getEps = 'SELECT * FROM episodes_users INNER JOIN episodes ON episodes.id = ' +
-   `episodes_users.episode_id WHERE episodes.show_id = '${showID}' AND episodes_users.user_id = ${userID} ` +
-   'ORDER BY episodes.pubDate DESC;';
-
-  standardDBCall(getEps, callback);
 };
 
 // /////////////////COMMENTS\\\\\\\\\\\\\\\\\\\\\\\\\\
