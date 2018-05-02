@@ -26,6 +26,7 @@ class ShowEntry extends React.Component {
     // this.comment = this.comment.bind(this);
     this.openShow = this.openShow.bind(this);
     this.fetchUserEps = this.fetchUserEps.bind(this);
+    this.fetchRecentEps = this.fetchRecentEps.bind(this);
     this.handleClose = this.handleClose.bind(this);
   }
 
@@ -125,6 +126,7 @@ class ShowEntry extends React.Component {
                         userID={userID}
                         showID={show.id}
                         fetchUserEps={this.fetchUserEps}
+                        isOwned
                       />
                     ))}
                   </List>

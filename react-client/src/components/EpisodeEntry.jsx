@@ -9,12 +9,12 @@ class EpisodeEntry extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      listened: false,
+      listened: this.props.isOwned,
     };
-    this.markListened = this.markListened.bind(this);
+    this.toggleListened = this.toggleListened.bind(this);
   }
 
-  markListened() {
+  toggleListened() {
     axios.post('/episodes/listen', {
       userID: this.props.userID,
       episode: this.props.episode,
@@ -44,13 +44,17 @@ class EpisodeEntry extends React.Component {
           </CardText>
           <CardActions>
             <FlatButton label="Talk About it" primary />
-            <FlatButton onClick={this.markListened} label={this.state.listened ? 'Unlisten' : 'Mark Listened'} primary={!this.state.listened} default={this.state.listened} />
+            <FlatButton onClick={this.toggleListened} label={this.state.listened ? 'Unlisten' : 'Mark Listened'} primary={!this.state.listened} default={this.state.listened} />
           </CardActions>
         </Card>
       </ListItem>
     );
   }
 }
+
+EpisodeEntry.defaultProps = {
+  isOwned: false,
+};
 
 EpisodeEntry.propTypes = {
   episode: PropTypes.shape({
@@ -60,6 +64,7 @@ EpisodeEntry.propTypes = {
   userID: PropTypes.number.isRequired,
   showID: PropTypes.string.isRequired,
   fetchUserEps: PropTypes.func.isRequired,
+  isOwned: PropTypes.bool,
 };
 
 export default EpisodeEntry;

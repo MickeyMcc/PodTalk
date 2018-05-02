@@ -36,7 +36,7 @@ const SearchForm = (props) => {
       />
     </Paper>
   );
-}
+};
 
 SearchForm.propTypes = {
   enterSearch: PropTypes.func.isRequired,

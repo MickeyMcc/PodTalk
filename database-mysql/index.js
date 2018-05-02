@@ -148,11 +148,11 @@ module.exports.addShowToUser = (user, show, callback) => {
 
 module.exports.userEpisodeListen = (userID, episode, showID, callback) => {
   const episodeID = episode.LNID;
-  const markListened = "UPDATE episodes_users SET listened=b'1' WHERE user_id = " +
+  const markListened = "UPDATE episodes_users SET listened=!listened WHERE user_id = " +
     `${userID} AND episode_id = '${episodeID}';`;
 
   const makeConnEntry = 'INSERT INTO episodes_users (user_id, episode_id, listened) VALUES ' +
-    `('${userID}', '${episodeID}', b'1');`;
+    `('${userID}', '${episodeID}', 1);`;
 
   const check4conn = `SELECT id from episodes_users WHERE user_id = ${userID} AND episode_id = '${episodeID}';`;
 

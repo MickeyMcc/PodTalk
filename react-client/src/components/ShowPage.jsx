@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 
 class ShowPage extends React.Component {
   constructor(props) {
@@ -72,9 +73,9 @@ class ShowPage extends React.Component {
         <div>
           <h4>The Chatter</h4>
           <ul>
-            {this.state.comments.map((comment, index) => (
+            {this.state.comments.map(comment => (
               <li
-                key={index}
+                key={comment.id}
               >
                 {comment.username}: {comment.text}
               </li>
@@ -86,5 +87,14 @@ class ShowPage extends React.Component {
     );
   }
 }
+
+ShowPage.propTypes = {
+  show: PropTypes.shape({
+    id: PropTypes.string,
+  }).isRequired,
+  owned: PropTypes.bool.isRequired,
+  addShow: PropTypes.func.isRequired,
+  saveComment: PropTypes.func.isRequired,
+};
 
 export default ShowPage;

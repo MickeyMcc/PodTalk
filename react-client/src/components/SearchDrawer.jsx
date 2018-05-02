@@ -23,7 +23,7 @@ class SearchDrawer extends React.Component {
   }
 
   submitSearch() {
-    this.setState({ searchLoading: true })
+    this.setState({ searchLoading: true });
     axios.get('/search', {
       params: {
         terms: this.state.query,
@@ -54,8 +54,8 @@ class SearchDrawer extends React.Component {
           <RefreshIndicator
             size={60}
             style={{ position: 'relative' }}
-            left={50}
-            top={20}
+            left={170}
+            top={60}
             status="loading"
           />
         :
