@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node server/index.js",
     "react-dev": "webpack -d --watch",
     "server-dev": "nodemon server/index.js",
     "test": "jest"
@@ -25,16 +26,15 @@
   },
   "dependencies": {
     "axios": "^0.17.1",
-    "babel-jest": "^22.4.3",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.17.2",
     "express": "^4.15.0",
     "express-session": "^1.15.6",
-    "jest": "^22.4.3",
     "jquery": "^3.1.1",
     "lodash": "^4.17.5",
     "material-ui": "^0.20.0",
     "mysql": "^2.13.0",
+    "pg": "^7.4.3",
     "prop-types": "^15.6.1",
     "react": "^15.6.2",
     "react-dom": "^15.6.2",

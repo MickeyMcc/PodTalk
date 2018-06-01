@@ -1,12 +1,19 @@
-const mysql = require('mysql');
+// const mysql = require('mysql');
 const bcrypt = require('bcrypt-nodejs');
+const { Client } = require('pg');
 
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'podtalk',
+const connection = new Client({
+  connectionString: process.env.DATABASE_URL,
 });
+
+connection.connect();
+
+// const connection = mysql.createConnection({
+//   host: 'localhost',
+//   user: 'root',
+//   password: '',
+//   database: 'podtalk',
+// });
 
 // Factored out here to for less repetition
 const standardDBCall = (query, callback) => {
