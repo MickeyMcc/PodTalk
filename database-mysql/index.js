@@ -2,6 +2,8 @@
 const bcrypt = require('bcrypt-nodejs');
 const { Client } = require('pg');
 
+console.log(process.env);
+
 const connection = new Client({
   connectionString: process.env.DATABASE_URL,
 });
