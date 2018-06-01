@@ -144,6 +144,11 @@ module.exports.addShowToUser = (user, show, callback) => {
   });
 };
 
+module.exports.removeShowFromUser = (userID, showID, callback) => {
+  const query = `DELETE FROM shows_users WHERE user_id='${userID}' AND show_id = '${showID}'`;
+  standardDBCall(query, callback);
+};
+
 // ////////////////////EPISODES\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 const getUserEpsForShow = (userID, showID, callback) => {
@@ -213,12 +218,10 @@ module.exports.userEpisodeListen = (userID, episode, showID, callback) => {
         }
       });
     } else { // episode in database
-      console.log('episode found');
       connection.query(check4conn, (err1, data) => { // see if there is already a relationship
         if (err1) {
           callback(err1);
         } else if (data.length) { // user already owns episode
-          console.log('user owns episode');
           connection.query(markListened, (err2, data1) => {
             callback(err2, data1);
           });

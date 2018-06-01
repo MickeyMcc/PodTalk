@@ -87,6 +87,14 @@ app.post('/shows', (req, res) => { // gets user and show
   });
 });
 
+app.patch('/shows/remove', (req, res) => {
+  const { userID, showID } = req.body;
+  console.log(userID, showID);
+  db.removeShowFromUser(userID, showID, () => {
+    res.status(201).end();
+  });
+});
+
 app.get('/episodes/user', (req, res) => {
   const { showID, userID } = req.query;
   db.getUserEpsForShow(userID, showID, (err, data) => {

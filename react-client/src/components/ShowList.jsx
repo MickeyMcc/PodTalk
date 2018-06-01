@@ -9,7 +9,7 @@ const ShowList = (props) => {
   return (
     <div>
       <GridList
-        cellHeight={200}
+        cellHeight={`${Math.floor(100 / cols)}vh`}
         cols={cols}
       >
         {props.shows.map(show => (
@@ -17,6 +17,7 @@ const ShowList = (props) => {
             show={show}
             key={show.id}
             userID={props.userID}
+            refresh={props.refresh}
           />
         ))}
       </GridList>
@@ -27,6 +28,7 @@ const ShowList = (props) => {
 ShowList.propTypes = {
   shows: PropTypes.arrayOf(PropTypes.object).isRequired,
   userID: PropTypes.number.isRequired,
+  refresh: PropTypes.func.isRequired,
 };
 
 export default ShowList;

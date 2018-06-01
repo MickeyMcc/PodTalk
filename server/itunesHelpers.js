@@ -35,8 +35,8 @@ module.exports.episodesForShow = (showID, callback) => {
     });
 };
 
-module.exports.parseShows = results => (
-  results.reduce((podList, podcast) => {
+module.exports.parseShows = results => {
+  return results.reduce((podList, podcast) => {
     podList.push({
       id: podcast.id,
       itunesID: podcast.itunes_id,
@@ -50,10 +50,13 @@ module.exports.parseShows = results => (
     });
     return podList;
   }, [])
-);
+};
 
-module.exports.parseEpisodes = (results, showID) => (
-  results.episodes.reduce((epList, podcast) => {
+module.exports.parseEpisodes = (results, showID) => {
+  if (!results.episodes) {
+    return [];
+  }
+  return results.episodes.reduce((epList, podcast) => {
     epList.push({
       title: podcast.title,
       description: podcast.description,
@@ -64,8 +67,8 @@ module.exports.parseEpisodes = (results, showID) => (
       pubDate: podcast.pub_date_ms,
     });
     return epList;
-  }, [])
-);
+  }, []);
+};
 
 // 'episode' search result ListenNotes
 // {

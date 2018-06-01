@@ -183,12 +183,14 @@ class App extends React.Component {
           <ShowList
             userID={this.state.user.id}
             shows={this.state.shows}
+            refresh={this.refreshShowList}
           />
         </Tab>
         <Tab label="World Feed">
           <ShowList
             userID={this.state.user.id}
             shows={this.state.shows}
+            refresh={this.refreshShowList}
           />
         </Tab>
       </Tabs>

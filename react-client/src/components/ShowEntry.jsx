@@ -3,9 +3,10 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import { GridTile } from 'material-ui/GridList';
 import CommentMode from 'material-ui/svg-icons/editor/mode-comment';
+import Delete from 'material-ui/svg-icons/action/delete';
 import IconButton from 'material-ui/IconButton';
 import Dialog from 'material-ui/Dialog';
-import { white } from 'material-ui/styles/colors';
+import { white, grey } from 'material-ui/styles/colors';
 import RefreshIndicator from 'material-ui/RefreshIndicator';
 import List from 'material-ui/List';
 import Divider from 'material-ui/Divider';
@@ -28,6 +29,7 @@ class ShowEntry extends React.Component {
     this.fetchUserEps = this.fetchUserEps.bind(this);
     this.fetchRecentEps = this.fetchRecentEps.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.removeShow = this.removeShow.bind(this);
   }
 
   // comment(e) {
@@ -77,6 +79,21 @@ class ShowEntry extends React.Component {
     this.setState({ open: true });
   }
 
+  removeShow() {
+    console.log('remove show!');
+    axios.patch('/shows/remove', {
+      userID: this.props.userID,
+      showID: this.props.show.id,
+    }).then(() => {
+      console.log('done');
+      this.handleClose();
+      this.props.refresh();
+    })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   handleClose() {
     this.setState({ open: false });
   }
@@ -97,7 +114,7 @@ class ShowEntry extends React.Component {
           </IconButton>
         }
       >
-        <img src={show.show_image} alt="" />
+        <img style={{ height: '33vw', width: '33vw' }} src={show.show_image} alt="" />
         <Dialog
           title={show.title}
           modal={false}
@@ -105,6 +122,10 @@ class ShowEntry extends React.Component {
           onRequestClose={this.handleClose}
           autoScrollBodyContent
         >
+          <IconButton onClick={this.removeShow}>
+            <Delete color={grey} style={iconStyle} />
+          </IconButton>
+          <br />
           {show.show_description}
           <Divider style={{ marginTop: 8 }} />
           <Tabs>
@@ -171,6 +192,7 @@ ShowEntry.propTypes = {
     id: PropTypes.string,
   }).isRequired,
   userID: PropTypes.number.isRequired,
+  refresh: PropTypes.func.isRequired,
 };
 
 export default ShowEntry;
