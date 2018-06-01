@@ -4,6 +4,10 @@ module.exports.MainStyle = {
   width: '100%',
 };
 
+module.exports.DialogStyle = {
+  height: '90%',
+  maxHeight: 'none',
+};
 
 module.exports.PaneStyle = {
   display: 'inline-flex',
@@ -118,4 +122,8 @@ module.exports.NavEntryStyle = {
   color: 'white',
   marginTop: '8px',
   marginRight: '25px',
+};
+
+module.exports.IconStyle = {
+  marginRight: '10px',
 };

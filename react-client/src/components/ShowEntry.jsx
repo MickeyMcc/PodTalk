@@ -1,17 +1,21 @@
 import React from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
+import { withStyles } from 'material-ui/styles';
 import { GridTile } from 'material-ui/GridList';
 import CommentMode from 'material-ui/svg-icons/editor/mode-comment';
-import Delete from 'material-ui/svg-icons/action/delete';
 import IconButton from 'material-ui/IconButton';
 import Dialog from 'material-ui/Dialog';
-import { white, grey } from 'material-ui/styles/colors';
-import RefreshIndicator from 'material-ui/RefreshIndicator';
-import List from 'material-ui/List';
-import Divider from 'material-ui/Divider';
-import { Tabs, Tab } from 'material-ui/Tabs';
-import EpisodeEntry from './EpisodeEntry';
+import { white } from 'material-ui/styles/colors';
+import { IconStyle, DialogStyle } from '../styles';
+import ShowDialog from './ShowDialog';
+
+const styles = {
+  dialogPaper: {
+    minHeight: '80vh',
+    maxHeight: '80vh',
+  },
+};
 
 class ShowEntry extends React.Component {
   constructor(props) {
@@ -100,9 +104,6 @@ class ShowEntry extends React.Component {
 
   render() {
     const { show, userID } = this.props;
-    const iconStyle = {
-      marginRight: '10px',
-    };
 
     return (
       <GridTile
@@ -110,7 +111,7 @@ class ShowEntry extends React.Component {
         subtitle={<span>by <b>{show.maker}</b></span>}
         actionIcon={
           <IconButton onClick={this.openShow}>
-            <CommentMode color={white} style={iconStyle} />
+            <CommentMode color={white} style={IconStyle} />
           </IconButton>
         }
       >
@@ -121,64 +122,22 @@ class ShowEntry extends React.Component {
           open={this.state.open}
           onRequestClose={this.handleClose}
           autoScrollBodyContent
+          contentStyle={{ width: "100%", maxWidth: "none" }}
         >
-          <IconButton onClick={this.removeShow}>
-            <Delete color={grey} style={iconStyle} />
-          </IconButton>
-          <br />
-          {show.show_description}
-          <Divider style={{ marginTop: 8 }} />
-          <Tabs>
-            <Tab label="Your Eps">
-              {this.state.userLoading ?
-                <RefreshIndicator
-                  size={40}
-                  style={{ position: 'relative' }}
-                  left={50}
-                  top={20}
-                  status="loading"
-                />
-              :
-                this.state.userEpList.length ?
-                  <List style={{ maxHeight: 300, overflow: 'auto' }}>
-                    {this.state.userEpList.map(episode => (
-                      <EpisodeEntry
-                        episode={episode}
-                        key={episode.id}
-                        userID={userID}
-                        showID={show.id}
-                        fetchUserEps={this.fetchUserEps}
-                      />
-                    ))}
-                  </List>
-                  :
-                  <div> You have not listened to any episodes of this show yet! </div>
-              }
-            </Tab>
-            <Tab label="Recent Eps">
-              {this.state.recentLoading ?
-                <RefreshIndicator
-                  size={40}
-                  style={{ position: 'relative' }}
-                  left={50}
-                  top={20}
-                  status="loading"
-                />
-              :
-                <List style={{ maxHeight: 300, overflow: 'auto' }} >
-                  {this.state.recentEpList.map(episode => (
-                    <EpisodeEntry
-                      episode={episode}
-                      key={episode.id}
-                      userID={userID}
-                      showID={show.id}
-                      fetchUserEps={this.fetchUserEps}
-                    />
-                  ))}
-                </List>
-              }
-            </Tab>
-          </Tabs>
+          <ShowDialog
+            classes={{
+                        paper: styles.dialogPaper,
+                      }
+                    }
+            fetchUserEps={this.fetchUserEps}
+            recentEpList={this.state.recentEpList}
+            userEpList={this.state.userEpList}
+            userLoading={this.state.userLoading}
+            recentLoading={this.state.recentLoading}
+            show={show}
+            userID={userID}
+            removeShow={this.removeShow}
+          />
         </Dialog>
       </GridTile>
     );
