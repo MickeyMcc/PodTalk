@@ -8,6 +8,10 @@ const connection = new Client({
 
 connection.connect();
 
+connection.query('select * from users', (err, data) => {
+  console.log(data);
+});
+
 // const connection = mysql.createConnection({
 //   host: 'localhost',
 //   user: 'root',

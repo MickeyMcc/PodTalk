@@ -50,6 +50,7 @@ class App extends React.Component {
   // /////////////////USERS\\\\\\\\\\\\\\\\\\\\\\\\\\
 
   setUser(userObj) {
+    console.log(userObj);
     this.setState({ user: userObj, loggedIn: true });
     this.refreshShowList();
   }
