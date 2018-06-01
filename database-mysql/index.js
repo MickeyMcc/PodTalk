@@ -2,15 +2,16 @@
 const bcrypt = require('bcrypt-nodejs');
 const { Client } = require('pg');
 
-const connection = new Client({
-  connectionString: process.env.DATABASE_URL,
-});
+let connection;
+if (process.env.DATABASE_URL) {
+  connection = new Client({
+    connectionString: process.env.DATABASE_URL,
+  });
+} else {
+  connection = new Client();
+}
 
 connection.connect();
-
-connection.query('select * from users', (err, data) => {
-  console.log(data);
-});
 
 // const connection = mysql.createConnection({
 //   host: 'localhost',
@@ -25,7 +26,7 @@ const standardDBCall = (query, callback) => {
     if (err) {
       callback(err);
     } else {
-      callback(err, data);
+      callback(err, data.rows);
     }
   });
 };
@@ -45,11 +46,14 @@ module.exports.createUser = (username, password, callback) => {
   connection.query(checkForExisting, (err, data) => {
     if (err) {
       callback(err);
-    } else if (data.length) {
+    } else if (data.rows.length) {
       callback('username');
     } else {
-      const insertQuery = `INSERT INTO USERS (username, password) VALUES ('${username}', '${bcrypt.hashSync(password)}')`;
-      standardDBCall(insertQuery, callback);
+      const insertQuery = `INSERT INTO USERS (username, password) VALUES ('${username}', '${bcrypt.hashSync(password)}'); SELECT currval(pg_get_serial_sequence('users','id')) as id;`;
+      connection.query(insertQuery, (err, data) => {
+        const id = data[1].rows[0];
+        callback(null, id);
+      });
     }
   });
 };
@@ -60,10 +64,10 @@ module.exports.login = (username, password, callback) => {
   connection.query(query, (err, data) => {
     if (err) {
       callback(err);
-    } else if (!data.length) {
+    } else if (!data.rows.length) {
       callback('username');
-    } else if (bcrypt.compareSync(password, data[0].password)) {
-      callback(null, data[0].id);
+    } else if (bcrypt.compareSync(password, data.rows[0].password)) {
+      callback(null, data.rows[0].id);
     } else {
       callback('password');
     }
@@ -89,7 +93,7 @@ function checkDBForShow(show, callback) {
     if (err) {
       callback(err);
     } else {
-      callback(null, !!data.length);
+      callback(null, !!data.rows.length);
     }
   });
 }
@@ -114,7 +118,7 @@ function checkForConnection(user, show, callback) {
     if (err) {
       callback(err);
     } else {
-      callback(err, !!data.length); // coerce to bool
+      callback(err, !!data.rows.length); // coerce to bool
     }
   });
 }
@@ -215,16 +219,16 @@ module.exports.userEpisodeListen = (userID, episode, showID, callback) => {
   const insertEpp = 'INSERT INTO episodes (id, show_id, title, description, url, audioLength, pubDate) ' +
     `VALUES ('${episodeID}', '${showID}', '${cleanQuotes(episode.title)}', '${cleanQuotes(episode.description)}', '${episode.audio}', '${episode.audioLength}', ${episode.pubDate})`;
 
-  connection.query(check4epp, (err, res) => {
+  connection.query(check4epp, (err, epp) => {
     if (err) {
       callback(err);
-    } else if (!res.length) { // episode is not yet in database
+    } else if (!epp.rows.length) { // episode is not yet in database
       connection.query(insertEpp, (err1) => { // add epp
         if (err1) {
           callback(err1);
         } else {
           connection.query(makeConnEntry, (err2, data) => { // add user
-            callback(err2, data);
+            callback(err2, data.rows);
           });
         }
       });
@@ -232,13 +236,13 @@ module.exports.userEpisodeListen = (userID, episode, showID, callback) => {
       connection.query(check4conn, (err1, data) => { // see if there is already a relationship
         if (err1) {
           callback(err1);
-        } else if (data.length) { // user already owns episode
+        } else if (data.rows.length) { // user already owns episode
           connection.query(markListened, (err2, data1) => {
-            callback(err2, data1);
+            callback(err2, data1.rows);
           });
         } else { // user does not own episode, make entry
           connection.query(makeConnEntry, (err3, data2) => {
-            callback(err3, data2);
+            callback(err3, data2.rows);
           });
         }
       });

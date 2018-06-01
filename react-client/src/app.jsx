@@ -50,8 +50,9 @@ class App extends React.Component {
   // /////////////////USERS\\\\\\\\\\\\\\\\\\\\\\\\\\
 
   setUser(userObj) {
-    console.log(userObj);
+    userObj.id = Number(userObj.id);
     this.setState({ user: userObj, loggedIn: true });
+
     this.refreshShowList();
   }
 

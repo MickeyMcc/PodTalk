@@ -48,10 +48,11 @@ app.post('/users', (req, res) => {
   const { user, password } = req.body;
   db.createUser(user, password, (err, data) => {
     if (err) {
+      console.log(err);
       res.status(404).send(err);
     } else {
       req.session.loggedIn = true;
-      res.status(201).json({ username: user, id: data.insertId });
+      res.status(201).json({ username: user, id: data.id });
     }
   });
 });
@@ -89,7 +90,6 @@ app.post('/shows', (req, res) => { // gets user and show
 
 app.patch('/shows/remove', (req, res) => {
   const { userID, showID } = req.body;
-  console.log(userID, showID);
   db.removeShowFromUser(userID, showID, () => {
     res.status(201).end();
   });
@@ -210,6 +210,6 @@ app.get('/activity', (req, res) => {
   }
 });
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT || 3000, () => {
   console.log('listening on port!');
 });

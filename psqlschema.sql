@@ -1,8 +1,14 @@
-DROP SCHEMA podtalk CASCADE;
+DROP SCHEMA IF EXISTS podtalk CASCADE;
 
-CREATE SCHEMA podtalk;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS shows;
+DROP TABLE IF EXISTS episodes;
+DROP TABLE IF EXISTS comments;
+DROP TABLE IF EXISTS shows_users;
+DROP TABLE IF EXISTS episodes_users;
 
-CREATE TABLE podtalk.users
+
+CREATE TABLE users
 (
     id SERIAL,
     username varchar (20) NOT NULL,
@@ -10,7 +16,7 @@ CREATE TABLE podtalk.users
     PRIMARY KEY (id)
 );
 
-CREATE TABLE podtalk.shows
+CREATE TABLE shows
 (
     id varchar(255) NOT NULL,
     itunesID varchar(255) NOT NULL,
@@ -24,7 +30,7 @@ CREATE TABLE podtalk.shows
     PRIMARY KEY (id)
 );
 
-CREATE TABLE podtalk.episodes
+CREATE TABLE episodes
 (
     id varchar(255) NOT NULL,
     show_id varchar(560),
@@ -37,7 +43,7 @@ CREATE TABLE podtalk.episodes
     FOREIGN KEY (show_id) REFERENCES shows (id)
 );
 
-CREATE TABLE podtalk.comments
+CREATE TABLE comments
 (
     id SERIAL PRIMARY KEY,
     text varchar (500) NOT NULL,
@@ -50,7 +56,7 @@ CREATE TABLE podtalk.comments
     FOREIGN KEY (show_id) REFERENCES shows (id)
 );
 
-CREATE TABLE podtalk.shows_users
+CREATE TABLE shows_users
 (
     id SERIAL,
     user_id int NOT NULL,
@@ -61,7 +67,7 @@ CREATE TABLE podtalk.shows_users
     FOREIGN KEY (show_id) REFERENCES shows (id)
 );
 
-CREATE TABLE podtalk.episodes_users
+CREATE TABLE episodes_users
 (
     id SERIAL,
     user_id int NOT NULL,

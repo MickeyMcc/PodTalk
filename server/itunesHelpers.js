@@ -1,9 +1,12 @@
 const axios = require('axios');
-// const config = require('./config');
-
-const config = {
-  mashapeKey: process.env.mashapeKey,
-};
+let config;
+if (process.env.mashapeKey) {
+  config = {
+    mashapeKey: process.env.mashapeKey,
+  };
+} else {
+  config = require('./config');
+}
 
 module.exports.searchListenNotes = (query, callback) => {
   axios.get('https://listennotes.p.mashape.com/api/v1/search', {
