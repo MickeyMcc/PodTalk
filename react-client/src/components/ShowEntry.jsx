@@ -1,7 +1,6 @@
 import React from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
 import { GridTile } from 'material-ui/GridList';
 import CommentMode from 'material-ui/svg-icons/editor/mode-comment';
 import IconButton from 'material-ui/IconButton';

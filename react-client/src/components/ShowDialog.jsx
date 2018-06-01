@@ -87,8 +87,15 @@ ShowDialog.propTypes = {
   recentEpList: PropTypes.arrayOf(PropTypes.object).isRequired,
   userEpList: PropTypes.arrayOf(PropTypes.object).isRequired,
   removeShow: PropTypes.func.isRequired,
+<<<<<<< HEAD
   userLoading: PropTypes.bool.isRequired,
   recentLoading: PropTypes.bool.isRequired,
 };
 
 export default ShowDialog;
+=======
+
+};
+
+export default ShowDialog;
+>>>>>>> 6ddceb996b8b4ff6a38e56ae9eb7545796568a31
